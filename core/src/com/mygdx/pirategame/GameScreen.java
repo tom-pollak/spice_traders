@@ -30,6 +30,7 @@ public class GameScreen implements Screen {
     private Player player;
     private EnemyShip enemyShip;
     private Hud hud;
+    private Coin coin;
 
     public GameScreen(PirateGame game){
         this.game = game;
@@ -53,6 +54,7 @@ public class GameScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         enemyShip = new EnemyShip(this, .32f, .32f);
+        coin = new Coin(this, .20f, .20f);
     }
 
     @Override
@@ -94,6 +96,7 @@ public class GameScreen implements Screen {
 
         player.update(dt);
         enemyShip.update(dt);
+        coin.update(dt);
         hud.update(dt);
 
         camera.position.x = player.b2body.getPosition().x;
@@ -115,6 +118,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         player.draw(game.batch);
         enemyShip.draw(game.batch);
+        coin.draw(game.batch);
         game.batch.end();
         hud.stage.draw();
     }
