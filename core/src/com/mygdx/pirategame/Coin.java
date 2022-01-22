@@ -19,9 +19,9 @@ public class Coin extends Enemy {
 
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
-        float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
+        /*float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
         b2body.setTransform(b2body.getWorldCenter(), angle - ((float)Math.PI) / 2.0f);
-        setRotation((float) (b2body.getAngle() * 180 / Math.PI));
+        setRotation((float) (b2body.getAngle() * 180 / Math.PI));*/
     }
 
     @Override
