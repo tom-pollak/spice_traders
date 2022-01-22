@@ -12,10 +12,15 @@ public class WorldContactListener implements ContactListener {
         if (fixA.getUserData() == "sensor" || fixB.getUserData() == "sensor") {
             Fixture sensor = fixA.getUserData() == "sensor" ? fixA : fixB;
             Fixture object = sensor == fixA ? fixB : fixA;
-
             if(object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
                 ((InteractiveTileObject) object.getUserData()).onContact();
             }
+        }
+        if (fixA.getUserData() == "coin" || fixB.getUserData() == "coin") {
+            Fixture sensor = fixA.getUserData() == "coin" ? fixA : fixB;
+            Fixture object = sensor == fixA ? fixB : fixA;
+
+            Hud.changeCoins(1);
         }
     }
 

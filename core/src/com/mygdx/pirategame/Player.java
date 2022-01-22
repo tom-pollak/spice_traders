@@ -37,11 +37,6 @@ public class Player extends Sprite {
         fdef.shape = shape;
         b2body.createFixture(fdef);
 
-        CircleShape sensor = new CircleShape();
-        sensor.setRadius(55 / PirateGame.PPM);
-        fdef.shape = sensor;
-        fdef.isSensor = true;
-
         b2body.createFixture(fdef).setUserData("sensor");
     }
 }

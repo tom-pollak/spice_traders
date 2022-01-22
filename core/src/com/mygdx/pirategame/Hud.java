@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -55,16 +54,16 @@ public class Hud implements Disposable {
         table2.setFillParent(true);
 
         timeLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        timeLabel.setFontScale(1.5f);
+        timeLabel.setFontScale(2f);
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel.setFontScale(1.5f);
+        scoreLabel.setFontScale(2f);
         healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        healthLabel.setFontScale(1.5f);
+        healthLabel.setFontScale(2f);
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        coinLabel.setFontScale(1.5f);
+        coinLabel.setFontScale(2f);
 
         table2.add(hpImg).width(64).height(64).padBottom(15).padLeft(30);
-        table1.add(healthLabel).padBottom(30).padLeft(42);
+        table1.add(healthLabel).padBottom(30).padLeft(37).center();
         table1.add(timeLabel).expandX().padBottom(15);
         table1.add(coinLabel).expandX().padBottom(15);
         table1.add(scoreLabel).expandX().padBottom(15);
@@ -78,6 +77,10 @@ public class Hud implements Disposable {
         if(timeCount >= 1) {
             worldTimer += 1;
             timeLabel.setText(String.format("%03d", worldTimer));
+            if(health != 100) {
+                health += 1;
+                healthLabel.setText(String.format("%02d", health));
+            }
             timeCount = 0;
         }
     }
@@ -89,7 +92,7 @@ public class Hud implements Disposable {
     }
     public static void changeCoins(int value) {
         coins += value;
-        coinLabel.setText(String.format("%02d", health));
+        coinLabel.setText(String.format("%03d", coins / 2));
     }
 
     @Override

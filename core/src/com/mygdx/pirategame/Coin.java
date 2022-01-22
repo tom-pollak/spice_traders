@@ -1,8 +1,6 @@
 package com.mygdx.pirategame;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -25,7 +23,7 @@ public class Coin extends Entity {
     @Override
     protected void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1200 / PirateGame.PPM, 1200 / PirateGame.PPM);
+        bdef.position.set(700 / PirateGame.PPM, 1200 / PirateGame.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -33,17 +31,7 @@ public class Coin extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(24 / PirateGame.PPM);
         fdef.shape = shape;
-        b2body.createFixture(fdef);
-
-        CircleShape sensor = new CircleShape();
-        sensor.setRadius(24 / PirateGame.PPM);
-        fdef.shape = sensor;
         fdef.isSensor = true;
-
-        b2body.createFixture(fdef).setUserData("sensor");
-    }
-    public void onContact() {
-        Gdx.app.log("coin", "collision");
-        Hud.changeCoins(1);
+        b2body.createFixture(fdef).setUserData("coin");
     }
 }

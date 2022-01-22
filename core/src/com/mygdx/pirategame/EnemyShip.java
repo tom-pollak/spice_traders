@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
-public class EnemyShip extends Enemy{
+public class EnemyShip extends Entity{
     private Texture enemyShip;
 
     public EnemyShip(GameScreen screen, float x, float y) {
@@ -24,7 +24,7 @@ public class EnemyShip extends Enemy{
     }
 
     @Override
-    protected void defineEnemy() {
+    protected void defineEntity() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(1200 / PirateGame.PPM, 1200 / PirateGame.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
