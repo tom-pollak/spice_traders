@@ -1,5 +1,7 @@
 package com.mygdx.pirategame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
@@ -8,6 +10,7 @@ public class Player extends Sprite {
     private Texture ship;
     public World world;
     public Body b2body;
+    Sound breakSound;
 
     public Player(GameScreen screen) {
         ship = new Texture("ship1.png");
@@ -16,6 +19,7 @@ public class Player extends Sprite {
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(ship);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
+        breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
     }
 
     public void update(float dt) {
@@ -23,6 +27,10 @@ public class Player extends Sprite {
         float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
         b2body.setTransform(b2body.getWorldCenter(), angle - ((float)Math.PI) / 2.0f);
         setRotation((float) (b2body.getAngle() * 180 / Math.PI));
+    }
+
+    public void playBreakSound() {
+        breakSound.play();
     }
 
     private void definePlayer() {

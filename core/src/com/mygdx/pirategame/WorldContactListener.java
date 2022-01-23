@@ -24,6 +24,7 @@ public class WorldContactListener implements ContactListener {
                 if(fixA.getFilterData().categoryBits == PirateGame.DEFAULT_BIT) {
                     if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
                         ((InteractiveTileObject) fixA.getUserData()).onContact();
+                        ((Player) fixB.getUserData()).playBreakSound();
                     }
                 }
                 else {
