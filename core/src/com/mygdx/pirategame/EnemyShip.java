@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class EnemyShip extends Enemy{
+    private float stateTime;
     private Texture enemyShip;
     private boolean setToDestroy;
     private boolean destroyed;
@@ -43,14 +44,21 @@ public class EnemyShip extends Enemy{
     @Override
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1200 / PirateGame.PPM, 1200 / PirateGame.PPM);
+        bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(55 / PirateGame.PPM);
+        fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef);
+    }
+
+    @Override
+    public void onContact() {
+
     }
 }

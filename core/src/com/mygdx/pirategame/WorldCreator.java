@@ -10,7 +10,9 @@ import com.badlogic.gdx.utils.Array;
 public class WorldCreator {
     private Array<EnemyShip> enemyShips;
 
-    public WorldCreator(World world, TiledMap map) {
+    public WorldCreator(GameScreen screen) {
+        World world = screen.getWorld();
+        TiledMap map = screen.getMap();
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
         FixtureDef fdef = new FixtureDef();
@@ -19,7 +21,7 @@ public class WorldCreator {
         for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-            new Islands(world, map, rect);
+            new Islands(screen, rect);
         }
 
     }

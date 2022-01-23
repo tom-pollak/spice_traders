@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Coin extends Entity {
+    private float stateTime;
     private Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
@@ -21,10 +22,10 @@ public class Coin extends Entity {
     }
 
     public void update(float dt) {
+        stateTime += dt;
         if(setToDestroyed && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
-            Hud.changeCoins(1);
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
@@ -34,22 +35,25 @@ public class Coin extends Entity {
     @Override
     protected void defineEntity() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(700 / PirateGame.PPM, 1200 / PirateGame.PPM);
+        bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(24 / PirateGame.PPM);
+        fdef.filter.categoryBits = PirateGame.COIN_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData("coin");
+        b2body.createFixture(fdef).setUserData(this);
     }
 
     @Override
     public void entityContact() {
-        Gdx.app.log("coin", "collision");
+        Hud.changeCoins(1);
         setToDestroyed = true;
+        Gdx.app.log("coin", "collision");
     }
 
     public void draw(Batch batch) {

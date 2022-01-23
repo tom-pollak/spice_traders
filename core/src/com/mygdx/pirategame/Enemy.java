@@ -16,5 +16,6 @@ public abstract class Enemy extends Sprite {
         defineEnemy();
     }
     protected abstract void defineEnemy();
+    public abstract void onContact();
     public abstract void update(float dt);
 }

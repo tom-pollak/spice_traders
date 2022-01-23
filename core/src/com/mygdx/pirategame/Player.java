@@ -9,9 +9,9 @@ public class Player extends Sprite {
     public World world;
     public Body b2body;
 
-    public Player(World world) {
+    public Player(GameScreen screen) {
         ship = new Texture("ship1.png");
-        this.world = world;
+        this.world = screen.getWorld();
         definePlayer();
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(ship);
@@ -37,6 +37,6 @@ public class Player extends Sprite {
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
         fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT;
         fdef.shape = shape;
-        b2body.createFixture(fdef).setUserData("sensor");
+        b2body.createFixture(fdef).setUserData(this);
     }
 }

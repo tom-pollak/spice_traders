@@ -47,14 +47,14 @@ public class GameScreen implements Screen {
         // Physics stuff
         world = new World(new Vector2(0,0), true);
         b2dr = new Box2DDebugRenderer();
-        player = new Player(world);
+        player = new Player(this);
 
-        new WorldCreator(world, map);
+        new WorldCreator(this);
 
         world.setContactListener(new WorldContactListener());
 
-        enemyShip = new EnemyShip(this, .32f, .32f);
-        coin = new Coin(this, .20f, .20f);
+        enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
+        coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
     }
 
     @Override

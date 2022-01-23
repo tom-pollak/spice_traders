@@ -14,9 +14,8 @@ public abstract class InteractiveTileObject {
     protected Body body;
     protected Fixture fixture;
 
-    public InteractiveTileObject(World world, TiledMap map, Rectangle bounds) {
-        this.world = world;
-        this.map = map;
+    public InteractiveTileObject(GameScreen screen, Rectangle bounds) {
+        this.world = screen.getWorld();
         this.bounds = bounds;
 
         BodyDef bdef = new BodyDef();

@@ -9,20 +9,29 @@ public class WorldContactListener implements ContactListener {
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
-        if (fixA.getUserData() == "sensor" || fixB.getUserData() == "sensor") {
-            Fixture sensor = fixA.getUserData() == "sensor" ? fixA : fixB;
-            Fixture object = sensor == fixA ? fixB : fixA;
-            if(object.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(object.getUserData().getClass())) {
-                ((InteractiveTileObject) object.getUserData()).onContact();
-            }
-        }
-        if (fixA.getUserData() == "coin" || fixB.getUserData() == "coin") {
-            Fixture sensor = fixA.getUserData() == "coin" ? fixA : fixB;
-            Fixture object = sensor == fixA ? fixB : fixA;
-            if(object.getUserData() != null && Entity.class.isAssignableFrom(object.getUserData().getClass())) {
-                ((Entity) object.getUserData()).entityContact();
-            }
-            Hud.changeCoins(1);
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+
+        switch (cDef){
+            case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
+                if(fixA.getFilterData().categoryBits == PirateGame.COIN_BIT) {
+                    ((Entity) fixA.getUserData()).entityContact();
+                }
+                else {
+                    ((Entity) fixB.getUserData()).entityContact();
+                }
+                break;
+            case PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT:
+                if(fixA.getFilterData().categoryBits == PirateGame.DEFAULT_BIT) {
+                    if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
+                        ((InteractiveTileObject) fixA.getUserData()).onContact();
+                    }
+                }
+                else {
+                    if (fixB.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixB.getUserData().getClass())) {
+                        ((InteractiveTileObject) fixB.getUserData()).onContact();
+                    }
+                }
+                break;
         }
     }
 
