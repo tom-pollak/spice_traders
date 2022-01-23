@@ -3,6 +3,7 @@ package com.mygdx.pirategame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -26,6 +27,8 @@ public class GameScreen implements Screen {
 
     private World world;
     private Box2DDebugRenderer b2dr;
+
+    private Music pirateMusic;
 
     private Player player;
     private EnemyShip enemyShip;
@@ -52,9 +55,15 @@ public class GameScreen implements Screen {
         map = maploader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
         new WorldCreator(this);
-        
+
         // Setting up contact listener for collisions
         world.setContactListener(new WorldContactListener());
+
+        // Start music looping with volume decreased
+        pirateMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate-music.mp3"));
+        pirateMusic.setLooping(true);
+        pirateMusic.setVolume(0f);
+        pirateMusic.play();
 
         // Spawning enemy ship and coin. x and y is spawn location
         enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
@@ -167,6 +176,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        pirateMusic.dispose();
         map.dispose();
         renderer.dispose();
         world.dispose();
