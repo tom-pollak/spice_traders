@@ -34,25 +34,29 @@ public class GameScreen implements Screen {
 
     public GameScreen(PirateGame game){
         this.game = game;
+        // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
         viewport = new ExtendViewport(PirateGame.WIDTH / PirateGame.PPM, PirateGame.HEIGHT / PirateGame.PPM, camera);
+        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+
         // Initialize a hud
         hud = new Hud(game.batch);
-        // making the Tiled tmx file render as a map
-        maploader = new TmxMapLoader();
-        map = maploader.load("map.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
 
-        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
-        // Physics stuff
+        // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
         b2dr = new Box2DDebugRenderer();
         player = new Player(this);
 
+        // making the Tiled tmx file render as a map
+        maploader = new TmxMapLoader();
+        map = maploader.load("map.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
         new WorldCreator(this);
-
+        
+        // Setting up contact listener for collisions
         world.setContactListener(new WorldContactListener());
-        // for enemyShip and coin, the x and y is the position they spawn
+
+        // Spawning enemy ship and coin. x and y is spawn location
         enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
     }
@@ -63,18 +67,23 @@ public class GameScreen implements Screen {
     }
 
     public void handleInput(float dt){
+        // Left physics impulse on 'A'
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
         }
+        // Right physics impulse on 'D'
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
         }
+        // Up physics impulse on 'W'
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
         }
+        // Down physics impulse on 'S'
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
         }
+        // Checking if player at max velocity, and keeping them below max
         if(player.b2body.getLinearVelocity().x >= maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
         }
@@ -91,14 +100,16 @@ public class GameScreen implements Screen {
 
     public void update(float dt){
         handleInput(dt);
-        // more Physics stuff
+        // Stepping the physics engine by time of 1 frame
         world.step(1 / 60f, 6, 2);
 
+        // Update all players and entities
         player.update(dt);
         enemyShip.update(dt);
         coin.update(dt);
         hud.update(dt);
 
+        // Centre camera on player boat
         camera.position.x = player.b2body.getPosition().x;
         camera.position.y = player.b2body.getPosition().y;
         camera.update();
@@ -112,12 +123,12 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
-        // b2dr is the shapes, can be commented out to hide
+        // b2dr is the hitbox shapes, can be commented out to hide
         b2dr.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        //order determines layering
+        // Order determines layering
         coin.draw(game.batch);
         player.draw(game.batch);
         enemyShip.draw(game.batch);
