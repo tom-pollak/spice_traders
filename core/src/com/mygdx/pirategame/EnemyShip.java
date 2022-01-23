@@ -52,7 +52,9 @@ public class EnemyShip extends Enemy{
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(55 / PirateGame.PPM);
+        // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
+        // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef);

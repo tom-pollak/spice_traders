@@ -42,7 +42,9 @@ public class Coin extends Entity {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(24 / PirateGame.PPM);
+        // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.COIN_BIT;
+        // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
@@ -61,5 +63,4 @@ public class Coin extends Entity {
             super.draw(batch);
         }
     }
-
 }

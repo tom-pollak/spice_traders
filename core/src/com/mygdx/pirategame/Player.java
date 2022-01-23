@@ -34,7 +34,9 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(55 / PirateGame.PPM);
+        // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+        // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
