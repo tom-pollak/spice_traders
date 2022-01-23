@@ -1,16 +1,12 @@
 package com.mygdx.pirategame;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -62,6 +58,7 @@ public class Hud implements Disposable {
         Table table2 = new Table();
         Table table3 = new Table();
         Table table4 = new Table();
+        Table table5 = new Table();
         table1.top().right();
         table1.setFillParent(true);
         table2.top().right();
@@ -117,7 +114,6 @@ public class Hud implements Disposable {
     public static void changeHealth(int value) {
         health += value;
         healthLabel.setText(String.format("%02d", health));
-
     }
     public static void changeCoins(int value) {
         coins += value;

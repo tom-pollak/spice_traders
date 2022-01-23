@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-
 public class MainMenu implements Screen {
 
     private final PirateGame parent;
@@ -21,7 +20,6 @@ public class MainMenu implements Screen {
     public MainMenu(PirateGame PirateGame){
         parent = PirateGame;
         stage = new Stage(new ScreenViewport());
-
     }
 
     @Override

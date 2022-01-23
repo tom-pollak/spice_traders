@@ -26,7 +26,7 @@ public class GameScreen implements Screen {
     private PirateGame game;
     private OrthographicCamera camera;
     private Viewport viewport;
-    public Stage stage;
+    private final Stage stage;
 
     private TmxMapLoader maploader;
     private TiledMap map;
@@ -44,11 +44,10 @@ public class GameScreen implements Screen {
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
-    private static int gamestatus;
-
+    private static int gameStatus;
 
     public GameScreen(PirateGame game){
-        gamestatus = 0;
+        gameStatus = 0;
         this.game = game;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
@@ -76,19 +75,17 @@ public class GameScreen implements Screen {
         // Spawning enemy ship and coin. x and y is spawn location
         enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
+        stage = new Stage(viewport);
     }
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(stage);
         //BUTTONS ADD
-        stage = new Stage(viewport);
-
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
         //GAME BUTTONS
         final TextButton pauseButton = new TextButton("Pause",skin);
-
         final TextButton skill = new TextButton("Skill Tree", skin);
 
         //PAUSE MENU BUTTONS
@@ -103,7 +100,6 @@ public class GameScreen implements Screen {
         final Table pauseTable = new Table();
         pauseTable.setFillParent(true);
         stage.addActor(pauseTable);
-
 
         //ADD TO TABLES
         table.add(pauseButton);
@@ -120,7 +116,6 @@ public class GameScreen implements Screen {
         pauseTable.setVisible(false);
         pauseTable.center();
 
-
         //BUTTON LISTENERS
         pauseButton.addListener(new ChangeListener() {
             @Override
@@ -130,80 +125,69 @@ public class GameScreen implements Screen {
                 pauseTable.setVisible(true);
             }
         });
-
         skill.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor){
                 game.changeScreen(PirateGame.SKILL);
             }
         });
-
-
-
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
                 resume();
                 pauseTable.setVisible(false);
                 table.setVisible(true);
-
-
             }
         });
-
         options.addListener(new ChangeListener() {
-                                @Override
-                                public void changed(ChangeEvent event, Actor actor) {
-                                    game.setScreen(new Options(game,game.getScreen()));
-                                }
-                            }
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.setScreen(new Options(game,game.getScreen()));
+            }
+        }
         );
-
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
             }
         });
-
     }
 
-
-
-
-
-
-
-    public void handleInput(float dt){
+    public void handleInput(float dt) {
         // Left physics impulse on 'A'
-        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
         }
         // Right physics impulse on 'D'
-        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
         }
         // Up physics impulse on 'W'
-        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
         }
         // Down physics impulse on 'S'
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
         }
         // Checking if player at max velocity, and keeping them below max
-        if(player.b2body.getLinearVelocity().x >= maxSpeed) {
+        if (player.b2body.getLinearVelocity().x >= maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
         }
-        if(player.b2body.getLinearVelocity().x <= -maxSpeed) {
+        if (player.b2body.getLinearVelocity().x <= -maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
         }
-        if(player.b2body.getLinearVelocity().y >= maxSpeed) {
+        if (player.b2body.getLinearVelocity().y >= maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
         }
-        if(player.b2body.getLinearVelocity().y <= -maxSpeed) {
+        if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            if(gameStatus == 0) {
+                pause();
+            }
         }
     }
 
@@ -227,12 +211,15 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (gamestatus == GAME_RUNNING) {
+        if (gameStatus == GAME_RUNNING) {
             update(delta);
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+            stage.draw();
             renderer.render();
+
             // b2dr is the hitbox shapes, can be commented out to hide
             b2dr.render(world, camera.combined);
 
@@ -263,15 +250,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        gamestatus = GAME_PAUSED;
-
+        gameStatus = GAME_PAUSED;
     }
 
     @Override
     public void resume() {
-
-        gamestatus = GAME_RUNNING;
-
+        gameStatus = GAME_RUNNING;
     }
 
     @Override

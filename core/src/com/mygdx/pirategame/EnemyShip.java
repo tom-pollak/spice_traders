@@ -1,5 +1,6 @@
 package com.mygdx.pirategame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -57,11 +58,12 @@ public class EnemyShip extends Enemy{
         // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        fdef.restitution = 0.7f;
+        b2body.createFixture(fdef).setUserData(this);
     }
 
     @Override
     public void onContact() {
-
+        Gdx.app.log("enemy", "collision");
     }
 }
