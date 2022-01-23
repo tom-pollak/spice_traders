@@ -5,11 +5,8 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 
 public class WorldCreator {
-    private Array<EnemyShip> enemyShips;
-
     public WorldCreator(GameScreen screen) {
         World world = screen.getWorld();
         TiledMap map = screen.getMap();

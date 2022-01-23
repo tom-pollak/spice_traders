@@ -29,6 +29,7 @@ public abstract class InteractiveTileObject {
 
         shape.setAsBox(bounds.getWidth() / 2 / PirateGame.PPM, bounds.getHeight() / 2 / PirateGame.PPM);
         fdef.shape = shape;
+        fdef.restitution = 0.7f;
         fixture = body.createFixture(fdef);
     }
 

@@ -52,7 +52,7 @@ public class GameScreen implements Screen {
         new WorldCreator(this);
 
         world.setContactListener(new WorldContactListener());
-
+        // for enemyShip and coin, the x and y is the position they spawn
         enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
     }
@@ -91,7 +91,7 @@ public class GameScreen implements Screen {
 
     public void update(float dt){
         handleInput(dt);
-
+        // more Physics stuff
         world.step(1 / 60f, 6, 2);
 
         player.update(dt);
@@ -112,13 +112,16 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
+        // b2dr is the shapes, can be commented out to hide
         b2dr.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        //order determines layering
         coin.draw(game.batch);
         player.draw(game.batch);
         enemyShip.draw(game.batch);
+
         game.batch.end();
         hud.stage.draw();
     }

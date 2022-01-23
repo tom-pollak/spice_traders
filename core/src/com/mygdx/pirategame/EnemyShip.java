@@ -11,6 +11,7 @@ public class EnemyShip extends Enemy{
     private Texture enemyShip;
     private boolean setToDestroy;
     private boolean destroyed;
+    private int health = 100;
 
     public EnemyShip(GameScreen screen, float x, float y) {
         super(screen, x, y);

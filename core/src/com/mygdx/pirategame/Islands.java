@@ -12,6 +12,7 @@ public class Islands extends InteractiveTileObject {
     @Override
     public void onContact() {
         Gdx.app.log("island", "collision");
+
         Hud.changeHealth(-10);
     }
 }
