@@ -1,6 +1,7 @@
 package com.mygdx.pirategame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -12,6 +13,7 @@ public class Coin extends Entity {
     private Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
+    Sound coinPickup;
 
     public Coin(GameScreen screen, float x, float y) {
         super(screen, x, y);
@@ -19,6 +21,7 @@ public class Coin extends Entity {
         setBounds(0,0,48 / PirateGame.PPM, 48 / PirateGame.PPM);
         setRegion(coin);
         setOrigin(24 / PirateGame.PPM,24 / PirateGame.PPM);
+        coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
     }
 
     public void update(float dt) {
@@ -56,6 +59,8 @@ public class Coin extends Entity {
         Hud.changeCoins(1);
         setToDestroyed = true;
         Gdx.app.log("coin", "collision");
+        coinPickup.play();
+
     }
 
     public void draw(Batch batch) {
