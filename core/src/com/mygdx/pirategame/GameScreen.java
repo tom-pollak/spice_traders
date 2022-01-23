@@ -69,11 +69,10 @@ public class GameScreen implements Screen {
         // Setting up contact listener for collisions
         world.setContactListener(new WorldContactListener());
 
-
         // Spawning enemy ship and coin. x and y is spawn location
         enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
-        stage = new Stage(viewport);
+        stage = new Stage(new ScreenViewport());
     }
 
     @Override
@@ -102,7 +101,6 @@ public class GameScreen implements Screen {
         if (gameStatus == GAME_PAUSED){
             table.setVisible(false);
         }
-
 
         //ADD TO TABLES
         table.add(pauseButton);
@@ -187,7 +185,7 @@ public class GameScreen implements Screen {
         if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if(gameStatus == GAME_RUNNING) {
                 pause();
             }else {
@@ -220,8 +218,6 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            stage.draw();
             renderer.render();
 
             // b2dr is the hitbox shapes, can be commented out to hide
@@ -236,6 +232,8 @@ public class GameScreen implements Screen {
 
             game.batch.end();
             hud.stage.draw();
+            stage.act();
+            stage.draw();
         }
         else {handleInput(delta);}
     }

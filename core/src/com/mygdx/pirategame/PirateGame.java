@@ -32,8 +32,6 @@ public class PirateGame extends Game {
 	public final static int GAME = 1;
 	public final static int SKILL = 2;
 
-
-	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

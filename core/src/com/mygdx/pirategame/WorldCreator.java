@@ -15,7 +15,7 @@ public class WorldCreator {
         FixtureDef fdef = new FixtureDef();
         Body body;
         // Object class is islands, stuff for boat to collide with
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)) {
+        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             new Islands(screen, rect);
