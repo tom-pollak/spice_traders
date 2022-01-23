@@ -99,6 +99,11 @@ public class GameScreen implements Screen {
         pauseTable.setFillParent(true);
         stage.addActor(pauseTable);
 
+        if (gameStatus == GAME_PAUSED){
+            table.setVisible(false);
+        }
+
+
         //ADD TO TABLES
         table.add(pauseButton);
         table.row().pad(10, 0, 10, 0);
