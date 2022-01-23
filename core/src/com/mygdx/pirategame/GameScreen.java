@@ -11,6 +11,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
 
 public class GameScreen implements Screen {
@@ -20,6 +26,7 @@ public class GameScreen implements Screen {
     private PirateGame game;
     private OrthographicCamera camera;
     private Viewport viewport;
+    public Stage stage;
 
     private TmxMapLoader maploader;
     private TiledMap map;
@@ -35,7 +42,13 @@ public class GameScreen implements Screen {
     private Hud hud;
     private Coin coin;
 
+    public static final int GAME_RUNNING = 0;
+    public static final int GAME_PAUSED = 1;
+    private static int gamestatus;
+
+
     public GameScreen(PirateGame game){
+        gamestatus = 0;
         this.game = game;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
@@ -43,7 +56,7 @@ public class GameScreen implements Screen {
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         // Initialize a hud
-        hud = new Hud(game.batch);
+        hud = new Hud(game.batch,this.game);
 
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
@@ -59,11 +72,6 @@ public class GameScreen implements Screen {
         // Setting up contact listener for collisions
         world.setContactListener(new WorldContactListener());
 
-        // Start music looping with volume decreased
-        pirateMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate-music.mp3"));
-        pirateMusic.setLooping(true);
-        pirateMusic.setVolume(0f);
-        pirateMusic.play();
 
         // Spawning enemy ship and coin. x and y is spawn location
         enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
@@ -73,7 +81,99 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+        //BUTTONS ADD
+        stage = new Stage(viewport);
+
+        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+
+        //GAME BUTTONS
+        final TextButton pauseButton = new TextButton("Pause",skin);
+
+        final TextButton skill = new TextButton("Skill Tree", skin);
+
+        //PAUSE MENU BUTTONS
+        final TextButton start = new TextButton("Resume", skin);
+        final TextButton options = new TextButton("Options", skin);
+        TextButton exit = new TextButton("Exit", skin);
+
+        final Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        final Table pauseTable = new Table();
+        pauseTable.setFillParent(true);
+        stage.addActor(pauseTable);
+
+
+        //ADD TO TABLES
+        table.add(pauseButton);
+        table.row().pad(10, 0, 10, 0);
+        table.left().top();
+
+        pauseTable.add(start).fillX().uniformX();
+        pauseTable.row().pad(20, 0, 10, 0);
+        pauseTable.add(skill).fillX().uniformX();
+        pauseTable.row().pad(20, 0, 10, 0);
+        pauseTable.add(options).fillX().uniformX();
+        pauseTable.row().pad(20, 0, 10, 0);
+        pauseTable.add(exit).fillX().uniformX();
+        pauseTable.setVisible(false);
+        pauseTable.center();
+
+
+        //BUTTON LISTENERS
+        pauseButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+                pause();
+                table.setVisible(false);
+                pauseTable.setVisible(true);
+            }
+        });
+
+        skill.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+                game.changeScreen(PirateGame.SKILL);
+            }
+        });
+
+
+
+        start.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                resume();
+                pauseTable.setVisible(false);
+                table.setVisible(true);
+
+
+            }
+        });
+
+        options.addListener(new ChangeListener() {
+                                @Override
+                                public void changed(ChangeEvent event, Actor actor) {
+                                    game.setScreen(new Options(game,game.getScreen()));
+                                }
+                            }
+        );
+
+        exit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.exit();
+            }
+        });
+
     }
+
+
+
+
+
+
 
     public void handleInput(float dt){
         // Left physics impulse on 'A'
@@ -127,23 +227,25 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        update(delta);
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (gamestatus == GAME_RUNNING) {
+            update(delta);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.render();
-        // b2dr is the hitbox shapes, can be commented out to hide
-        b2dr.render(world, camera.combined);
+            renderer.render();
+            // b2dr is the hitbox shapes, can be commented out to hide
+            b2dr.render(world, camera.combined);
 
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        // Order determines layering
-        coin.draw(game.batch);
-        player.draw(game.batch);
-        enemyShip.draw(game.batch);
+            game.batch.setProjectionMatrix(camera.combined);
+            game.batch.begin();
+            // Order determines layering
+            coin.draw(game.batch);
+            player.draw(game.batch);
+            enemyShip.draw(game.batch);
 
-        game.batch.end();
-        hud.stage.draw();
+            game.batch.end();
+            hud.stage.draw();
+        }
     }
 
     @Override
@@ -161,11 +263,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
+        gamestatus = GAME_PAUSED;
 
     }
 
     @Override
     public void resume() {
+
+        gamestatus = GAME_RUNNING;
 
     }
 
