@@ -3,7 +3,6 @@ package com.mygdx.pirategame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -35,7 +34,6 @@ public class GameScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
-    private Music pirateMusic;
 
     private Player player;
     private EnemyShip enemyShip;
@@ -185,9 +183,10 @@ public class GameScreen implements Screen {
             player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            if(gameStatus == 0) {
+            if(gameStatus == GAME_RUNNING) {
                 pause();
-            }
+            }else {
+                resume();}
         }
     }
 
@@ -233,6 +232,7 @@ public class GameScreen implements Screen {
             game.batch.end();
             hud.stage.draw();
         }
+        else {handleInput(delta);}
     }
 
     @Override
@@ -265,7 +265,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        pirateMusic.dispose();
         map.dispose();
         renderer.dispose();
         world.dispose();
