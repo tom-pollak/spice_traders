@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -63,7 +64,7 @@ public class Hud implements Disposable {
         coinLabel.setFontScale(2f);
 
         table2.add(hpImg).width(64).height(64).padBottom(15).padLeft(30);
-        table1.add(healthLabel).padBottom(30).padLeft(37).center();
+        table1.add(healthLabel).padBottom(30).padLeft(42).center();
         table1.add(timeLabel).expandX().padBottom(15);
         table1.add(coinLabel).expandX().padBottom(15);
         table1.add(scoreLabel).expandX().padBottom(15);
@@ -92,7 +93,7 @@ public class Hud implements Disposable {
     }
     public static void changeCoins(int value) {
         coins += value;
-        coinLabel.setText(String.format("%03d", coins / 2));
+        coinLabel.setText(String.format("%03d", coins));
     }
 
     @Override

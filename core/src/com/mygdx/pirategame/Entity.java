@@ -17,4 +17,5 @@ public abstract class Entity extends Sprite {
     }
 
     protected abstract void defineEntity();
+    public abstract void entityContact();
 }

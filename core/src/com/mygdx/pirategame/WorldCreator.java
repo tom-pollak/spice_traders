@@ -5,8 +5,11 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 
 public class WorldCreator {
+    private Array<EnemyShip> enemyShips;
+
     public WorldCreator(World world, TiledMap map) {
         BodyDef bdef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -18,5 +21,6 @@ public class WorldCreator {
 
             new Islands(world, map, rect);
         }
+
     }
 }

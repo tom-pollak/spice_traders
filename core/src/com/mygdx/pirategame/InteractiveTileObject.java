@@ -2,6 +2,7 @@ package com.mygdx.pirategame;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -33,4 +34,14 @@ public abstract class InteractiveTileObject {
     }
 
     public abstract void onContact();
+    public void setCategoryFilter(short filterBit) {
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        fixture.setFilterData(filter);
+    }
+
+    public TiledMapTileLayer.Cell getCell(){
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(1);
+        return layer.getCell((int)(body.getPosition().x * PirateGame.PPM / 64), (int)(body.getPosition().y * PirateGame.PPM / 64));
+    }
 }

@@ -19,7 +19,9 @@ public class WorldContactListener implements ContactListener {
         if (fixA.getUserData() == "coin" || fixB.getUserData() == "coin") {
             Fixture sensor = fixA.getUserData() == "coin" ? fixA : fixB;
             Fixture object = sensor == fixA ? fixB : fixA;
-
+            if(object.getUserData() != null && Entity.class.isAssignableFrom(object.getUserData().getClass())) {
+                ((Entity) object.getUserData()).entityContact();
+            }
             Hud.changeCoins(1);
         }
     }

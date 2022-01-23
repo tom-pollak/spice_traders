@@ -15,6 +15,6 @@ public abstract class Enemy extends Sprite {
         setPosition(x, y);
         defineEnemy();
     }
-
     protected abstract void defineEnemy();
+    public abstract void update(float dt);
 }

@@ -9,6 +9,7 @@ public class Islands extends InteractiveTileObject {
     public Islands(World world, TiledMap map, Rectangle bounds) {
         super(world, map, bounds);
         fixture.setUserData(this);
+        setCategoryFilter(PirateGame.ISLAND_BIT);
     }
 
     @Override
