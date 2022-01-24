@@ -15,9 +15,9 @@ public class PirateGame extends Game {
 	public static final short PLAYER_BIT = 2;
 	public static final short ISLAND_BIT = 4;
 	public static final short COIN_BIT = 8;
-	public static final short DESTROYED_BIT = 16;
+	public static final short CANNON_BIT = 16;
 	public static final short ENEMY_BIT = 32;
-	public static final short COLLISION_BIT = 64;
+	public static final short PLACEHOLDER_BIT = 64;
 
 	public SpriteBatch batch;
 
