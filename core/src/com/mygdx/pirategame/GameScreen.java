@@ -236,8 +236,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        System.out.println(accel);
-        System.out.println(maxSpeed);
         if (gameStatus == GAME_RUNNING) {
             update(delta);
         }
