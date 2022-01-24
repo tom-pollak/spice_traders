@@ -19,7 +19,7 @@ public class Hud implements Disposable {
     //private Integer worldTimer;
     private float timeCount;
     private Integer score;
-    public static Integer health;
+    private static Integer health;
     private Texture minimap;
     private Texture hp;
     private Texture boxBackground;
@@ -31,6 +31,7 @@ public class Hud implements Disposable {
     private static Label coinLabel;
     private static Label pointsText;
     private static Integer coins;
+    private static Integer coinMulti;
     //private Image minimapImg;
     private Image hpImg;
     private Image box;
@@ -41,6 +42,7 @@ public class Hud implements Disposable {
         health = 100;
         score = 0;
         coins = 0;
+        coinMulti = 1;
         minimap = new Texture("minimap.png");
         hp = new Texture("hp.png");
         boxBackground = new Texture("hudBG.png");
@@ -116,12 +118,20 @@ public class Hud implements Disposable {
         healthLabel.setText(String.format("%02d", health));
     }
     public static void changeCoins(int value) {
-        coins += value;
+        coins += value * coinMulti;
         coinLabel.setText(String.format("%03d", coins));
+    }
+
+    public static void changeCoinsMulti(int value) {
+        coinMulti = coinMulti * value;
     }
 
     public static Integer getHealth(){
         return health;
+    }
+
+    public static Integer getCoins(){
+        return coins;
     }
 
     @Override

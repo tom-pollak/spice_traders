@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Player extends Sprite {
+    private final GameScreen screen;
     private Texture ship;
     public World world;
     public Body b2body;
     Sound breakSound;
 
     public Player(GameScreen screen) {
+        this.screen = screen;
         ship = new Texture("ship1.png");
         this.world = screen.getWorld();
         definePlayer();
@@ -30,7 +32,9 @@ public class Player extends Sprite {
     }
 
     public void playBreakSound() {
-        breakSound.play();
+        if (screen.game.getPreferences().isEffectsEnabled()) {
+            breakSound.play(screen.game.getPreferences().getEffectsVolume());
+        }
     }
 
     private void definePlayer() {

@@ -57,7 +57,7 @@ public class SkillTree implements Screen {
 
         //create skill tree buttons
 
-        final TextButton movement1 = new TextButton("Movement Speed + 10", skin);
+        final TextButton movement1 = new TextButton("Movement Speed + 20%", skin);
         movement1.setTransform(true);
         movement1.setScale(0.9f); //make slightly smaller
 
@@ -85,7 +85,7 @@ public class SkillTree implements Screen {
             GoldMulti1.setDisabled(true);
         }
 
-        final TextButton movement2 = new TextButton("Movement Speed + 10", skin);
+        final TextButton movement2 = new TextButton("Movement Speed + 20%", skin);
         movement2.setTransform(true);
         movement2.setScale(0.9f); //make slightly smaller
 
@@ -101,17 +101,23 @@ public class SkillTree implements Screen {
         movement1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //change movement speed
-                damage1.setDisabled(false);
-                GoldMulti1.setDisabled(false);
-                movement2.setDisabled(false);
-                movement1.setDisabled(true);
 
-                states.clear();
-                states.add(1);
-                states.add(0);
-                states.add(0);
-                states.add(0);
+                if (Hud.getCoins() >= 1) {
+                    //Change acceleration
+                    GameScreen.changeAcceleration(20F);
+                    //Change Max speed
+                    GameScreen.changeMaxSpeed(20F);
+                    damage1.setDisabled(false);
+                    GoldMulti1.setDisabled(false);
+                    movement2.setDisabled(false);
+                    movement1.setDisabled(true);
+
+                    states.clear();
+                    states.add(1);
+                    states.add(0);
+                    states.add(0);
+                    states.add(0);
+                }
 
             }
         });
@@ -119,31 +125,39 @@ public class SkillTree implements Screen {
         movement2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //change movement speed
-                movement2.setDisabled(true);
 
-                states.set(3, 1); //Set list value
-            }
+                if (Hud.getCoins() >= 1) {
+                    //Change acceleration
+                    GameScreen.changeAcceleration(20F);
+                    //Change Max speed
+                    GameScreen.changeMaxSpeed(20F);
+                    movement2.setDisabled(true);
+
+                    states.set(3, 1); //Set list value
+            }}
         });
 
         damage1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //change damage
-                damage1.setDisabled(true);
+                if (Hud.getCoins() >= 1) {
+                    damage1.setDisabled(true);
 
-                states.set(1, 1); //Set list value
-            }
+                    states.set(1, 1); //Set list value
+            }}
         });
 
         GoldMulti1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //change gold
-                GoldMulti1.setDisabled(true);
+                //change coin multiplier
+                if (Hud.getCoins() >= 1) {
+                    Hud.changeCoinsMulti(2);
+                    GoldMulti1.setDisabled(true);
 
-                states.set(2, 1); //Set list value
-            }
+                    states.set(2, 1); //Set list value
+            }}
         });
 
 

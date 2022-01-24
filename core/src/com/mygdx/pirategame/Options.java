@@ -13,14 +13,14 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Options implements Screen {
 
-    private final PirateGame myGame;
+    private final PirateGame PirateGame;
     private final Screen parent;
     private final Stage stage;
 
 
     //In the constructor, the game base is set as well as screen. Also the parent is set separately to allow for easy return
-    public Options(PirateGame myGame, Screen parent){
-        this.myGame = myGame;
+    public Options(PirateGame pirateGame, Screen parent){
+        this.PirateGame = pirateGame;
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
 
@@ -41,30 +41,30 @@ public class Options implements Screen {
 
         //Music Sliders and Check
         final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
-        volumeMusicSlider.setValue( myGame.getPreferences().getMusicVolume() ); //Set value to current option
+        volumeMusicSlider.setValue( PirateGame.getPreferences().getMusicVolume() ); //Set value to current option
         volumeMusicSlider.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
-                myGame.getPreferences().setMusicVolume(volumeMusicSlider.getValue());  //Change music value in options to slider
-                myGame.song.setVolume(myGame.getPreferences().getMusicVolume()); //Change the volume
+                PirateGame.getPreferences().setMusicVolume(volumeMusicSlider.getValue());  //Change music value in options to slider
+                PirateGame.song.setVolume(PirateGame.getPreferences().getMusicVolume()); //Change the volume
 
                 return false;
             }
         });
 
         final CheckBox musicCheckbox = new CheckBox(null, skin);
-        musicCheckbox.setChecked( myGame.getPreferences().isMusicEnabled() ); //Check if it should be checked
+        musicCheckbox.setChecked( PirateGame.getPreferences().isMusicEnabled() ); //Check if it should be checked
         musicCheckbox.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked(); //Get checked value
-                myGame.getPreferences().setMusicEnabled( enabled ); //Set
+                PirateGame.getPreferences().setMusicEnabled( enabled ); //Set
 
-                if(myGame.getPreferences().isMusicEnabled()){ //Play or don't
-                    myGame.song.play();
+                if(PirateGame.getPreferences().isMusicEnabled()){ //Play or don't
+                    PirateGame.song.play();
                 }
                 else {
-                    myGame.song.pause();}
+                    PirateGame.song.pause();}
 
                 return false;
             }
@@ -73,22 +73,22 @@ public class Options implements Screen {
 
         //EFFECTS
         final Slider volumeEffectSlider = new Slider( 0f, 1f, 0.1f,false, skin );
-        volumeEffectSlider.setValue( myGame.getPreferences().getEffectsVolume() ); //Set value to current option
+        volumeEffectSlider.setValue( PirateGame.getPreferences().getEffectsVolume() ); //Set value to current option
         volumeEffectSlider.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
-                myGame.getPreferences().setEffectsVolume(volumeEffectSlider.getValue()); //Change effect value in options to slider
+                PirateGame.getPreferences().setEffectsVolume(volumeEffectSlider.getValue()); //Change effect value in options to slider
                 return false;
             }
         });
 
         final CheckBox effectCheckbox = new CheckBox(null, skin);
-        effectCheckbox.setChecked( myGame.getPreferences().isEffectsEnabled() );
+        effectCheckbox.setChecked( PirateGame.getPreferences().isEffectsEnabled() );
         effectCheckbox.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = effectCheckbox.isChecked(); //Get checked value
-                myGame.getPreferences().setEffectsEnabled( enabled ); //Set
+                PirateGame.getPreferences().setEffectsEnabled( enabled ); //Set
                 return false;
             }
         });
@@ -98,7 +98,7 @@ public class Options implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                myGame.setScreen(parent);
+                PirateGame.setScreen(parent);
             }
         });
 
