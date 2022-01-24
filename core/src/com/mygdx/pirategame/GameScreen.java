@@ -23,6 +23,7 @@ public class GameScreen implements Screen {
     public static final float accel = 0.02f;
 
     private PirateGame game;
+    private DeathScreen deathScreen;
     private OrthographicCamera camera;
     private Viewport viewport;
     private final Stage stage;
@@ -33,7 +34,6 @@ public class GameScreen implements Screen {
 
     private World world;
     private Box2DDebugRenderer b2dr;
-
 
     private Player player;
     private EnemyShip enemyShip;
@@ -232,6 +232,9 @@ public class GameScreen implements Screen {
 
             game.batch.end();
             hud.stage.draw();
+            if (Hud.health <= 0) {
+                game.changeScreen(PirateGame.DEATH);
+            }
             stage.act();
             stage.draw();
         }

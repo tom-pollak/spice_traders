@@ -73,8 +73,6 @@ public class MainMenu implements Screen {
         });
     }
 
-
-
     @Override
     public void render(float delta) {
         //Set the screen

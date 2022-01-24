@@ -19,7 +19,7 @@ public class Hud implements Disposable {
     //private Integer worldTimer;
     private float timeCount;
     private Integer score;
-    private static Integer health;
+    public static Integer health;
     private Texture minimap;
     private Texture hp;
     private Texture boxBackground;
@@ -118,6 +118,10 @@ public class Hud implements Disposable {
     public static void changeCoins(int value) {
         coins += value;
         coinLabel.setText(String.format("%03d", coins));
+    }
+
+    public static Integer getHealth(){
+        return health;
     }
 
     @Override

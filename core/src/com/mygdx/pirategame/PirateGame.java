@@ -24,6 +24,7 @@ public class PirateGame extends Game {
 	private MainMenu menuScreen;
 	private GameScreen gameScreen;
 	private SkillTree skillTreeScreen;
+	private DeathScreen deathScreen;
 
 	private audioControls options;
 	public Music song;
@@ -31,6 +32,7 @@ public class PirateGame extends Game {
 	public final static int MENU = 0;
 	public final static int GAME = 1;
 	public final static int SKILL = 2;
+	public final static int DEATH = 3;
 
 	@Override
 	public void create () {
@@ -64,6 +66,10 @@ public class PirateGame extends Game {
 				this.setScreen(skillTreeScreen);
 				break;
 
+			case DEATH:
+				if (deathScreen == null) deathScreen = new DeathScreen(this);
+				this.setScreen(deathScreen);
+				break;
 		}
 	}
 
@@ -80,6 +86,5 @@ public class PirateGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-
 	}
 }
