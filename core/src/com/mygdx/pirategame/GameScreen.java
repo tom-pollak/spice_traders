@@ -23,7 +23,6 @@ public class GameScreen implements Screen {
     public static final float accel = 0.02f;
 
     private PirateGame game;
-    private DeathScreen deathScreen;
     private OrthographicCamera camera;
     private Viewport viewport;
     private final Stage stage;
