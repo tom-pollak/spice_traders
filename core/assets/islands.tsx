@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="islands" tilewidth="64" tileheight="64" tilecount="97" columns="0">
+<tileset version="1.5" tiledversion="1.7.2" name="islands" tilewidth="64" tileheight="64" tilecount="101" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="64">
   <image width="64" height="64" source="tile_17.png"/>
@@ -291,5 +291,17 @@
  </tile>
  <tile id="184">
   <image width="64" height="64" source="tile_87.png"/>
+ </tile>
+ <tile id="185">
+  <image width="64" height="64" source="tile_94.png"/>
+ </tile>
+ <tile id="186">
+  <image width="64" height="64" source="tile_93.png"/>
+ </tile>
+ <tile id="187">
+  <image width="64" height="64" source="tile_31.png"/>
+ </tile>
+ <tile id="188">
+  <image width="64" height="64" source="tile_32.png"/>
  </tile>
 </tileset>

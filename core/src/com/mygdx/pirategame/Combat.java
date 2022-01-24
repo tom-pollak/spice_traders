@@ -17,7 +17,6 @@ public class Combat extends Entity {
         setRegion(cannonBall);
         setOrigin(5 / PirateGame.PPM,5 / PirateGame.PPM);
         destroyed = false;
-        Player player = new Player(screen);
     }
 
     @Override
