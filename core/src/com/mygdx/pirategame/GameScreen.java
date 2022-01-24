@@ -38,6 +38,7 @@ public class GameScreen implements Screen {
     private EnemyShip enemyShip;
     private Hud hud;
     private Coin coin;
+    private Combat combat;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -171,6 +172,10 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
         }
+        // Cannon fire on 'E'
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            combat = new Combat(this, player.getX() + 0.55f, player.getY()+ 0.55f);
+        }
         // Checking if player at max velocity, and keeping them below max
         if (player.b2body.getLinearVelocity().x >= maxSpeed) {
             player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
@@ -228,7 +233,6 @@ public class GameScreen implements Screen {
             coin.draw(game.batch);
             player.draw(game.batch);
             enemyShip.draw(game.batch);
-
             game.batch.end();
             hud.stage.draw();
             if (Hud.health <= 0) {
