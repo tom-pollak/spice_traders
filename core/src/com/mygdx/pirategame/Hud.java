@@ -118,8 +118,14 @@ public class Hud implements Disposable {
         healthLabel.setText(String.format("%02d", health));
     }
     public static void changeCoins(int value) {
-        coins += value * coinMulti;
-        coinLabel.setText(String.format("%03d", coins));
+        if (value > 0) {
+            coins += value * coinMulti;
+            coinLabel.setText(String.format("%03d", coins));
+        }
+        else{
+            coins += value;
+            coinLabel.setText(String.format("%03d", coins));
+        }
     }
 
     public static void changeCoinsMulti(int value) {

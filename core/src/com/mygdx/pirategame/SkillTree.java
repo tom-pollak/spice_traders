@@ -103,6 +103,7 @@ public class SkillTree implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (Hud.getCoins() >= 1) {
+                    Hud.changeCoins(-1);
                     //Change acceleration
                     GameScreen.changeAcceleration(20F);
                     //Change Max speed
@@ -127,6 +128,7 @@ public class SkillTree implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
 
                 if (Hud.getCoins() >= 1) {
+                    Hud.changeCoins(-1);
                     //Change acceleration
                     GameScreen.changeAcceleration(20F);
                     //Change Max speed
@@ -142,6 +144,7 @@ public class SkillTree implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 //change damage
                 if (Hud.getCoins() >= 1) {
+                    Hud.changeCoins(-1);
                     damage1.setDisabled(true);
 
                     states.set(1, 1); //Set list value
@@ -153,6 +156,7 @@ public class SkillTree implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 //change coin multiplier
                 if (Hud.getCoins() >= 1) {
+                    Hud.changeCoins(-1);
                     Hud.changeCoinsMulti(2);
                     GoldMulti1.setDisabled(true);
 
