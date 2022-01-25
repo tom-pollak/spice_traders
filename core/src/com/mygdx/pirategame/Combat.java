@@ -2,6 +2,7 @@ package com.mygdx.pirategame;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Combat extends Entity {
@@ -9,6 +10,7 @@ public class Combat extends Entity {
     private Texture cannonBall;
     private boolean setToDestroyed;
     private boolean destroyed;
+    private Vector2 velocity;
 
     public Combat(GameScreen screen, float x, float y) {
         super(screen, x, y);
@@ -16,6 +18,7 @@ public class Combat extends Entity {
         setBounds(0,0,10 / PirateGame.PPM, 10 / PirateGame.PPM);
         setRegion(cannonBall);
         setOrigin(5 / PirateGame.PPM,5 / PirateGame.PPM);
+        velocity = new Vector2(0,0);
         destroyed = false;
     }
 
@@ -29,11 +32,11 @@ public class Combat extends Entity {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
-        // setting BIT identifier
+
         fdef.filter.categoryBits = PirateGame.CANNON_BIT;
-        // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
+
         b2body.createFixture(fdef).setUserData(this);
     }
 
@@ -47,11 +50,12 @@ public class Combat extends Entity {
         if(setToDestroyed && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
+            stateTime = 0;
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         }
-        if(stateTime == 5) {
+        if(stateTime > 1) {
             setToDestroyed = true;
         }
     }
@@ -60,5 +64,9 @@ public class Combat extends Entity {
         if(!destroyed) {
             super.draw(batch);
         }
+    }
+
+    public void destroy() {
+        setToDestroyed = true;
     }
 }

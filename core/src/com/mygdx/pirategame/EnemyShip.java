@@ -3,6 +3,7 @@ package com.mygdx.pirategame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -35,6 +36,11 @@ public class EnemyShip extends Enemy{
             b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
             setRotation((float) (b2body.getAngle() * 180 / Math.PI));
         }
+        //Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
+        //target.sub(b2body.getPosition());
+        //target.nor();
+        //float speed = 1.5f;
+        //b2body.setLinearVelocity(target.scl(speed));
     }
 
     public void draw(Batch batch) {

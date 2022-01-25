@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,7 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.*;
+
+import java.util.PriorityQueue;
 
 public class GameScreen implements Screen {
     private static float maxSpeed = 2;
@@ -39,10 +43,12 @@ public class GameScreen implements Screen {
     private Hud hud;
     private Coin coin;
     private Combat combat;
+    private Combat combat2;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
     private static int gameStatus;
+    private float cannonFire;
 
     private Table pauseTable;
     private Table table;
@@ -73,7 +79,7 @@ public class GameScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         // Spawning enemy ship and coin. x and y is spawn location
-        enemyShip = new EnemyShip(this, 1200 / PirateGame.PPM, 900 / PirateGame.PPM);
+        enemyShip = new EnemyShip(this, 714 / PirateGame.PPM, 1200 / PirateGame.PPM);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
         stage = new Stage(new ScreenViewport());
     }
@@ -166,6 +172,30 @@ public class GameScreen implements Screen {
         });
     }
 
+    public void shootCannons(float dt) {
+        cannonFire = 0;
+        cannonFire += dt;
+        combat = new Combat(this, player.getX() + 0.32f, player.getY() + 0.55f);
+        float velocity = 5;
+        float angle = player.b2body.getAngle();
+
+        float velX = MathUtils.cos(angle) * velocity;
+        float velY = MathUtils.sin(angle) * velocity;
+        combat.b2body.applyLinearImpulse(new Vector2(velX, velY), player.b2body.getWorldCenter(), true);
+        if(cannonFire > 2) {
+            combat.destroy();
+        }
+        combat2 = new Combat(this, player.getX() + 0.32f, player.getY() + 0.55f);
+        float angle2 = player.b2body.getAngle();
+        float velocity2 = -5;
+        float velX2 = MathUtils.cos(angle2) * velocity2;
+        float velY2 = MathUtils.sin(angle2) * velocity2;
+        combat2.b2body.applyLinearImpulse(new Vector2(velX2, velY2), player.b2body.getWorldCenter(), true);
+        if(cannonFire > 2){
+            combat2.destroy();
+        }
+    }
+
     public void handleInput(float dt) {
         if (gameStatus == GAME_RUNNING) {
             // Left physics impulse on 'A'
@@ -186,7 +216,7 @@ public class GameScreen implements Screen {
             }
             // Cannon fire on 'E'
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                combat = new Combat(this, player.getX() + 0.55f, player.getY() + 0.55f);
+                shootCannons(dt);
             }
             // Checking if player at max velocity, and keeping them below max
             if (player.b2body.getLinearVelocity().x >= maxSpeed) {
@@ -226,6 +256,7 @@ public class GameScreen implements Screen {
         enemyShip.update(dt);
         coin.update(dt);
         hud.update(dt);
+        //combat.update(dt);
 
         // Centre camera on player boat
         camera.position.x = player.b2body.getPosition().x;
@@ -240,8 +271,6 @@ public class GameScreen implements Screen {
             update(delta);
         }
         else{handleInput(delta);}
-
-
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -259,7 +288,6 @@ public class GameScreen implements Screen {
         if (Hud.getHealth() <= 0) {
             game.changeScreen(PirateGame.DEATH);
         }
-
         stage.act();
         stage.draw();
     }
