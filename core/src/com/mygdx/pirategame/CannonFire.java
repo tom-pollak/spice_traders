@@ -58,7 +58,7 @@ public class CannonFire extends Sprite {
             world.destroyBody(b2body);
             destroyed = true;
         }
-        // determines how long the cannon ball can travel for
+        // determines cannonball range
         if(stateTime > 0.5f) {
             setToDestroy();
         }
