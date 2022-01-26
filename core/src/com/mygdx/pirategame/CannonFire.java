@@ -16,12 +16,14 @@ public class CannonFire extends Sprite {
     Body b2body;
     float angle;
     float velocity;
+    Vector2 bodyVel;
 
-    public CannonFire(GameScreen screen, float x, float y, float angle, float velocity) {
+    public CannonFire(GameScreen screen, float x, float y, float angle, float velocity, Vector2 bodyVel) {
         this.screen = screen;
         this.angle = angle;
         this.velocity = velocity;
         this.world = screen.getWorld();
+        this.bodyVel = bodyVel;
 
         cannonBall = new Texture("cannonBall.png");
         setRegion(cannonBall);
@@ -44,8 +46,8 @@ public class CannonFire extends Sprite {
         fdef.shape = shape;
 
         b2body.createFixture(fdef).setUserData(this);
-        float velX = MathUtils.cos(angle) * velocity;
-        float velY = MathUtils.sin(angle) * velocity;
+        float velX = MathUtils.cos(angle) * velocity + bodyVel.x;
+        float velY = MathUtils.sin(angle) * velocity + bodyVel.y;
         b2body.applyLinearImpulse(new Vector2(velX, velY), b2body.getWorldCenter(), true);
     }
 
@@ -56,6 +58,7 @@ public class CannonFire extends Sprite {
             world.destroyBody(b2body);
             destroyed = true;
         }
+        // determines how long the cannon ball can travel for
         if(stateTime > 0.5f) {
             setToDestroy();
         }

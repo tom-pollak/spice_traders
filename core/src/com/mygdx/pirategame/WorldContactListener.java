@@ -41,6 +41,7 @@ public class WorldContactListener implements ContactListener {
                     ((Enemy) fixB.getUserData()).onContact();
                 }
                 break;
+
         }
     }
 
