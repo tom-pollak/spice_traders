@@ -27,7 +27,7 @@ public class CannonFire extends Sprite {
 
         cannonBall = new Texture("cannonBall.png");
         setRegion(cannonBall);
-        setBounds(x, y, 5 / PirateGame.PPM, 5 / PirateGame.PPM);
+        setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
         defineCannonBall();
     }
 
