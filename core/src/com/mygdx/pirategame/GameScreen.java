@@ -42,8 +42,6 @@ public class GameScreen implements Screen {
     private EnemyShip enemyShip;
     private Hud hud;
     private Coin coin;
-    private Combat combat;
-    private Combat combat2;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -172,30 +170,6 @@ public class GameScreen implements Screen {
         });
     }
 
-    public void shootCannons(float dt) {
-        cannonFire = 0;
-        cannonFire += dt;
-        combat = new Combat(this, player.getX() + 0.32f, player.getY() + 0.55f);
-        float velocity = 5;
-        float angle = player.b2body.getAngle();
-
-        float velX = MathUtils.cos(angle) * velocity;
-        float velY = MathUtils.sin(angle) * velocity;
-        combat.b2body.applyLinearImpulse(new Vector2(velX, velY), player.b2body.getWorldCenter(), true);
-        if(cannonFire > 2) {
-            combat.destroy();
-        }
-        combat2 = new Combat(this, player.getX() + 0.32f, player.getY() + 0.55f);
-        float angle2 = player.b2body.getAngle();
-        float velocity2 = -5;
-        float velX2 = MathUtils.cos(angle2) * velocity2;
-        float velY2 = MathUtils.sin(angle2) * velocity2;
-        combat2.b2body.applyLinearImpulse(new Vector2(velX2, velY2), player.b2body.getWorldCenter(), true);
-        if(cannonFire > 2){
-            combat2.destroy();
-        }
-    }
-
     public void handleInput(float dt) {
         if (gameStatus == GAME_RUNNING) {
             // Left physics impulse on 'A'
@@ -216,7 +190,7 @@ public class GameScreen implements Screen {
             }
             // Cannon fire on 'E'
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                shootCannons(dt);
+                player.fire();
             }
             // Checking if player at max velocity, and keeping them below max
             if (player.b2body.getLinearVelocity().x >= maxSpeed) {
@@ -256,7 +230,6 @@ public class GameScreen implements Screen {
         enemyShip.update(dt);
         coin.update(dt);
         hud.update(dt);
-        //combat.update(dt);
 
         // Centre camera on player boat
         camera.position.x = player.b2body.getPosition().x;
@@ -277,6 +250,7 @@ public class GameScreen implements Screen {
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
         b2dr.render(world, camera.combined);
+
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         // Order determines layering
