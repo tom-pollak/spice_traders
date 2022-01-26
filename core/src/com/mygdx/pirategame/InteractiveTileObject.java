@@ -18,19 +18,19 @@ public abstract class InteractiveTileObject {
         this.world = screen.getWorld();
         this.bounds = bounds;
 
-        BodyDef bdef = new BodyDef();
-        FixtureDef fdef = new FixtureDef();
+        BodyDef bDef = new BodyDef();
+        FixtureDef fDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
-        bdef.type = BodyDef.BodyType.StaticBody;
-        bdef.position.set((bounds.getX() + bounds.getWidth() / 2) / PirateGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PirateGame.PPM);
+        bDef.type = BodyDef.BodyType.StaticBody;
+        bDef.position.set((bounds.getX() + bounds.getWidth() / 2) / PirateGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PirateGame.PPM);
 
-        body = world.createBody(bdef);
+        body = world.createBody(bDef);
 
         shape.setAsBox(bounds.getWidth() / 2 / PirateGame.PPM, bounds.getHeight() / 2 / PirateGame.PPM);
-        fdef.shape = shape;
-        fdef.restitution = 0.7f;
-        fixture = body.createFixture(fdef);
+        fDef.shape = shape;
+        fDef.restitution = 0.7f;
+        fixture = body.createFixture(fDef);
     }
 
     public abstract void onContact();

@@ -36,6 +36,7 @@ public class EnemyShip extends Enemy{
             b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
             setRotation((float) (b2body.getAngle() * 180 / Math.PI));
         }
+        // below code is to move the ship to a coordinate (target)
         //Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
         //target.sub(b2body.getPosition());
         //target.nor();

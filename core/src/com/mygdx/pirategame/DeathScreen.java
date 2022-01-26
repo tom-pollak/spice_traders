@@ -17,8 +17,8 @@ public class DeathScreen implements Screen {
 
     private Label deathMsg;
 
-    public DeathScreen(PirateGame PirateGame){
-        parent = PirateGame;
+    public DeathScreen(PirateGame pirateGame){
+        parent = pirateGame;
         stage = new Stage(new ScreenViewport());
 
         Table table = new Table();

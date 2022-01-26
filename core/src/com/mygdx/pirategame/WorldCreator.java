@@ -10,9 +10,9 @@ public class WorldCreator {
     public WorldCreator(GameScreen screen) {
         World world = screen.getWorld();
         TiledMap map = screen.getMap();
-        BodyDef bdef = new BodyDef();
+        BodyDef bDef = new BodyDef();
         PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
+        FixtureDef fDef = new FixtureDef();
         Body body;
         // Object class is islands, stuff for boat to collide with
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {

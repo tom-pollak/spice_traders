@@ -17,13 +17,11 @@ public class Options implements Screen {
     private final Screen parent;
     private final Stage stage;
 
-
     //In the constructor, the game base is set as well as screen. Also the parent is set separately to allow for easy return
     public Options(PirateGame pirateGame, Screen parent){
         this.PirateGame = pirateGame;
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
-
     }
 
     @Override
@@ -69,7 +67,6 @@ public class Options implements Screen {
                 return false;
             }
         });
-
 
         //EFFECTS
         final Slider volumeEffectSlider = new Slider( 0f, 1f, 0.1f,false, skin );
@@ -127,8 +124,6 @@ public class Options implements Screen {
         table.add(backButton);
 
     }
-
-
 
     @Override
     public void render(float delta) {

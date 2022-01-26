@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-
 public class PirateGame extends Game {
 	public static final int WIDTH = 320 * 4;
 	public static final int HEIGHT = 180 * 4;

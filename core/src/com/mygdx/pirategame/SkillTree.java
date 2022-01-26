@@ -10,11 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class SkillTree implements Screen {
 
@@ -35,7 +32,6 @@ public class SkillTree implements Screen {
         states.add(1);
         states.add(1);
     }
-
 
     @Override
     public void show() {
@@ -187,8 +183,6 @@ public class SkillTree implements Screen {
         Other.bottom().left();
 
     }
-
-
 
     @Override
     public void render(float delta) {

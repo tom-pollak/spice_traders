@@ -4,14 +4,12 @@ import com.badlogic.gdx.Preferences;
 
 public class audioControls {
 
-
     //Set keys that are stored in the file
     private static final String MUSIC_VOLUME = "volume";
     private static final String MUSIC_ENABLED = "music.enabled";
     private static final String SOUND_ENABLED = "sound.enabled";
     private static final String EFFECT_VOL = "sound";
     private static final String PAGE = "audio";
-
 
     //Allows interaction with the file
     protected Preferences optionsObtains() {
