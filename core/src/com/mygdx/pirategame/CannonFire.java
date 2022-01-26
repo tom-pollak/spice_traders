@@ -32,20 +32,20 @@ public class CannonFire extends Sprite {
     }
 
     public void defineCannonBall() {
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        BodyDef bDef = new BodyDef();
+        bDef.position.set(getX(), getY());
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bDef);
 
-        FixtureDef fdef = new FixtureDef();
+        FixtureDef fDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
 
-        fdef.filter.categoryBits = PirateGame.CANNON_BIT;
-        fdef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT;
-        fdef.shape = shape;
+        fDef.filter.categoryBits = PirateGame.CANNON_BIT;
+        fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT;
+        fDef.shape = shape;
 
-        b2body.createFixture(fdef).setUserData(this);
+        b2body.createFixture(fDef).setUserData(this);
         float velX = MathUtils.cos(angle) * velocity + bodyVel.x;
         float velY = MathUtils.sin(angle) * velocity + bodyVel.y;
         b2body.applyLinearImpulse(new Vector2(velX, velY), b2body.getWorldCenter(), true);
