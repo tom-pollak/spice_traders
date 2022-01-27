@@ -15,9 +15,9 @@ public class EnemyShip extends Enemy{
     private boolean destroyed;
     private int health = 100;
 
-    public EnemyShip(GameScreen screen, float x, float y) {
+    public EnemyShip(GameScreen screen, float x, float y, String path) {
         super(screen, x, y);
-        enemyShip = new Texture("enemyShip1.png");
+        enemyShip = new Texture(path);
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);

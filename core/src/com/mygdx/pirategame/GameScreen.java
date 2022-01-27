@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class GameScreen implements Screen {
     private static float maxSpeed = 2;
     private static float accel = 0.02f;
@@ -35,7 +38,8 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
     private Player player;
-    private EnemyShip enemyShip;
+    private HashMap<String, College> colleges = new HashMap<>();
+    private ArrayList<EnemyShip> ships = new ArrayList<>();
     private Hud hud;
     private Coin coin;
 
@@ -73,7 +77,18 @@ public class GameScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         // Spawning enemy ship and coin. x and y is spawn location
-        enemyShip = new EnemyShip(this, 714 / PirateGame.PPM, 1200 / PirateGame.PPM);
+        colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
+                "alcuin_flag.png", "alcuin_ship.png", 4));
+        colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1200 / PirateGame.PPM,
+                "anne_lister_flag.png", "anne_lister_ship.png", 4));
+        colleges.put("Constantine", new College(this, 6500 / PirateGame.PPM, 6750 / PirateGame.PPM,
+                "constantine_flag.png", "constantine_ship.png", 4));
+        colleges.put("Derwent", new College(this, 1900 / PirateGame.PPM, 6750 / PirateGame.PPM,
+                "derwent_flag.png", "derwent_ship.png", 4));
+        ships.addAll(colleges.get("Alcuin").fleet);
+        ships.addAll(colleges.get("Anne Lister").fleet);
+        ships.addAll(colleges.get("Constantine").fleet);
+        ships.addAll(colleges.get("Derwent").fleet);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
         stage = new Stage(new ScreenViewport());
     }
@@ -223,7 +238,13 @@ public class GameScreen implements Screen {
 
         // Update all players and entities
         player.update(dt);
-        enemyShip.update(dt);
+        colleges.get("Alcuin").update(dt);
+        colleges.get("Anne Lister").update(dt);
+        colleges.get("Constantine").update(dt);
+        colleges.get("Derwent").update(dt);
+        for (int i = 1; i < ships.size(); i++){
+            ships.get(i).update(dt);
+        }
         coin.update(dt);
         hud.update(dt);
 
@@ -252,7 +273,13 @@ public class GameScreen implements Screen {
         // Order determines layering
         coin.draw(game.batch);
         player.draw(game.batch);
-        enemyShip.draw(game.batch);
+        colleges.get("Alcuin").draw(game.batch);
+        colleges.get("Anne Lister").draw(game.batch);
+        colleges.get("Constantine").draw(game.batch);
+        colleges.get("Derwent").draw(game.batch);
+        for (int i = 1; i < ships.size(); i++){
+            ships.get(i).draw(game.batch);
+        }
         game.batch.end();
         hud.stage.draw();
         if (Hud.getHealth() <= 0) {
