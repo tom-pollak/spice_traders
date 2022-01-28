@@ -161,6 +161,7 @@ public class GameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
                 table.setVisible(true);
+
                 resume();
 
             }
@@ -253,10 +254,12 @@ public class GameScreen implements Screen {
         camera.position.y = player.b2body.getPosition().y;
         camera.update();
         renderer.setView(camera);
+
     }
 
     @Override
     public void render(float delta) {
+
         if (gameStatus == GAME_RUNNING) {
             update(delta);
         }
@@ -281,9 +284,10 @@ public class GameScreen implements Screen {
             ships.get(i).draw(game.batch);
         }
         game.batch.end();
-        hud.stage.draw();
+        Hud.stage.draw();
         if (Hud.getHealth() <= 0) {
             game.changeScreen(PirateGame.DEATH);
+            game.killGame();
         }
         stage.act();
         stage.draw();
@@ -293,6 +297,7 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
+        Hud.resize( width, height);
     }
 
     public TiledMap getMap() {

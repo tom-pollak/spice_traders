@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -19,7 +20,13 @@ public class SkillTree implements Screen {
     private final Stage stage;
 
     //To store whether buttons are enabled or disabled
-    private final List<Integer> states = new ArrayList<Integer>();
+    private static final List<Integer> states = new ArrayList<Integer>();
+
+    private static TextButton movement1;
+    private TextButton damage1;
+    private TextButton GoldMulti1;
+    private TextButton movement2;
+
 
     //In the constructor, the parent and stage are set. Also the states list is set
     public SkillTree(PirateGame myGame){
@@ -27,7 +34,7 @@ public class SkillTree implements Screen {
         stage = new Stage(new ScreenViewport());
 
         //0 = enabled, 1 = disabled
-        states.add(0);
+        states.add(1);
         states.add(1);
         states.add(1);
         states.add(1);
@@ -42,6 +49,10 @@ public class SkillTree implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
+        Table info = new Table();
+        info.setFillParent(true);
+        stage.addActor(info);
+
         // Table for the return button
         final Table Other = new Table();
         Other.setFillParent(true);
@@ -53,7 +64,7 @@ public class SkillTree implements Screen {
 
         //create skill tree buttons
 
-        final TextButton movement1 = new TextButton("Movement Speed + 20%", skin);
+        movement1 = new TextButton("Movement Speed + 20%", skin);
         movement1.setTransform(true);
         movement1.setScale(0.9f); //make slightly smaller
 
@@ -63,7 +74,7 @@ public class SkillTree implements Screen {
         }
 
 
-        final TextButton damage1 = new TextButton("Damage + 5", skin);
+        damage1 = new TextButton("Damage + 5", skin);
         damage1.setTransform(true);
         damage1.setScale(0.9f); //make slightly smaller
 
@@ -72,7 +83,7 @@ public class SkillTree implements Screen {
             damage1.setDisabled(true);
         }
 
-        final TextButton GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
+        GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
         GoldMulti1.setTransform(true);
         GoldMulti1.setScale(0.9f); //make slightly smaller
 
@@ -81,7 +92,7 @@ public class SkillTree implements Screen {
             GoldMulti1.setDisabled(true);
         }
 
-        final TextButton movement2 = new TextButton("Movement Speed + 20%", skin);
+        movement2 = new TextButton("Movement Speed + 20%", skin);
         movement2.setTransform(true);
         movement2.setScale(0.9f); //make slightly smaller
 
@@ -90,77 +101,16 @@ public class SkillTree implements Screen {
             movement2.setDisabled(true);
         }
 
+        final Label unlock100 = new Label("100 points",skin);
+        final Label unlock200 = new Label("200 points",skin);
+        final Label unlock300 = new Label("300 points",skin);
+        final Label unlock400 = new Label("400 points",skin);
+
+
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
 
         //Change the value and set below skills to be available.Update list accordingly
-        movement1.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-
-                if (Hud.getCoins() >= 1) {
-                    Hud.changeCoins(-1);
-                    //Change acceleration
-                    GameScreen.changeAcceleration(20F);
-                    //Change Max speed
-                    GameScreen.changeMaxSpeed(20F);
-                    damage1.setDisabled(false);
-                    GoldMulti1.setDisabled(false);
-                    movement2.setDisabled(false);
-                    movement1.setDisabled(true);
-
-                    states.clear();
-                    states.add(1);
-                    states.add(0);
-                    states.add(0);
-                    states.add(0);
-                }
-
-            }
-        });
-
-        movement2.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-
-                if (Hud.getCoins() >= 1) {
-                    Hud.changeCoins(-1);
-                    //Change acceleration
-                    GameScreen.changeAcceleration(20F);
-                    //Change Max speed
-                    GameScreen.changeMaxSpeed(20F);
-                    movement2.setDisabled(true);
-
-                    states.set(3, 1); //Set list value
-            }}
-        });
-
-        damage1.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //change damage
-                if (Hud.getCoins() >= 1) {
-                    Hud.changeCoins(-1);
-                    damage1.setDisabled(true);
-
-                    states.set(1, 1); //Set list value
-            }}
-        });
-
-        GoldMulti1.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //change coin multiplier
-                if (Hud.getCoins() >= 1) {
-                    Hud.changeCoins(-1);
-                    Hud.changeCoinsMulti(2);
-                    GoldMulti1.setDisabled(true);
-
-                    states.set(2, 1); //Set list value
-            }}
-        });
-
-
 
         backButton.addListener(new ChangeListener() {
             @Override
@@ -171,18 +121,55 @@ public class SkillTree implements Screen {
         });
 
         //add buttons to main table
-        table.add(movement1).colspan(3);
+        table.add(movement1);
+        table.add(unlock100);
+        table.row().pad(10, 0, 10, 0);
+        table.add(GoldMulti1);
+        table.add(unlock200);
         table.row().pad(10, 0, 10, 0);
         table.add(movement2);
-        table.add(GoldMulti1);
+        table.add(unlock300);
+        table.row().pad(10, 0, 10, 0);
         table.add(damage1);
+        table.add(unlock400);
         table.top();
+
 
         //add return button
         Other.add(backButton);
         Other.bottom().left();
 
     }
+
+    public static void pointsCheck(int points){
+
+        if(states.get(0) == 1 && points == 100){
+            //Change acceleration
+            GameScreen.changeAcceleration(20F);
+            //Change Max speed
+            GameScreen.changeMaxSpeed(20F);
+            states.set(0, 0);
+
+        }
+        else if(states.get(1) == 1 && points == 200){
+            Hud.changeCoins(-1);
+            Hud.changeCoinsMulti(2);
+            states.set(1, 0);
+        }
+        else if(states.get(2) == 1 && points == 300){
+            //Change acceleration
+            GameScreen.changeAcceleration(20F);
+            //Change Max speed
+            GameScreen.changeMaxSpeed(20F);
+            states.set(2, 0);
+        }else if(states.get(3) == 1 && points == 400){
+            //damage
+            states.set(3, 0);
+        }
+
+
+    }
+
 
     @Override
     public void render(float delta) {
