@@ -55,7 +55,8 @@ public class GameScreen implements Screen {
         this.game = game;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
-        viewport = new ExtendViewport(PirateGame.WIDTH / PirateGame.PPM, PirateGame.HEIGHT / PirateGame.PPM, camera);
+        camera.zoom = 0.0135f;
+        viewport = new ScreenViewport(camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         // Initialize a hud
@@ -261,7 +262,7 @@ public class GameScreen implements Screen {
         }
         else{handleInput(delta);}
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(46/255f, 204/255f, 113/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
