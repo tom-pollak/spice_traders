@@ -59,7 +59,7 @@ public class CannonFire extends Sprite {
             destroyed = true;
         }
         // determines cannonball range
-        if(stateTime > 0.5f) {
+        if(stateTime > 0.8f) {
             setToDestroy();
         }
     }

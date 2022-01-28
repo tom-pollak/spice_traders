@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {
-    private static float maxSpeed = 2.5f;
+    private static float maxSpeed = 2f;
     private static float accel = 0.2f;
 
     protected PirateGame game;
