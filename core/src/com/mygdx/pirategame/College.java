@@ -3,7 +3,6 @@ package com.mygdx.pirategame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class College extends Enemy{
     private Texture enemyCollege;
     private boolean setToDestroy;
     private boolean destroyed;
-    private int health = 100;
+    public int health = 100;
     public Random rand = new Random();
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
