@@ -13,7 +13,9 @@ public class EnemyShip extends Enemy{
     private Texture enemyShip;
     private boolean setToDestroy;
     private boolean destroyed;
-    private int health = 100;
+    public int health = 100;
+    public int maxHealth = 100;
+    protected HealthBar bar;
 
     public EnemyShip(GameScreen screen, float x, float y, String path) {
         super(screen, x, y);
@@ -23,6 +25,7 @@ public class EnemyShip extends Enemy{
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
         setToDestroy = false;
         destroyed = false;
+        bar = new HealthBar(this);
     }
 
     public void update(float dt) {
@@ -35,7 +38,10 @@ public class EnemyShip extends Enemy{
             float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
             b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
             setRotation((float) (b2body.getAngle() * 180 / Math.PI));
+            bar.update();
         }
+
+
         // below code is to move the ship to a coordinate (target)
         //Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
         //target.sub(b2body.getPosition());
@@ -47,6 +53,7 @@ public class EnemyShip extends Enemy{
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
+            bar.render(batch);
         }
     }
 

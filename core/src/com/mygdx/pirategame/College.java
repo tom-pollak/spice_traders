@@ -15,6 +15,7 @@ public class College extends Enemy{
     private boolean destroyed;
     public int health = 100;
     public Random rand = new Random();
+    protected HealthBar bar;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
@@ -26,8 +27,10 @@ public class College extends Enemy{
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
         setToDestroy = false;
         destroyed = false;
+        bar = new HealthBar(this);
         int ranx;
         int rany;
+
         for (int i = 0; i < ship_no; i++){
             ranx = rand.nextInt(2000) - 1000;
             rany = rand.nextInt(2000) - 1000;
@@ -43,11 +46,13 @@ public class College extends Enemy{
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         }
+        bar.update();
     }
 
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
+            bar.render(batch);
         }
     }
 
