@@ -14,6 +14,7 @@ public class EnemyShip extends Enemy{
     private boolean setToDestroy;
     private boolean destroyed;
     public int health = 100;
+    public int maxHealth = 100;
     protected HealthBar bar;
 
     public EnemyShip(GameScreen screen, float x, float y, String path) {
@@ -80,7 +81,7 @@ public class EnemyShip extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
-        health -= 25;
-        bar.changeHealth(25);
+        health -= 20;
+        bar.changeHealth(20);
     }
 }

@@ -14,6 +14,7 @@ public class College extends Enemy{
     private boolean setToDestroy;
     private boolean destroyed;
     public int health = 100;
+    public int maxHealth = 100;
     public Random rand = new Random();
     protected HealthBar bar;
 
@@ -52,6 +53,9 @@ public class College extends Enemy{
             claimCollege();
         }
         bar.update();
+        if(health <= 0) {
+            setToDestroy = true;
+        }
     }
 
     public void draw(Batch batch) {
