@@ -14,7 +14,6 @@ public class EnemyShip extends Enemy{
     private boolean setToDestroy;
     private boolean destroyed;
     public int health = 100;
-    public int maxHealth = 100;
     protected HealthBar bar;
 
     public EnemyShip(GameScreen screen, float x, float y, String path) {
@@ -40,7 +39,9 @@ public class EnemyShip extends Enemy{
             setRotation((float) (b2body.getAngle() * 180 / Math.PI));
             bar.update();
         }
-
+        if(health <= 0) {
+            setToDestroy = true;
+        }
 
         // below code is to move the ship to a coordinate (target)
         //Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
@@ -70,7 +71,7 @@ public class EnemyShip extends Enemy{
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT;
         fdef.shape = shape;
         fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
@@ -79,5 +80,7 @@ public class EnemyShip extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
+        health -= 25;
+        bar.changeHealth(25);
     }
 }

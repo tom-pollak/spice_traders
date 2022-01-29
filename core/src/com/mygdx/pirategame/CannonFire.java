@@ -42,8 +42,9 @@ public class CannonFire extends Sprite {
         shape.setRadius(5 / PirateGame.PPM);
 
         fDef.filter.categoryBits = PirateGame.CANNON_BIT;
-        fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT;
+        fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT | PirateGame.COLLEGE_BIT;
         fDef.shape = shape;
+        fDef.isSensor = true;
 
         b2body.createFixture(fDef).setUserData(this);
         float velX = MathUtils.cos(angle) * velocity + bodyVel.x;

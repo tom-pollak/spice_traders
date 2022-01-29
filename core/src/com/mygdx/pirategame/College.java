@@ -25,6 +25,7 @@ public class College extends Enemy{
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
+
         setToDestroy = false;
         destroyed = false;
         bar = new HealthBar(this);
@@ -45,6 +46,10 @@ public class College extends Enemy{
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
+        }
+        if(health <= 0) {
+            setToDestroy = true;
+            claimCollege();
         }
         bar.update();
     }
@@ -73,10 +78,17 @@ public class College extends Enemy{
         fdef.shape = shape;
         fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
+
     }
 
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
+        health -= 10;
+        bar.changeHealth(10);
+    }
+
+    public void claimCollege(){
+
     }
 }
