@@ -19,7 +19,7 @@ class HealthBar {
         healthBar2 = new Texture("HealthBar.png");
         healthBar1 = new Sprite(healthBar2);
         healthBar1.setScale(0.0135f);
-        healthBar1.setSize(healthBar1.getWidth(), healthBar1.getHeight() - 1.5f);
+        healthBar1.setSize(healthBar1.getWidth(), healthBar1.getHeight() - 2f);
 
         System.out.println(ownerBoat.b2body.getPosition().y + ownerBoat.getHeight());
         healthBar1.setX (ownerBoat.b2body.getPosition().x - 0.68f);
