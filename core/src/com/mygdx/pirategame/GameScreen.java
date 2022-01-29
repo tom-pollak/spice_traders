@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {
-    private static float maxSpeed = 2f;
-    private static float accel = 0.2f;
+    private static float maxSpeed = 2.5f;
+    private static float accel = 0.05f;
 
     protected PirateGame game;
     private OrthographicCamera camera;
@@ -269,7 +269,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
-        //b2dr.render(world, camera.combined);
+        b2dr.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
