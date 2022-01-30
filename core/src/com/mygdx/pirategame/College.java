@@ -48,7 +48,10 @@ public class College extends Enemy{
             world.destroyBody(b2body);
             destroyed = true;
             if (currentCollege.equals("alcuin_flag.png")){
-            GameScreen.gameOverCheck("SelfKill");
+                GameScreen.gameOverCheck("SelfKill");
+            }
+            if (!currentCollege.equals("alcuin_flag.png")){
+                claimCollege();
             }
         }
         else if(!destroyed) {
@@ -56,7 +59,6 @@ public class College extends Enemy{
         }
         if(health <= 0) {
             setToDestroy = true;
-            claimCollege();
         }
         bar.update();
         if(health <= 0) {
