@@ -25,5 +25,20 @@ public class WorldCreator {
 
             new CollegeWalls(screen, rect);
         }
+        for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new CollegeWalls2(screen, rect);
+        }
+        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new CollegeWalls3(screen, rect);
+        }
+        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            new CollegeWalls4(screen, rect);
+        }
     }
 }
