@@ -44,7 +44,7 @@ public class CannonFire extends Sprite {
         fDef.filter.categoryBits = PirateGame.CANNON_BIT;
         fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT | PirateGame.COLLEGE_BIT;
         fDef.shape = shape;
-        //fDef.isSensor = true;
+        fDef.isSensor = true;
 
         b2body.createFixture(fDef).setUserData(this);
         float velX = MathUtils.cos(angle) * velocity + bodyVel.x;
@@ -64,6 +64,7 @@ public class CannonFire extends Sprite {
             setToDestroy();
         }
     }
+
 
     public void setToDestroy(){
         setToDestroy = true;

@@ -45,20 +45,24 @@ public class WorldContactListener implements ContactListener {
                 if(fixA.getFilterData().categoryBits == PirateGame.COLLEGE_BIT) {
                     if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
                         ((InteractiveTileObject) fixA.getUserData()).onContact();
+                        ((CannonFire) fixB.getUserData()).setToDestroy();
                     }
                 }
                 else {
                     if (fixB.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixB.getUserData().getClass())) {
                         ((InteractiveTileObject) fixB.getUserData()).onContact();
+                        ((CannonFire) fixA.getUserData()).setToDestroy();
                     }
                 }
                 break;
             case PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT:
                 if(fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
                     ((Enemy) fixA.getUserData()).onContact();
+                    ((CannonFire) fixB.getUserData()).setToDestroy();
                 }
                 else {
                     ((Enemy) fixB.getUserData()).onContact();
+                    ((CannonFire) fixA.getUserData()).setToDestroy();
                 }
                 break;
 

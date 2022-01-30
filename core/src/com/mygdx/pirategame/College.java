@@ -32,13 +32,14 @@ public class College extends Enemy{
         setToDestroy = false;
         destroyed = false;
         bar = new HealthBar(this);
-        int ranx;
-        int rany;
+
+        int ranX;
+        int ranY;
 
         for (int i = 0; i < ship_no; i++){
-            ranx = rand.nextInt(2000) - 1000;
-            rany = rand.nextInt(2000) - 1000;
-            fleet.add(new EnemyShip(screen, x + (ranx / PirateGame.PPM), y + (rany / PirateGame.PPM), ship));
+            ranX = rand.nextInt(2000) - 1000;
+            ranY = rand.nextInt(2000) - 1000;
+            fleet.add(new EnemyShip(screen, x + (ranX / PirateGame.PPM), y + (ranY / PirateGame.PPM), ship));
         }
     }
 
