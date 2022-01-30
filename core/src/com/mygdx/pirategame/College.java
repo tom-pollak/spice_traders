@@ -17,11 +17,13 @@ public class College extends Enemy{
     public int maxHealth = 100;
     public Random rand = new Random();
     protected HealthBar bar;
+    private String currentCollege;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
     public College(GameScreen screen, float x, float y, String flag, String ship, int ship_no) {
         super(screen, x, y);
+        currentCollege = flag;
         enemyCollege = new Texture(flag);
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
@@ -44,6 +46,9 @@ public class College extends Enemy{
         if(setToDestroy && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
+            if (currentCollege.equals("alcuin_flag.png")){
+            GameScreen.gameOverCheck("SelfKill");
+            }
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);

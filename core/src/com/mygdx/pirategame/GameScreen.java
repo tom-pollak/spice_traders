@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
     private static float maxSpeed = 2.5f;
     private static float accel = 0.05f;
 
-    protected PirateGame game;
+    protected static PirateGame game;
     private OrthographicCamera camera;
     private Viewport viewport;
     private final Stage stage;
@@ -285,10 +285,7 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
         Hud.stage.draw();
-        if (Hud.getHealth() <= 0) {
-            game.changeScreen(PirateGame.DEATH);
-            game.killGame();
-        }
+        gameOverCheck("Boat 0 Health");
         stage.act();
         stage.draw();
     }
@@ -306,6 +303,13 @@ public class GameScreen implements Screen {
 
     public World getWorld() {
         return world;
+    }
+
+    public static void gameOverCheck(String type){
+        if (Hud.getHealth() <= 0 || type.equals("SelfKill")) {
+            game.changeScreen(PirateGame.DEATH);
+            game.killGame();
+        }
     }
 
 
