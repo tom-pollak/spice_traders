@@ -43,7 +43,6 @@ public class GameScreen implements Screen {
     private ArrayList<EnemyShip> ships = new ArrayList<>();
     private ArrayList<Coin> Coins = new ArrayList<>();
     private Hud hud;
-    private Coin coin;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -123,8 +122,6 @@ public class GameScreen implements Screen {
         Coins.add(new Coin(this, 66, 9));
         Coins.add(new Coin(this, 69, 11));
 
-
-        coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
         stage = new Stage(new ScreenViewport());
     }
 

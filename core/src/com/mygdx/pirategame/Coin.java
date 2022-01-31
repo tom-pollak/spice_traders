@@ -16,9 +16,13 @@ public class Coin extends Entity {
 
     public Coin(GameScreen screen, float x, float y) {
         super(screen, x, y);
+        //Set coin image
         coin = new Texture("coin.png");
+        //Set the position and size of the coin
         setBounds(0,0,48 / PirateGame.PPM, 48 / PirateGame.PPM);
+        //Set the texture
         setRegion(coin);
+        //Sets origin of the coin
         setOrigin(24 / PirateGame.PPM,24 / PirateGame.PPM);
         coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
     }

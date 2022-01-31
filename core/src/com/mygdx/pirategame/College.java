@@ -55,8 +55,6 @@ public class College extends Enemy{
     }
 
     public boolean getCoord(int x, int y) {
-        System.out.println("X: " + x + "   Y: " + y);
-        int a = 1;
         if (x >= 50 && y <= 50) {
             if (y <= 7) {
                 return false;
