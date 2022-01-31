@@ -15,13 +15,13 @@ public class Hud implements Disposable {
     private Viewport viewport;
 
     private float timeCount;
-    private Integer score;
+    private static Integer score;
     private static Integer health;
     private Texture hp;
     private Texture boxBackground;
     private Texture coinPic;
 
-    private Label scoreLabel;
+    private static Label scoreLabel;
     private static Label healthLabel;
     private static Label coinLabel;
     private static Label pointsText;
@@ -89,6 +89,8 @@ public class Hud implements Disposable {
                 health += 1;
                 healthLabel.setText(String.format("%02d", health));
             }
+            score += 1;
+            scoreLabel.setText(String.format("%03d", score));
             timeCount = 0;
 
             SkillTree.pointsCheck(score);
@@ -109,6 +111,11 @@ public class Hud implements Disposable {
             coins += value;
             coinLabel.setText(String.format("%03d", coins));
         }
+    }
+
+    public static void changePoints(int value) {
+        score += value;
+        scoreLabel.setText(String.format("%03d", score));
     }
 
     public static void changeCoinsMulti(int value) {

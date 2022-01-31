@@ -50,6 +50,7 @@ public class College extends Enemy{
                 GameScreen.gameOverCheck();
             }
             if (!currentCollege.equals("alcuin_flag.png")){
+                Hud.changePoints(100);
                 claimCollege();
             }
         }

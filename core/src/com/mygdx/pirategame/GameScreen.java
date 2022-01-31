@@ -309,7 +309,7 @@ public class GameScreen implements Screen {
             game.changeScreen(PirateGame.DEATH);
             game.killGame();
         }
-        else if ( colleges.get("Anne Lister").destroyed || colleges.get("Constantine").destroyed || colleges.get("Derwent").destroyed){
+        else if ( colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Derwent").destroyed){
             game.changeScreen(PirateGame.VICTORY);
             game.killGame();
 
