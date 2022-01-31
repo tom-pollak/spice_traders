@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer b2dr;
 
     private Player player;
-    private HashMap<String, College> colleges = new HashMap<>();
+    private static HashMap<String, College> colleges = new HashMap<>();
     private ArrayList<EnemyShip> ships = new ArrayList<>();
     private Hud hud;
     private Coin coin;
@@ -285,7 +285,7 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
         Hud.stage.draw();
-        gameOverCheck("Boat 0 Health");
+        gameOverCheck();
         stage.act();
         stage.draw();
     }
@@ -305,10 +305,15 @@ public class GameScreen implements Screen {
         return world;
     }
 
-    public static void gameOverCheck(String type){
-        if (Hud.getHealth() <= 0 || type.equals("SelfKill")) {
+    public static void gameOverCheck(){
+        if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
             game.changeScreen(PirateGame.DEATH);
             game.killGame();
+        }
+        else if ( colleges.get("Anne Lister").destroyed || colleges.get("Constantine").destroyed || colleges.get("Derwent").destroyed){
+            game.changeScreen(PirateGame.VICTORY);
+            game.killGame();
+
         }
     }
 

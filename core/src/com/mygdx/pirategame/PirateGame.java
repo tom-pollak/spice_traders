@@ -25,6 +25,7 @@ public class PirateGame extends Game {
 	private SkillTree skillTreeScreen;
 	private DeathScreen deathScreen;
 	private Help helpScreen;
+	private VictoryScreen victoryScreen;
 
 	private audioControls options;
 	public Music song;
@@ -34,6 +35,7 @@ public class PirateGame extends Game {
 	public final static int SKILL = 2;
 	public final static int DEATH = 3;
 	public final static int HELP = 4;
+	public final static int VICTORY = 5;
 
 	@Override
 	public void create () {
@@ -76,6 +78,10 @@ public class PirateGame extends Game {
 			case HELP:
 				if (helpScreen == null) helpScreen = new Help(this);
 				this.setScreen(helpScreen);
+
+			case VICTORY:
+				if (victoryScreen == null) victoryScreen = new VictoryScreen(this);
+				this.setScreen(victoryScreen);
 		}
 	}
 
@@ -88,8 +94,9 @@ public class PirateGame extends Game {
 		gameScreen = null;
 		skillTreeScreen = null;
 	}
-	public void killDeathScreen(){
+	public void killEndScreen(){
 		deathScreen = null;
+		victoryScreen = null;
 	}
 
 	@Override

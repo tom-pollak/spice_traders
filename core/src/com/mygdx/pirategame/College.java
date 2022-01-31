@@ -11,7 +11,7 @@ import java.util.Random;
 public class College extends Enemy{
     private Texture enemyCollege;
     private boolean setToDestroy;
-    private boolean destroyed;
+    protected boolean destroyed;
     public int health = 100;
     public int maxHealth = 100;
     public Random rand = new Random();
@@ -47,7 +47,7 @@ public class College extends Enemy{
             world.destroyBody(b2body);
             destroyed = true;
             if (currentCollege.equals("alcuin_flag.png")){
-                GameScreen.gameOverCheck("SelfKill");
+                GameScreen.gameOverCheck();
             }
             if (!currentCollege.equals("alcuin_flag.png")){
                 claimCollege();

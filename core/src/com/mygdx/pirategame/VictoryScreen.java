@@ -14,14 +14,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class DeathScreen implements Screen {
+public class VictoryScreen implements Screen {
 
     private final PirateGame parent;
     private final Stage stage;
 
-    private Label deathMsg;
+    private Label victoryMsg;
+    private Label victoryMsg2;
 
-    public DeathScreen(PirateGame pirateGame){
+    public VictoryScreen(PirateGame pirateGame){
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
@@ -36,9 +37,13 @@ public class DeathScreen implements Screen {
         table2.center();
         table2.setFillParent(true);
 
-        deathMsg = new Label("YOU  DIED", new Label.LabelStyle(new BitmapFont(), Color.RED));
-        deathMsg.setFontScale(4f);
-        table.add(deathMsg).center();
+        victoryMsg = new Label("YOU WON", new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
+        victoryMsg.setFontScale(4f);
+        victoryMsg2 = new Label("CONGRATULATIONS PIRATE", new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
+        victoryMsg2.setFontScale(4f);
+        table.add(victoryMsg).center();
+        table.row();
+        table.add(victoryMsg2).center().padTop(20);
         stage.addActor(table);
 
         TextButton backButton = new TextButton("Return To Menu", skin);
