@@ -65,7 +65,6 @@ public class WorldContactListener implements ContactListener {
                     ((CannonFire) fixA.getUserData()).setToDestroy();
                 }
                 break;
-
         }
     }
 

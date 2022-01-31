@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {
-    private static float maxSpeed = 2.5f;
+    private static float maxSpeed = 5f;
     private static float accel = 0.05f;
 
     protected static PirateGame game;
@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
         // Spawning enemy ship and coin. x and y is spawn location
         colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
                 "alcuin_flag.png", "alcuin_ship.png", 4));
-        colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1250 / PirateGame.PPM,
+        colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
                 "anne_lister_flag.png", "anne_lister_ship.png", 4));
         colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
                 "constantine_flag.png", "constantine_ship.png", 4));
@@ -254,7 +254,6 @@ public class GameScreen implements Screen {
         camera.position.y = player.b2body.getPosition().y;
         camera.update();
         renderer.setView(camera);
-
     }
 
     @Override

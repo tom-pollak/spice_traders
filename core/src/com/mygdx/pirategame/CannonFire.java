@@ -14,16 +14,18 @@ public class CannonFire extends Sprite {
     private boolean destroyed;
     private boolean setToDestroy;
     private Body b2body;
+    private Body body;
     private float angle;
     private float velocity;
     private Vector2 bodyVel;
 
-    public CannonFire(GameScreen screen, float x, float y, float angle, float velocity, Vector2 bodyVel) {
+    public CannonFire(GameScreen screen, float x, float y, Body body, float velocity) {
         this.screen = screen;
-        this.angle = angle;
+        this.body = body;
         this.velocity = velocity;
         this.world = screen.getWorld();
-        this.bodyVel = bodyVel;
+        bodyVel = body.getLinearVelocity();
+        angle = body.getAngle();
 
         cannonBall = new Texture("cannonBall.png");
         setRegion(cannonBall);

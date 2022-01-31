@@ -60,14 +60,14 @@ public class Player extends Sprite {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
     }
 
     public void fire() {
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body.getAngle(), 5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body.getAngle(), -5, b2body.getLinearVelocity()));
+        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
+        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
         // Cone fire below
         /*cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
