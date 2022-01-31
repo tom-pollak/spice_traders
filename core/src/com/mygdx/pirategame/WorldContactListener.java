@@ -65,6 +65,14 @@ public class WorldContactListener implements ContactListener {
                     ((CannonFire) fixA.getUserData()).setToDestroy();
                 }
                 break;
+            case PirateGame.COLLEGESENSOR_BIT | PirateGame.PLAYER_BIT:
+                if(fixA.getFilterData().categoryBits == PirateGame.COLLEGESENSOR_BIT) {
+                    ((College) fixA.getUserData()).fire();
+                }
+                else {
+                    ((College) fixB.getUserData()).fire();
+                }
+                break;
         }
     }
 

@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
         this.game = game;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
-        camera.zoom = 0.0145f;
+        camera.zoom = 0.0155f;
         viewport = new ScreenViewport(camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
@@ -78,15 +78,13 @@ public class GameScreen implements Screen {
 
         // Spawning enemy ship and coin. x and y is spawn location
         colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
-                "alcuin_flag.png", "alcuin_ship.png", 0));
-        colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
-                "anne_lister_flag.png", "anne_lister_ship.png", 50));
-        colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
-                "constantine_flag.png", "constantine_ship.png", 0));
-        colleges.put("Derwent", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
-                "derwent_flag.png", "derwent_ship.png", 0));
-        colleges.put("Goodricke", new College(this, 0, 0,
-                "ship1.png", "derwent_ship.png", 0));
+                "alcuin_flag.png", "alcuin_ship.png", 4));
+        colleges.put("Anne Lister", new College(this, 6304 / PirateGame.PPM, 1199 / PirateGame.PPM,
+                "anne_lister_flag.png", "anne_lister_ship.png", 4));
+        colleges.put("Constantine", new College(this, 6240 / PirateGame.PPM, 6703 / PirateGame.PPM,
+                "constantine_flag.png", "constantine_ship.png", 4));
+        colleges.put("Derwent", new College(this, 1760 / PirateGame.PPM, 6767 / PirateGame.PPM,
+                "derwent_flag.png", "derwent_ship.png", 4));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
@@ -245,7 +243,6 @@ public class GameScreen implements Screen {
         colleges.get("Anne Lister").update(dt);
         colleges.get("Constantine").update(dt);
         colleges.get("Derwent").update(dt);
-        colleges.get("Goodricke").update(dt);
 
         for (int i = 0; i < ships.size(); i++){
             ships.get(i).update(dt);
@@ -283,7 +280,6 @@ public class GameScreen implements Screen {
         colleges.get("Anne Lister").draw(game.batch);
         colleges.get("Constantine").draw(game.batch);
         colleges.get("Derwent").draw(game.batch);
-        colleges.get("Goodricke").draw(game.batch);
         for (int i = 0; i < ships.size(); i++){
             ships.get(i).draw(game.batch);
         }
