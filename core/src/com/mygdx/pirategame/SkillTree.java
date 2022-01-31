@@ -143,7 +143,7 @@ public class SkillTree implements Screen {
 
     public static void pointsCheck(int points){
 
-        if(states.get(0) == 1 && points == 100){
+        if(states.get(0) == 1 && points >= 100){
             //Change acceleration
             GameScreen.changeAcceleration(20F);
             //Change Max speed
@@ -151,18 +151,18 @@ public class SkillTree implements Screen {
             states.set(0, 0);
 
         }
-        else if(states.get(1) == 1 && points == 200){
+        else if(states.get(1) == 1 && points >= 200){
             Hud.changeCoins(-1);
             Hud.changeCoinsMulti(2);
             states.set(1, 0);
         }
-        else if(states.get(2) == 1 && points == 300){
+        else if(states.get(2) == 1 && points >= 300){
             //Change acceleration
             GameScreen.changeAcceleration(20F);
             //Change Max speed
             GameScreen.changeMaxSpeed(20F);
             states.set(2, 0);
-        }else if(states.get(3) == 1 && points == 400){
+        }else if(states.get(3) == 1 && points >= 400){
             //damage
             states.set(3, 0);
         }

@@ -116,6 +116,7 @@ public class Hud implements Disposable {
     public static void changePoints(int value) {
         score += value;
         scoreLabel.setText(String.format("%03d", score));
+        SkillTree.pointsCheck(score);
     }
 
     public static void changeCoinsMulti(int value) {
