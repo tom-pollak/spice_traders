@@ -60,7 +60,7 @@ public class Player extends Sprite {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
     }

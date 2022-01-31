@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,6 +18,7 @@ public class College extends Enemy{
     public Random rand = new Random();
     protected HealthBar bar;
     private String currentCollege;
+    private Array<CannonFire> cannonBalls;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
@@ -32,13 +34,15 @@ public class College extends Enemy{
         destroyed = false;
         bar = new HealthBar(this);
 
+        cannonBalls = new Array<CannonFire>();
+
         int ranX = 0;
         int ranY = 0;
         Boolean spawnIsValid;
 
         for (int i = 0; i < ship_no; i++){
             spawnIsValid = false;
-            while (spawnIsValid == false){
+            while (!spawnIsValid){
                 ranX = rand.nextInt(2000) - 1000;
                 ranY = rand.nextInt(2000) - 1000;
                 ranX = (int)Math.floor(x + (ranX / PirateGame.PPM));
@@ -115,6 +119,7 @@ public class College extends Enemy{
             }
             if (!currentCollege.equals("alcuin_flag.png")){
                 Hud.changePoints(100);
+                Hud.changeCoins(rand.nextInt(10));
                 claimCollege();
             }
         }
@@ -127,6 +132,11 @@ public class College extends Enemy{
         bar.update();
         if(health <= 0) {
             setToDestroy = true;
+        }
+        for(CannonFire ball : cannonBalls) {
+            ball.update(dt);
+            if(ball.isDestroyed())
+                cannonBalls.removeValue(ball, true);
         }
     }
 
@@ -146,18 +156,25 @@ public class College extends Enemy{
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(55 / PirateGame.PPM);
+        shape.setRadius(750 / PirateGame.PPM);
         // setting BIT identifier
-        fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
+        fdef.filter.categoryBits = PirateGame.COLLEGESENSOR_BIT;
         // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.PLAYER_BIT | PirateGame.CANNON_BIT;
         fdef.shape = shape;
+        fdef.isSensor = true;
         fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
     }
 
     @Override
     public void onContact() {
+        Gdx.app.log("enemy", "collision");
+        health -= 10;
+        bar.changeHealth(10);
+    }
+
+    public void fire() {
         Gdx.app.log("enemy", "collision");
         health -= 10;
         bar.changeHealth(10);

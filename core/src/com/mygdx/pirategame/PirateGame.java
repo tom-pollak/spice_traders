@@ -17,6 +17,7 @@ public class PirateGame extends Game {
 	public static final short CANNON_BIT = 16;
 	public static final short ENEMY_BIT = 32;
 	public static final short COLLEGE_BIT = 64;
+	public static final short COLLEGESENSOR_BIT = 128;
 
 	public SpriteBatch batch;
 
@@ -76,13 +77,17 @@ public class PirateGame extends Game {
 				break;
 
 			case HELP:
+				System.out.println("s");
 				if (helpScreen == null) helpScreen = new Help(this);
 				this.setScreen(helpScreen);
+				break;
 
 			case VICTORY:
+				System.out.println("dd");
 				if (victoryScreen == null) victoryScreen = new VictoryScreen(this);
 				this.setScreen(victoryScreen);
-		}
+				break;
+		}//
 	}
 
 	//Allows interaction with the options document
