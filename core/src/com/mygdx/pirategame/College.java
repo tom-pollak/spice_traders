@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class College extends Enemy{
-    private float stateTime;
     private Texture enemyCollege;
     private boolean setToDestroy;
     private boolean destroyed;

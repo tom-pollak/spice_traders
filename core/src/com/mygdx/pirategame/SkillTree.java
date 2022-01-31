@@ -29,8 +29,8 @@ public class SkillTree implements Screen {
 
 
     //In the constructor, the parent and stage are set. Also the states list is set
-    public SkillTree(PirateGame myGame){
-        parent = myGame;
+    public SkillTree(PirateGame pirateGame){
+        parent = pirateGame;
         stage = new Stage(new ScreenViewport());
 
         //0 = enabled, 1 = disabled

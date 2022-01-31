@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class EnemyShip extends Enemy{
-    private float stateTime;
     private Texture enemyShip;
     private boolean setToDestroy;
     private boolean destroyed;

@@ -7,16 +7,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class CannonFire extends Sprite {
-    GameScreen screen;
-    World world;
-    Texture cannonBall;
-    float stateTime;
-    boolean destroyed;
-    boolean setToDestroy;
-    Body b2body;
-    float angle;
-    float velocity;
-    Vector2 bodyVel;
+    private GameScreen screen;
+    private World world;
+    private Texture cannonBall;
+    private float stateTime;
+    private boolean destroyed;
+    private boolean setToDestroy;
+    private Body b2body;
+    private float angle;
+    private float velocity;
+    private Vector2 bodyVel;
 
     public CannonFire(GameScreen screen, float x, float y, float angle, float velocity, Vector2 bodyVel) {
         this.screen = screen;

@@ -9,11 +9,10 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class Coin extends Entity {
-    private float stateTime;
     private Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
-    Sound coinPickup;
+    private Sound coinPickup;
 
     public Coin(GameScreen screen, float x, float y) {
         super(screen, x, y);
@@ -25,7 +24,6 @@ public class Coin extends Entity {
     }
 
     public void update(float dt) {
-        stateTime += dt;
         if(setToDestroyed && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
