@@ -57,26 +57,18 @@ public class College extends Enemy{
     public boolean getCoord(int x, int y) {
         System.out.println("X: " + x + "   Y: " + y);
         int a = 1;
-        if (a == 0) {
-            if (x <= 0 || y <= 7) {
+        if (x >= 50 && y <= 50) {
+            if (y <= 7) {
                 return false;
-            } else if (x >= 4 && x <= 11 && y >= 83 && y <= 86) {
+            } else if (x >= 53 && x <= 59 && y >= 10 && y <= 12) {
                 return false;
-            } else if (x == 53 && y >= 10 && y <= 11) {
+            } else if (x >= 58 && x <= 60 && y >= 12 && y <= 13) {
                 return false;
-            } else if (x >= 54 && x <= 56 && y >= 10 && y <= 12) {
+            } else if (x >= 60 && x <= 65 && y >= 9 && y <= 14) {
                 return false;
-            } else if (x >= 57 && x <= 71 && y >= 10 && y <= 13) {
+            } else if (x >= 64 && x <= 67 && y >= 12 && y <= 16) {
                 return false;
-            } else if (x >= 63 && x <= 70 && y == 9) {
-                return false;
-            } else if (x >= 69 && x <= 74 && y >= 14 && y <= 18) {
-                return false;
-            } else if (x >= 70 && x <= 73 && y == 19) {
-                return false;
-            } else if (x >= 62 && x <= 63 && y >= 14 && y <= 15) {
-                return false;
-            } else if (x >= 64 && x <= 68 && y >= 14 && y <= 16) {
+            } else if (x >= 68 && x <= 73 && y >= 16 && y <= 24) {
                 return false;
             } else {
                 return true;

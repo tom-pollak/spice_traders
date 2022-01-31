@@ -50,7 +50,7 @@ public class Player extends Sprite {
 
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1800 / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
+        bdef.position.set(1800  / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 

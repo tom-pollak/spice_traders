@@ -84,17 +84,14 @@ public class GameScreen implements Screen {
         colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
                 "alcuin_flag.png", "alcuin_ship.png", 0));
         colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
-                "anne_lister_flag.png", "anne_lister_ship.png", 500));
+                "anne_lister_flag.png", "anne_lister_ship.png", 8));
         colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
-                "constantine_flag.png", "constantine_ship.png", 0));
+                "constantine_flag.png", "constantine_ship.png", 8));
         colleges.put("Goodricke", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
-                "goodricke_flag.png", "goodricke_ship.png", 0));
-        colleges.put("Derwent", new College(this, 0, 0,
-                "ship1.png", "derwent_ship.png", 0));
+                "goodricke_flag.png", "goodricke_ship.png", 8));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
-        ships.addAll(colleges.get("Derwent").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
         //Random middle coins
@@ -280,7 +277,6 @@ public class GameScreen implements Screen {
         colleges.get("Alcuin").update(dt);
         colleges.get("Anne Lister").update(dt);
         colleges.get("Constantine").update(dt);
-        colleges.get("Derwent").update(dt);
         colleges.get("Goodricke").update(dt);
 
         for (int i = 0; i < ships.size(); i++){
@@ -329,7 +325,6 @@ public class GameScreen implements Screen {
         colleges.get("Alcuin").draw(game.batch);
         colleges.get("Anne Lister").draw(game.batch);
         colleges.get("Constantine").draw(game.batch);
-        colleges.get("Derwent").draw(game.batch);
         colleges.get("Goodricke").draw(game.batch);
         for (int i = 0; i < ships.size(); i++){
             ships.get(i).draw(game.batch);
