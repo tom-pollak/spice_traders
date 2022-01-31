@@ -39,8 +39,6 @@ public class College extends Enemy{
             ranX = rand.nextInt(2000) - 1000;
             ranY = rand.nextInt(2000) - 1000;
             fleet.add(new EnemyShip(screen, x + (ranX / PirateGame.PPM), y + (ranY / PirateGame.PPM), ship));
-            System.out.println(flag);
-            System.out.println(fleet);
         }
     }
 
