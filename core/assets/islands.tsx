@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.5" tiledversion="1.7.2" name="islands" tilewidth="64" tileheight="64" tilecount="101" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
+ <properties>
+  <property name="Invalidates Spawning" type="bool" value="true"/>
+ </properties>
  <tile id="64">
   <image width="64" height="64" source="tile_17.png"/>
  </tile>

@@ -32,13 +32,48 @@ public class College extends Enemy{
         destroyed = false;
         bar = new HealthBar(this);
 
-        int ranX;
-        int ranY;
+        int ranX = 0;
+        int ranY = 0;
+        Boolean spawnIsValid;
 
         for (int i = 0; i < ship_no; i++){
-            ranX = rand.nextInt(2000) - 1000;
-            ranY = rand.nextInt(2000) - 1000;
-            fleet.add(new EnemyShip(screen, x + (ranX / PirateGame.PPM), y + (ranY / PirateGame.PPM), ship));
+            spawnIsValid = false;
+            while (spawnIsValid == false){
+                ranX = rand.nextInt(2000) - 1000;
+                ranY = rand.nextInt(2000) - 1000;
+                ranX = (int)Math.floor(x + (ranX / PirateGame.PPM));
+                ranY = (int)Math.floor(y + (ranY / PirateGame.PPM));
+                spawnIsValid = getCoord(ranX, ranY);
+            }
+
+            fleet.add(new EnemyShip(screen, ranX, ranY, ship));
+        }
+    }
+
+    public boolean getCoord(int x, int y){
+        System.out.println("X: " + x + "   Y: " + y);
+        if (x <= 0 || y <= 7){
+            return false;
+        }else if (x >= 4 && x <= 11 && y >= 83 && y <= 86){
+            return false;
+        }else if (x == 53 && y >= 10 && y <= 11){
+            return false;
+        }else if (x >= 54 && x <= 56 && y >= 10 && y <= 12){
+            return false;
+        }else if (x >= 57 && x <= 71 && y >= 10 && y <= 13){
+            return false;
+        }else if (x >= 63 && x <= 70 && y == 9){
+            return false;
+        }else if (x >= 69 && x <= 74 && y >= 14 && y <= 18){
+            return false;
+        }else if (x >= 70 && x <= 73 && y == 19){
+            return false;
+        }else if (x >= 62 && x <= 63 && y >= 14 && y <= 15){
+            return false;
+        }else if (x >= 64 && x <= 68 && y >= 14 && y <= 16){
+            return false;
+        }else{
+            return true;
         }
     }
 
