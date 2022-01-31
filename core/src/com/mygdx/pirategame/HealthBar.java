@@ -18,7 +18,7 @@ class HealthBar {
         this.ownerCollege = null;
         image = new Texture("HealthBar.png");
         healthBar = new Sprite(image);
-        healthBar.setScale(0.0135f);
+        healthBar.setScale(0.0145f);
         healthBar.setSize(healthBar.getWidth(), healthBar.getHeight() - 2f);
 
         healthBar.setX (ownerBoat.b2body.getPosition().x - 0.68f);
