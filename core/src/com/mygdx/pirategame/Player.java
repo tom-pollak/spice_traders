@@ -13,7 +13,7 @@ public class Player extends Sprite {
     private Texture ship;
     public World world;
     public Body b2body;
-    Sound breakSound;
+    private Sound breakSound;
     private Array<CannonFire> cannonBalls;
 
     public Player(GameScreen screen) {

@@ -8,12 +8,8 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class WorldCreator {
     public WorldCreator(GameScreen screen) {
-        World world = screen.getWorld();
         TiledMap map = screen.getMap();
-        BodyDef bDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fDef = new FixtureDef();
-        Body body;
+
         // Object class is islands, stuff for boat to collide with
         for(MapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();

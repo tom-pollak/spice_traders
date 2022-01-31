@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 class HealthBar {
-    private Sprite healthBar1;
-    private Texture healthBar2;
+    private Sprite healthBar;
+    private Texture image;
 
     private EnemyShip ownerBoat;
     private College ownerCollege;
@@ -16,47 +16,47 @@ class HealthBar {
     public HealthBar(EnemyShip owner){
         this.ownerBoat = owner;
         this.ownerCollege = null;
-        healthBar2 = new Texture("HealthBar.png");
-        healthBar1 = new Sprite(healthBar2);
-        healthBar1.setScale(0.0135f);
-        healthBar1.setSize(healthBar1.getWidth(), healthBar1.getHeight() - 2f);
+        image = new Texture("HealthBar.png");
+        healthBar = new Sprite(image);
+        healthBar.setScale(0.0135f);
+        healthBar.setSize(healthBar.getWidth(), healthBar.getHeight() - 2f);
 
-        healthBar1.setX (ownerBoat.b2body.getPosition().x - 0.68f);
-        healthBar1.setY(ownerBoat.b2body.getPosition().y + ownerBoat.getHeight() / 2);
-        healthBar1.setOrigin(0,0);
+        healthBar.setX (ownerBoat.b2body.getPosition().x - 0.68f);
+        healthBar.setY(ownerBoat.b2body.getPosition().y + ownerBoat.getHeight() / 2);
+        healthBar.setOrigin(0,0);
     }
 
     public HealthBar(College owner) {
         this.ownerCollege = owner;
         this.ownerBoat = null;
-        healthBar2 = new Texture("HealthBar.png");
-        healthBar1 = new Sprite(healthBar2);
-        healthBar1.setScale(0.0135f);
-        healthBar1.setSize(healthBar1.getWidth(), healthBar1.getHeight() - 1.5f);
+        image = new Texture("HealthBar.png");
+        healthBar = new Sprite(image);
+        healthBar.setScale(0.0135f);
+        healthBar.setSize(healthBar.getWidth(), healthBar.getHeight() - 1.5f);
 
-        healthBar1.setX( ownerCollege.b2body.getPosition().x - 0.68f);
-        healthBar1.setY(ownerCollege.b2body.getPosition().y + ownerCollege.getHeight() / 2);
-        healthBar1.setOrigin(0,0);
+        healthBar.setX( ownerCollege.b2body.getPosition().x - 0.68f);
+        healthBar.setY(ownerCollege.b2body.getPosition().y + ownerCollege.getHeight() / 2);
+        healthBar.setOrigin(0,0);
     }
 
     public void update(){
         if (ownerBoat != null) {
-            healthBar1.setX( (ownerBoat.b2body.getPosition().x - 0.68f));
-            healthBar1.setY(ownerBoat.b2body.getPosition().y + ownerBoat.getHeight() / 2);
+            healthBar.setX( (ownerBoat.b2body.getPosition().x - 0.68f));
+            healthBar.setY(ownerBoat.b2body.getPosition().y + ownerBoat.getHeight() / 2);
         }
         else{
-            healthBar1.setX( (ownerCollege.b2body.getPosition().x - 0.68f));
-            healthBar1.setY(ownerCollege.b2body.getPosition().y + ownerCollege.getHeight() / 2 + 0.2f);
+            healthBar.setX( (ownerCollege.b2body.getPosition().x - 0.68f));
+            healthBar.setY(ownerCollege.b2body.getPosition().y + ownerCollege.getHeight() / 2 + 0.2f);
         }
 
     }
     public void render(Batch batch){
-        healthBar1.draw(batch);
+        healthBar.draw(batch);
 
     }
 
     public void changeHealth(float value){
-        healthBar1.setSize(healthBar1.getWidth() - value, healthBar1.getHeight());
+        healthBar.setSize(healthBar.getWidth() - value, healthBar.getHeight());
     }
 
 

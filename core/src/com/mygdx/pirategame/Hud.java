@@ -1,15 +1,12 @@
 package com.mygdx.pirategame;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -17,34 +14,28 @@ public class Hud implements Disposable {
     public static Stage stage;
     private Viewport viewport;
 
-    //private Integer worldTimer;
     private float timeCount;
     private Integer score;
     private static Integer health;
-    private Texture minimap;
     private Texture hp;
     private Texture boxBackground;
     private Texture coinPic;
 
-    //private Label timeLabel;
     private Label scoreLabel;
     private static Label healthLabel;
     private static Label coinLabel;
     private static Label pointsText;
     private static Integer coins;
     private static Integer coinMulti;
-    //private Image minimapImg;
     private Image hpImg;
     private Image box;
     private Image coin;
 
-    public Hud(SpriteBatch sb, final PirateGame game) {
-        //worldTimer = 0;
+    public Hud(SpriteBatch sb) {
         health = 100;
         score = 0;
         coins = 0;
         coinMulti = 1;
-        minimap = new Texture("minimap.png");
         hp = new Texture("hp.png");
         boxBackground = new Texture("hudBG.png");
         coinPic = new Texture("coin.png");
@@ -70,16 +61,10 @@ public class Hud implements Disposable {
         table3.setFillParent(true);
 
 
-        //timeLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        //timeLabel.setFontScale(2f);
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        //scoreLabel.setFontScale(2f);
         healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
-        //healthLabel.setFontScale(2f);
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
-        //coinLabel.setFontScale(2f);
         pointsText = new Label("Points:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        //pointsText.setFontScale(2f);
 
         table3.add(box).width(140).height(140).padBottom(15).padLeft(30);
         table2.add(hpImg).width(32).height(32).padTop(16).padRight(90);
@@ -89,12 +74,9 @@ public class Hud implements Disposable {
         table2.add(pointsText).width(32).height(32).padTop(6).padRight(90);
         table1.add(healthLabel).padTop(20).top().right().padRight(40);
         table1.row();
-        //table1.add(timeLabel).expandX().padBottom(15).top().right().padRight(60);
-        //table1.row();
         table1.add(coinLabel).padTop(20).top().right().padRight(40);
         table1.row();
         table1.add(scoreLabel).padTop(22).top().right().padRight(40);
-        //table2.add(minimapImg).width(64).height(64).padBottom(15).expandX().padLeft(1100);
         stage.addActor(table3);
         stage.addActor(table2);
         stage.addActor(table1);
@@ -103,8 +85,6 @@ public class Hud implements Disposable {
     public void update(float dt) {
         timeCount += dt;
         if(timeCount >= 1) {
-            //worldTimer += 1;
-            //timeLabel.setText(String.format("%03d", worldTimer));
             if(health != 100) {
                 health += 1;
                 healthLabel.setText(String.format("%02d", health));
