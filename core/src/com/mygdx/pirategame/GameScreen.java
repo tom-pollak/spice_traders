@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
         this.game = game;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
-        camera.zoom = 0.0135f;
+        camera.zoom = 0.0145f;
         viewport = new ScreenViewport(camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
@@ -83,7 +83,7 @@ public class GameScreen implements Screen {
                 "anne_lister_flag.png", "anne_lister_ship.png", 4));
         colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
                 "constantine_flag.png", "constantine_ship.png", 4));
-        colleges.put("Derwent", new College(this, 1900 / PirateGame.PPM, 6500 / PirateGame.PPM,
+        colleges.put("Derwent", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
                 "derwent_flag.png", "derwent_ship.png", 4));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
@@ -304,12 +304,16 @@ public class GameScreen implements Screen {
         return world;
     }
 
+    public College getCollege(String collegeName) {
+        return colleges.get(collegeName);
+    }
+
     public static void gameOverCheck(){
         if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
             game.changeScreen(PirateGame.DEATH);
             game.killGame();
         }
-        else if ( colleges.get("Anne Lister").destroyed || colleges.get("Constantine").destroyed || colleges.get("Derwent").destroyed){
+        else if ( colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Derwent").destroyed){
             game.changeScreen(PirateGame.VICTORY);
             game.killGame();
 

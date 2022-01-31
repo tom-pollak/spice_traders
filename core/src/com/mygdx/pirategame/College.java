@@ -89,7 +89,6 @@ public class College extends Enemy{
         fdef.shape = shape;
         fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
-
     }
 
     @Override
@@ -100,6 +99,7 @@ public class College extends Enemy{
     }
 
     public void claimCollege(){
-
+        new College(screen, b2body.getPosition().x / PirateGame.PPM, b2body.getPosition().y / PirateGame.PPM,
+                "alcuin_flag.png", "alcuin_ship.png", 4);
     }
 }
