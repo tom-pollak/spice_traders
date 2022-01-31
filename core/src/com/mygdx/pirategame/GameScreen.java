@@ -243,7 +243,7 @@ public class GameScreen implements Screen {
         colleges.get("Anne Lister").update(dt);
         colleges.get("Constantine").update(dt);
         colleges.get("Derwent").update(dt);
-        for (int i = 1; i < ships.size(); i++){
+        for (int i = 0; i < ships.size(); i++){
             ships.get(i).update(dt);
         }
         coin.update(dt);
@@ -280,7 +280,7 @@ public class GameScreen implements Screen {
         colleges.get("Anne Lister").draw(game.batch);
         colleges.get("Constantine").draw(game.batch);
         colleges.get("Derwent").draw(game.batch);
-        for (int i = 1; i < ships.size(); i++){
+        for (int i = 0; i < ships.size(); i++){
             ships.get(i).draw(game.batch);
         }
         game.batch.end();
