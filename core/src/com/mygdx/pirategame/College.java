@@ -90,6 +90,7 @@ public class College extends Enemy{
             }
             if (!currentCollege.equals("alcuin_flag.png")){
                 Hud.changePoints(100);
+                Hud.changeCoins(rand.nextInt(10));
                 claimCollege();
             }
         }

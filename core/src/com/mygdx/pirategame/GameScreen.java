@@ -17,12 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
+import java.util.Random;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {
-    private static float maxSpeed = 5f;
+    private static float maxSpeed = 20f;
     private static float accel = 0.05f;
 
     protected static PirateGame game;
@@ -40,8 +41,8 @@ public class GameScreen implements Screen {
     private Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
     private ArrayList<EnemyShip> ships = new ArrayList<>();
+    private ArrayList<Coin> Coins = new ArrayList<>();
     private Hud hud;
-    private Coin coin;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -49,6 +50,8 @@ public class GameScreen implements Screen {
 
     private Table pauseTable;
     private Table table;
+
+    public Random rand = new Random();
 
     public GameScreen(PirateGame game){
         gameStatus = GAME_RUNNING;
@@ -89,7 +92,37 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Derwent").fleet);
-        coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
+
+
+        //Random middle coins
+        for (int i = 0; i < 20; i++) {
+            Coins.add(new Coin(this, rand.nextInt(56 - 24) + 24, rand.nextInt(53 - 24) + 24));
+        }
+
+        //Alcuin coins
+        Coins.add(new Coin(this, 10, 12));
+        Coins.add(new Coin(this, 10, 11));
+        Coins.add(new Coin(this, 8, 16));
+        Coins.add(new Coin(this, 9, 13));
+
+        //Goodrick Coins
+        Coins.add(new Coin(this, 10, 71));
+        Coins.add(new Coin(this, 18, 73));
+        Coins.add(new Coin(this, 24, 71));
+        Coins.add(new Coin(this, 14, 74));
+
+        //Constantine Coins
+        Coins.add(new Coin(this, 57, 70));
+        Coins.add(new Coin(this, 63, 72));
+        Coins.add(new Coin(this, 68, 71));
+        Coins.add(new Coin(this, 72, 70));
+
+        //Anne Lister
+        Coins.add(new Coin(this, 67, 7));
+        Coins.add(new Coin(this, 68, 10));
+        Coins.add(new Coin(this, 66, 9));
+        Coins.add(new Coin(this, 69, 11));
+
         stage = new Stage(new ScreenViewport());
     }
 
@@ -247,7 +280,12 @@ public class GameScreen implements Screen {
         for (int i = 0; i < ships.size(); i++){
             ships.get(i).update(dt);
         }
-        coin.update(dt);
+
+        for(int i=0;i<Coins.size();i++) {
+
+            Coins.get(i).update(dt);
+        }
+
         hud.update(dt);
 
         // Centre camera on player boat
@@ -274,7 +312,13 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         // Order determines layering
-        coin.draw(game.batch);
+
+        for(int i=0;i<Coins.size();i++) {
+
+            Coins.get(i).draw(game.batch);
+        }
+
+
         player.draw(game.batch);
         colleges.get("Alcuin").draw(game.batch);
         colleges.get("Anne Lister").draw(game.batch);
