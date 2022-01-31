@@ -18,7 +18,7 @@ public class Player extends Sprite {
 
     public Player(GameScreen screen) {
         this.screen = screen;
-        ship = new Texture("alcuin_ship.png");
+        ship = new Texture("player_ship.png");
         this.world = screen.getWorld();
         definePlayer();
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
@@ -50,7 +50,7 @@ public class Player extends Sprite {
 
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1800 / PirateGame.PPM, 2500 / PirateGame.PPM);
+        bdef.position.set(1800 / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 

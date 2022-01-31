@@ -80,17 +80,17 @@ public class GameScreen implements Screen {
         colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
                 "alcuin_flag.png", "alcuin_ship.png", 0));
         colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
-                "anne_lister_flag.png", "anne_lister_ship.png", 50));
+                "anne_lister_flag.png", "anne_lister_ship.png", 500));
         colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
                 "constantine_flag.png", "constantine_ship.png", 0));
-        colleges.put("Derwent", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
-                "derwent_flag.png", "derwent_ship.png", 0));
-        colleges.put("Goodricke", new College(this, 0, 0,
+        colleges.put("Goodricke", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
+                "goodricke_flag.png", "goodricke_ship.png", 0));
+        colleges.put("Derwent", new College(this, 0, 0,
                 "ship1.png", "derwent_ship.png", 0));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
-        ships.addAll(colleges.get("Derwent").fleet);
+        ships.addAll(colleges.get("Goodricke").fleet);
         coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
         stage = new Stage(new ScreenViewport());
     }

@@ -50,29 +50,58 @@ public class College extends Enemy{
         }
     }
 
-    public boolean getCoord(int x, int y){
+    public boolean getCoord(int x, int y) {
         System.out.println("X: " + x + "   Y: " + y);
-        if (x <= 0 || y <= 7){
-            return false;
-        }else if (x >= 4 && x <= 11 && y >= 83 && y <= 86){
-            return false;
-        }else if (x == 53 && y >= 10 && y <= 11){
-            return false;
-        }else if (x >= 54 && x <= 56 && y >= 10 && y <= 12){
-            return false;
-        }else if (x >= 57 && x <= 71 && y >= 10 && y <= 13){
-            return false;
-        }else if (x >= 63 && x <= 70 && y == 9){
-            return false;
-        }else if (x >= 69 && x <= 74 && y >= 14 && y <= 18){
-            return false;
-        }else if (x >= 70 && x <= 73 && y == 19){
-            return false;
-        }else if (x >= 62 && x <= 63 && y >= 14 && y <= 15){
-            return false;
-        }else if (x >= 64 && x <= 68 && y >= 14 && y <= 16){
-            return false;
-        }else{
+        int a = 1;
+        if (a == 0) {
+            if (x <= 0 || y <= 7) {
+                return false;
+            } else if (x >= 4 && x <= 11 && y >= 83 && y <= 86) {
+                return false;
+            } else if (x == 53 && y >= 10 && y <= 11) {
+                return false;
+            } else if (x >= 54 && x <= 56 && y >= 10 && y <= 12) {
+                return false;
+            } else if (x >= 57 && x <= 71 && y >= 10 && y <= 13) {
+                return false;
+            } else if (x >= 63 && x <= 70 && y == 9) {
+                return false;
+            } else if (x >= 69 && x <= 74 && y >= 14 && y <= 18) {
+                return false;
+            } else if (x >= 70 && x <= 73 && y == 19) {
+                return false;
+            } else if (x >= 62 && x <= 63 && y >= 14 && y <= 15) {
+                return false;
+            } else if (x >= 64 && x <= 68 && y >= 14 && y <= 16) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (x <= 50 && y >= 50) {
+            if (y >= 75){
+                return false;
+            }else if (x >= 9 && x <= 16 && y >= 60 && y <= 63){
+                return false;
+            }else if (x >= 11 && x <= 25 && y >= 64 && y <= 69){
+                return false;
+            }else if (x >= 12 && x <= 25 && y >= 70 && y <= 71) {
+                return false;
+            }else{
+                return true;
+            }
+        }else if (x >= 50 && y >= 50) {
+            if (y >= 75) {
+                return false;
+            }else if (x >= 58 && x <= 71 && y >= 64 && y <= 70) {
+                return false;
+            }else if (x >= 67 && x <= 71 && y >= 60 && y <= 64) {
+                return false;
+            }else if (x >= 57 && x <= 59 && y >= 57 && y <= 62) {
+                return false;
+            }else{
+                return true;
+            }
+        }else {
             return true;
         }
     }

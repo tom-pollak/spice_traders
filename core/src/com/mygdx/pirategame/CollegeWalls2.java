@@ -14,6 +14,6 @@ public class CollegeWalls2 extends InteractiveTileObject {
     @Override
     public void onContact() {
         Gdx.app.log("wall", "collision");
-        screen.getCollege("Derwent").onContact();
+        screen.getCollege("Goodricke").onContact();
     }
 }
