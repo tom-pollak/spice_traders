@@ -148,7 +148,6 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        //BUTTONS ADD
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
         //GAME BUTTONS
@@ -464,9 +463,9 @@ public class GameScreen implements Screen {
 
     /**
      * Checks if the game is over
-     * i.e. goal reached (all colleges bar "Alcuin" are destroyed
+     * i.e. goal reached (all colleges bar "Alcuin" are destroyed)
      */
-    public static void gameOverCheck(){
+    public void gameOverCheck(){
         if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
             game.changeScreen(PirateGame.DEATH);
             game.killGame();

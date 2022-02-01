@@ -14,6 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type for the skill tree screen.
+ * It is a visual representation for the skills that the game automatically unlocks for the player.
+ * Automatically unlocked when a points threshold is reached
+ *
+ * @author Sam Pearson
+ * @version 1.0
+ */
 public class SkillTree implements Screen {
 
     private final PirateGame parent;
@@ -27,8 +35,12 @@ public class SkillTree implements Screen {
     private TextButton GoldMulti1;
     private TextButton movement2;
 
-
-    //In the constructor, the parent and stage are set. Also the states list is set
+    /**
+     * Instantiates a new Skill tree.
+     *
+     * @param pirateGame the main starting body of the game. Where screen swapping is carried out.
+     */
+//In the constructor, the parent and stage are set. Also the states list is set
     public SkillTree(PirateGame pirateGame){
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
@@ -137,6 +149,11 @@ public class SkillTree implements Screen {
 
     }
 
+    /**
+     * Points check.
+     *
+     * @param points the points
+     */
     public static void pointsCheck(int points){
 
         if(states.get(0) == 1 && points >= 100){

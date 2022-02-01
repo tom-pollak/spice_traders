@@ -20,6 +20,7 @@ public class College extends Enemy{
 
     public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
         super(screen, x, y);
+        this.screen = screen;
         noSpawn = invalidSpawn;
         currentCollege = flag;
         enemyCollege = new Texture(flag);
@@ -64,7 +65,7 @@ public class College extends Enemy{
             destroyed = true;
 
             if (currentCollege.equals("alcuin_flag.png")){
-                GameScreen.gameOverCheck();
+                screen.gameOverCheck();
             }
             if (!currentCollege.equals("alcuin_flag.png")){
                 Hud.changePoints(100);
