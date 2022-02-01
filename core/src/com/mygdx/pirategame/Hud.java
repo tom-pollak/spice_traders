@@ -10,6 +10,13 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * Hud
+ * Produces a hud for the player
+ *
+ *@author Sam Pearson
+ *@version 1.0
+ */
 public class Hud implements Disposable {
     public static Stage stage;
     private Viewport viewport;
@@ -31,6 +38,12 @@ public class Hud implements Disposable {
     private Image box;
     private Image coin;
 
+    /**
+     * Retrieves information and displays it in the hud
+     * Adjusts hud with viewport
+     *
+     * @param sb Batch of images used in the hud
+     */
     public Hud(SpriteBatch sb) {
         health = 100;
         score = 0;
@@ -60,7 +73,6 @@ public class Hud implements Disposable {
         table3.top().right();
         table3.setFillParent(true);
 
-
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
@@ -82,6 +94,11 @@ public class Hud implements Disposable {
         stage.addActor(table1);
     }
 
+    /**
+     * Updates the state of the hud
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void update(float dt) {
         timeCount += dt;
         if(timeCount >= 1) {
@@ -97,10 +114,21 @@ public class Hud implements Disposable {
         }
     }
 
+    /**
+     * Changes health by value increase
+     *
+     * @param value Increase to health
+     */
     public static void changeHealth(int value) {
         health += value;
         healthLabel.setText(String.format("%02d", health));
     }
+
+    /**
+     * Changes coins by value increase
+     *
+     * @param value Increase to coins
+     */
     public static void changeCoins(int value) {
         if (value > 0) {
             coins += value * coinMulti;
@@ -108,29 +136,58 @@ public class Hud implements Disposable {
         }
     }
 
+    /**
+     * Changes points by value increase
+     *
+     * @param value Increase to points
+     */
     public static void changePoints(int value) {
         score += value;
         scoreLabel.setText(String.format("%03d", score));
         SkillTree.pointsCheck(score);
     }
 
+    /**
+     * Changes health by value factor
+     *
+     * @param value Factor of coin increase
+     */
     public static void changeCoinsMulti(int value) {
         coinMulti = coinMulti * value;
     }
 
+    /**
+     * Changes the camera size, Scales the hud to match the camera
+     *
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     public static void resize(int width, int height){
-
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Returns health value
+     *
+     * @return health : returns health value
+     */
     public static Integer getHealth(){
         return health;
     }
 
+    /**
+     * (Not Used)
+     * Returns coins value
+     *
+     * @return health : returns coins value
+     */
     public static Integer getCoins(){
         return coins;
     }
 
+    /**
+     * Disposes game data
+     */
     @Override
     public void dispose() {
         stage.dispose();

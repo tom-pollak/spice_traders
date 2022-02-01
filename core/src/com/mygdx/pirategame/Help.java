@@ -18,18 +18,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Help implements Screen {
-
     private final PirateGame parent;
     private final Stage stage;
 
-
-    //In the constructor, the parent and stage are set. Also the states list is set
+    /**
+     * In the constructor, the parent and stage are set. Also the states list is set
+     *
+     * @param pirateGame Game data
+     */
     public Help(PirateGame pirateGame){
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
-
     }
 
+    /**
+     * Displays help data
+     */
     @Override
     public void show() {
         //Set the input processor
@@ -44,32 +48,25 @@ public class Help implements Screen {
         Other.setFillParent(true);
         stage.addActor(Other);
 
-
         //The skin for the actors
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
         //Text
-
         Label Controls1 = new Label("WASD to move", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         Label Controls2 = new Label("E to fire", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         Label Controls3 = new Label("ESCAPE to see menu", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
         Label objective1 = new Label("The objective is to take over or destroy all other colleges", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         Label objective2 = new Label("Destroy the college flag with cannons", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         Label objective3 = new Label("Collect coins on the way", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
         Label skillInfo1 = new Label("Automatically upgrade as you play", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         Label skillInfo2 = new Label("See your upgrades in the skills tab", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-
-
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
-
         backButton.addListener(new ChangeListener() {
+
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
                 parent.changeScreen(PirateGame.MENU);
             }
         });
@@ -94,15 +91,16 @@ public class Help implements Screen {
         Other.add(skillInfo1);
         Other.row();
         Other.add(skillInfo2).padBottom((40));
-
         Other.center();
-
-
-
     }
 
+    /**
+     * Renders visual data with delta time
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     @Override
-    public void render(float delta) {
+    public void render(float dt) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -112,26 +110,44 @@ public class Help implements Screen {
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Changes the camera size
+     *
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * (Not Used)
+     * Pauses game
+     */
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
     }
 
+    /**
+     * (Not Used)
+     * Resumes game
+     */
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
     }
 
+    /**
+     * (Not Used)
+     * Hides game
+     */
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
     }
 
+    /**
+     * Disposes game data
+     */
     @Override
     public void dispose() {
         stage.dispose();

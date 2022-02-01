@@ -1,11 +1,16 @@
 package com.mygdx.pirategame;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 
+/**
+ * Interactive Tile Object
+ * Generates the world with interactive tiles
+ *
+ *@author Ethan Alabaster
+ *@version 1.0
+ */
 public abstract class InteractiveTileObject {
     protected World world;
     protected TiledMapTile tile;
@@ -13,6 +18,12 @@ public abstract class InteractiveTileObject {
     protected Body body;
     protected Fixture fixture;
 
+    /**
+     * Instantiates world data
+     *
+     * @param screen Visual data
+     * @param bounds Rectangle boundary (world boundary)
+     */
     public InteractiveTileObject(GameScreen screen, Rectangle bounds) {
         this.world = screen.getWorld();
         this.bounds = bounds;
@@ -32,7 +43,14 @@ public abstract class InteractiveTileObject {
         fixture = body.createFixture(fDef);
     }
 
+    /**
+     * Check contact
+     */
     public abstract void onContact();
+
+    /**
+     * Set filter
+     */
     public void setCategoryFilter(short filterBit) {
         Filter filter = new Filter();
         filter.categoryBits = filterBit;

@@ -61,7 +61,6 @@ public class DeathScreen implements Screen {
         TextButton backButton = new TextButton("Return To Menu", skin);
 
         backButton.addListener(new ChangeListener() {
-            @Override
             /**
              * Switches screen
              * Returns to menu
@@ -69,6 +68,7 @@ public class DeathScreen implements Screen {
              * @param event Updates system event state to meny
              * @param actor updates scene
              */
+            @Override
             public void changed(ChangeEvent event, Actor actor) {
                 parent.changeScreen(PirateGame.MENU);
                 parent.killEndScreen();
@@ -84,11 +84,9 @@ public class DeathScreen implements Screen {
 
     /**
      * (Not Used)
-     * Updates the state of each object with delta time
-     *
-     * @param dt Delta time (elapsed time since last game tick)
+     * Updates the state of each object
      */
-    public void update(float dt){
+    public void update(){
     }
 
     /**
@@ -105,6 +103,7 @@ public class DeathScreen implements Screen {
 
     /**
      * Changes the camera size
+     *
      * @param width the width of the viewable area
      * @param height the height of the viewable area
      */
