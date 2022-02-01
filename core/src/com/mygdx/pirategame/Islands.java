@@ -17,6 +17,7 @@ public class Islands extends InteractiveTileObject {
     public Islands(GameScreen screen, Rectangle bounds) {
         super(screen, bounds);
         fixture.setUserData(this);
+        //Set the category bit
         setCategoryFilter(PirateGame.DEFAULT_BIT);
     }
 
@@ -26,6 +27,7 @@ public class Islands extends InteractiveTileObject {
     @Override
     public void onContact() {
         Gdx.app.log("island", "collision");
+        //Deal damage to the boat
         Hud.changeHealth(-10);
     }
 }

@@ -34,6 +34,7 @@ public class CollegeFire extends Sprite {
         this.world = screen.getWorld();
         playerPos = screen.getPlayerPos();
         cannonBall = new Texture("cannonBall.png");
+        //Set the position and size of the ball
         setRegion(cannonBall);
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
         defineCannonBall();
@@ -44,19 +45,21 @@ public class CollegeFire extends Sprite {
      * Defines cannonball shape
      */
     public void defineCannonBall() {
+        //sets the body definitions
         BodyDef bDef = new BodyDef();
         bDef.position.set(getX(), getY());
         bDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bDef);
-
+        //Sets collision boundaries
         FixtureDef fDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
-
+        // setting BIT identifier
         fDef.filter.categoryBits = PirateGame.COLLEGEFIRE_BIT;
+        // determining what this BIT can collide with
         fDef.filter.maskBits = PirateGame.PLAYER_BIT;
-        fDef.shape = shape;
 
+        fDef.shape = shape;
         b2body.createFixture(fDef).setUserData(this);
 
         // Math for firing the cannonball at the player
@@ -74,6 +77,7 @@ public class CollegeFire extends Sprite {
      */
     public void update(float dt){
         stateTime += dt;
+        //If college is set to destroy and isnt, destroy it
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
         if((setToDestroy) && !destroyed) {
             world.destroyBody(b2body);

@@ -44,7 +44,7 @@ public class DeathScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
-
+        // Create tables for the text and button
         Table table = new Table();
         table.center();
         table.setFillParent(true);
@@ -58,8 +58,10 @@ public class DeathScreen implements Screen {
         table.add(deathMsg).center();
         stage.addActor(table);
 
+        //Creat button
         TextButton backButton = new TextButton("Return To Menu", skin);
 
+        //Return to main menu and kill screen
         backButton.addListener(new ChangeListener() {
             /**
              * Switches screen

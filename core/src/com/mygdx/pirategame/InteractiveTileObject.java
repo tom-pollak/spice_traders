@@ -28,10 +28,12 @@ public abstract class InteractiveTileObject {
         this.world = screen.getWorld();
         this.bounds = bounds;
 
+        //Create objects used for dimensions
         BodyDef bDef = new BodyDef();
         FixtureDef fDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
 
+        //Set position
         bDef.type = BodyDef.BodyType.StaticBody;
         bDef.position.set((bounds.getX() + bounds.getWidth() / 2) / PirateGame.PPM, (bounds.getY() + bounds.getHeight() / 2) / PirateGame.PPM);
 

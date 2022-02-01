@@ -46,10 +46,12 @@ public class Coin extends Entity {
      * Updates the coins state. If needed, deletes the coin if picked up.
      */
     public void update() {
+        //If coin is set to destroy and isnt, destroy it
         if(setToDestroyed && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
         }
+        //Update position of coin
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         }
@@ -60,11 +62,13 @@ public class Coin extends Entity {
      */
     @Override
     protected void defineEntity() {
+        //sets the body definitions
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
+        //Sets collision boundaries
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(24 / PirateGame.PPM);
@@ -82,9 +86,12 @@ public class Coin extends Entity {
      */
     @Override
     public void entityContact() {
+        //Add a coin
         Hud.changeCoins(1);
+        //Set to destroy
         setToDestroyed = true;
         Gdx.app.log("coin", "collision");
+        //Play pickup sound
         if (screen.game.getPreferences().isEffectsEnabled()) {
             coinPickup.play(screen.game.getPreferences().getEffectsVolume());
         }

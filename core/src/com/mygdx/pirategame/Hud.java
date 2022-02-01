@@ -49,22 +49,22 @@ public class Hud implements Disposable {
         score = 0;
         coins = 0;
         coinMulti = 1;
+        //Set images
         hp = new Texture("hp.png");
         boxBackground = new Texture("hudBG.png");
         coinPic = new Texture("coin.png");
 
-        //minimapImg = new Image(minimap);
         hpImg = new Image(hp);
         box = new Image(boxBackground);
         coin = new Image(coinPic);
 
-        //viewport = new ExtendViewport(PirateGame.WIDTH, PirateGame.HEIGHT, new OrthographicCamera());
         viewport = new ScreenViewport();
         stage = new Stage(viewport, sb);
 
-        Table table1 = new Table();
-        Table table2 = new Table();
-        Table table3 = new Table();
+        //Creates tables
+        Table table1 = new Table(); //Counters
+        Table table2 = new Table(); //Pictures or points label
+        Table table3 = new Table(); //Background
 
         table1.top().right();
         table1.setFillParent(true);
@@ -102,14 +102,17 @@ public class Hud implements Disposable {
     public void update(float dt) {
         timeCount += dt;
         if(timeCount >= 1) {
+            //Regen health every second
             if(health != 100) {
                 health += 1;
                 healthLabel.setText(String.format("%02d", health));
             }
+            //Gain point every second
             score += 1;
             scoreLabel.setText(String.format("%03d", score));
             timeCount = 0;
 
+            //Check if a points boundary is met
             SkillTree.pointsCheck(score);
         }
     }
@@ -144,6 +147,7 @@ public class Hud implements Disposable {
     public static void changePoints(int value) {
         score += value;
         scoreLabel.setText(String.format("%03d", score));
+        //Check if a points boundary is met
         SkillTree.pointsCheck(score);
     }
 

@@ -84,7 +84,6 @@ public class GameScreen implements Screen {
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
         b2dr = new Box2DDebugRenderer();
-        b2dr.setDrawBodies(false);
         player = new Player(this);
 
         // making the Tiled tmx file render as a map
@@ -119,10 +118,13 @@ public class GameScreen implements Screen {
         for (int i = 0; i < 20; i++) {
             validLoc = false;
             while (!validLoc) {
+                //Get random x and y coords
                 a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+                //Check if valid
                 validLoc = checkGenPos(a, b);
             }
+            //Add a ship at the random coords
             ships.add(new EnemyShip(this, a, b, "unaligned_ship.png", "Unaligned"));
         }
 
@@ -131,10 +133,12 @@ public class GameScreen implements Screen {
         for (int i = 0; i < 100; i++) {
             validLoc = false;
             while (!validLoc) {
+                //Get random x and y coords
                 a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
                 validLoc = checkGenPos(a, b);
             }
+            //Add a coins at the random coords
             Coins.add(new Coin(this, a, b));
         }
 
@@ -161,6 +165,8 @@ public class GameScreen implements Screen {
         final TextButton options = new TextButton("Options", skin);
         TextButton exit = new TextButton("Exit", skin);
 
+
+        //Create main table and pause tables
         table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -169,6 +175,8 @@ public class GameScreen implements Screen {
         pauseTable.setFillParent(true);
         stage.addActor(pauseTable);
 
+
+        //Set the visability of the tables. Particuarly used when coming back from options or skillTree
         if (gameStatus == GAME_PAUSED){
             table.setVisible(false);
             pauseTable.setVisible(true);
@@ -194,13 +202,6 @@ public class GameScreen implements Screen {
 
 
         pauseButton.addListener(new ChangeListener() {
-            /**
-             * Button Listeners
-             * Changes state to paused
-             *
-             * @param event updates system event state to Paused
-             * @param actor updates scene
-             */
             @Override
             public void changed(ChangeEvent event, Actor actor){
                 table.setVisible(false);
@@ -210,13 +211,6 @@ public class GameScreen implements Screen {
             }
         });
         skill.addListener(new ChangeListener() {
-            /**
-             * Button Listeners
-             * Changes state to Skill Screen
-             *
-             * @param event updates system event state to Skill Screen
-             * @param actor updates scene
-             */
             @Override
             public void changed(ChangeEvent event, Actor actor){
                 pauseTable.setVisible(false);
@@ -224,13 +218,6 @@ public class GameScreen implements Screen {
             }
         });
         start.addListener(new ChangeListener() {
-            /**
-             * Button Listeners
-             * Changes state to Game
-             *
-             * @param event updates system event state to Game
-             * @param actor updates scene
-             */
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
@@ -239,13 +226,6 @@ public class GameScreen implements Screen {
             }
         });
         options.addListener(new ChangeListener() {
-            /**
-             * Button Listeners
-             * Resets Game
-             *
-             * @param event updates system event state to NEW Game Screen
-             * @param actor updates scene
-             */
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
@@ -254,13 +234,6 @@ public class GameScreen implements Screen {
         }
         );
         exit.addListener(new ChangeListener() {
-            /**
-             * Button Listeners
-             * Closes game
-             *
-             * @param event updates system event state to terminate game
-             * @param actor terminates
-             */
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
@@ -344,13 +317,16 @@ public class GameScreen implements Screen {
         colleges.get("Constantine").update(dt);
         colleges.get("Goodricke").update(dt);
 
+        //Update ships
         for (int i = 0; i < ships.size(); i++) {
             ships.get(i).update(dt);
         }
 
+        //Updates coin
         for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
         }
+        //After a delay check if a college is destroyed. If not, if can fire
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
                 colleges.get("Anne Lister").fire();
@@ -390,24 +366,30 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
-        b2dr.render(world, camera.combined);
+        //b2dr.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         // Order determines layering
 
+        //Renders coins
         for(int i=0;i<Coins.size();i++) {
             Coins.get(i).draw(game.batch);
         }
 
+        //Renders colleges
         player.draw(game.batch);
         colleges.get("Alcuin").draw(game.batch);
         colleges.get("Anne Lister").draw(game.batch);
         colleges.get("Constantine").draw(game.batch);
         colleges.get("Goodricke").draw(game.batch);
+
+        //Updates all ships
         for (int i = 0; i < ships.size(); i++){
             if (ships.get(i).college != "Unaligned") {
+                //Flips a colleges allegence if their college is destroyed
                 if (colleges.get(ships.get(i).college).destroyed) {
+
                     ships.get(i).updateTexture("Alcuin", "alcuin_ship.png");
                 }
             }
@@ -417,6 +399,7 @@ public class GameScreen implements Screen {
         Hud.stage.draw();
         stage.act();
         stage.draw();
+        //Checks game over conditions
         gameOverCheck();
     }
 
@@ -468,10 +451,12 @@ public class GameScreen implements Screen {
      * i.e. goal reached (all colleges bar "Alcuin" are destroyed)
      */
     public void gameOverCheck(){
+        //Lose game if ship on 0 health or Alcuin is destroyed
         if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
             game.changeScreen(PirateGame.DEATH);
             game.killGame();
         }
+        //Win game if all colleges destroyed
         else if (colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Goodricke").destroyed){
             game.changeScreen(PirateGame.VICTORY);
             game.killGame();
@@ -488,7 +473,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Updates acceleration by a given percentage
+     * Updates acceleration by a given percentage. Accessed by skill tree
      *
      * @param percentage percentage increase
      */
@@ -497,7 +482,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Updates max speed by a given percentage
+     * Updates max speed by a given percentage. Accessed by skill tree
      *
      * @param percentage percentage increase
      */
@@ -506,11 +491,12 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Deals damage to a given Enemy Entity
+     * Changes the amount of damage done by each hit. Accessed by skill tree
      *
      * @param value damage dealt
      */
     public static void changeDamage(int value){
+
         for (int i = 0; i < ships.size(); i++){
             ships.get(i).changeDamageReceived(value);
         }

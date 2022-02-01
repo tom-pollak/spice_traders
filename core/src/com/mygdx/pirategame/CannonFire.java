@@ -43,13 +43,17 @@ public class CannonFire extends Sprite {
     public CannonFire(GameScreen screen, float x, float y, Body body, float velocity) {
         this.velocity = velocity;
         this.world = screen.getWorld();
+        //sets the angle and velocity
         bodyVel = body.getLinearVelocity();
         angle = body.getAngle();
 
+        //set cannonBall dimensions for the texture
         cannonBall = new Texture("cannonBall.png");
         setRegion(cannonBall);
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
+        //set collision bounds
         defineCannonBall();
+        //set sound for fire and play if on
         fireNoise = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
         if (screen.game.getPreferences().isEffectsEnabled()) {
             fireNoise.play(screen.game.getPreferences().getEffectsVolume());
@@ -60,21 +64,26 @@ public class CannonFire extends Sprite {
      * Defines the existance, direction, shape and size of a cannonball
      */
     public void defineCannonBall() {
+        //sets the body definitions
         BodyDef bDef = new BodyDef();
         bDef.position.set(getX(), getY());
         bDef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bDef);
 
+        //Sets collision boundaries
         FixtureDef fDef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
 
+        // setting BIT identifier
         fDef.filter.categoryBits = PirateGame.CANNON_BIT;
+        // determining what this BIT can collide with
         fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT | PirateGame.COLLEGE_BIT;
         fDef.shape = shape;
         fDef.isSensor = true;
-
         b2body.createFixture(fDef).setUserData(this);
+
+        //Velocity maths
         float velX = MathUtils.cos(angle) * velocity + bodyVel.x;
         float velY = MathUtils.sin(angle) * velocity + bodyVel.y;
         b2body.applyLinearImpulse(new Vector2(velX, velY), b2body.getWorldCenter(), true);
@@ -88,7 +97,10 @@ public class CannonFire extends Sprite {
      */
     public void update(float dt){
         stateTime += dt;
+        //Update position of ball
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+
+        //If ball is set to destroy and isnt, destroy it
         if((setToDestroy) && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;

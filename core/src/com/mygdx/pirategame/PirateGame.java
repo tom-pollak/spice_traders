@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class PirateGame extends Game {
 	public static final float PPM = 100;
 
+	//Bits used in collisions
 	public static final short DEFAULT_BIT = 1;
 	public static final short PLAYER_BIT = 2;
 	public static final short COLLEGEFIRE_BIT = 4;
@@ -27,6 +28,7 @@ public class PirateGame extends Game {
 
 	public SpriteBatch batch;
 
+	//Variable for each screen
 	private MainMenu menuScreen;
 	private GameScreen gameScreen;
 	private SkillTree skillTreeScreen;
@@ -37,6 +39,7 @@ public class PirateGame extends Game {
 	private audioControls options;
 	public Music song;
 
+	//Constant for swapping between screens
 	public final static int MENU = 0;
 	public final static int GAME = 1;
 	public final static int SKILL = 2;
@@ -52,10 +55,13 @@ public class PirateGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+		//Set starting screen
 		MainMenu mainMenu = new MainMenu(this);
 		setScreen(mainMenu);
+		//Create options
 		options = new audioControls();
 
+		//Set background music and play if valid
 		song = Gdx.audio.newMusic(Gdx.files.internal("pirate-music.mp3"));
 		song.setLooping(true);
 		if(getPreferences().isMusicEnabled()){
@@ -70,6 +76,7 @@ public class PirateGame extends Game {
 	 * @param screen the number of the screen that the user wants to swap to
 	 */
 	public void changeScreen(int screen) {
+		//Depending on which value given, change the screen
 		switch (screen) {
 			case MENU:
 				if (menuScreen == null) menuScreen = new MainMenu(this);
@@ -109,7 +116,6 @@ public class PirateGame extends Game {
 	 *
 	 * @return the options object
 	 */
-//Allows interaction with the options document
 	public audioControls getPreferences() {
 		return this.options;
 	}

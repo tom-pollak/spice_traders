@@ -22,6 +22,7 @@ public class CollegeWalls3 extends InteractiveTileObject {
         super(screen, bounds);
         this.screen = screen;
         fixture.setUserData(this);
+        //Set the category bit
         setCategoryFilter(PirateGame.COLLEGE_BIT);
     }
 
@@ -31,6 +32,7 @@ public class CollegeWalls3 extends InteractiveTileObject {
     @Override
     public void onContact() {
         Gdx.app.log("wall", "collision");
+        //Deal damage to the assigned college
         screen.getCollege("Constantine").onContact();
     }
 }

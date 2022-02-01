@@ -34,12 +34,16 @@ public class EnemyShip extends Enemy{
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
+        //Assign college
         college = assignment;
+        //Set audios
         destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
         hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
+        //Set the position and size of the college
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
+
         damage = 20;
     }
 
@@ -50,18 +54,25 @@ public class EnemyShip extends Enemy{
      * @param dt Delta time (elapsed time since last game tick)
      */
     public void update(float dt) {
+        //If ship is set to destroy and isnt, destroy it
         if(setToDestroy && !destroyed) {
-            destroy.play(screen.game.getPreferences().getEffectsVolume());
+            //Play death noise
+            if (screen.game.getPreferences().isEffectsEnabled()) {
+                destroy.play(screen.game.getPreferences().getEffectsVolume());
+            }
             world.destroyBody(b2body);
             destroyed = true;
+            //Change player coins and points
             Hud.changePoints(20);
             Hud.changeCoins(10);
         }
         else if(!destroyed) {
+            //Update position and angle of ship
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
             float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
             b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
             setRotation((float) (b2body.getAngle() * 180 / Math.PI));
+            //Update health bar
             bar.update();
         }
         if(health <= 0) {
@@ -84,6 +95,7 @@ public class EnemyShip extends Enemy{
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
+            //Render health bar
             bar.render(batch);
         }
     }
@@ -94,11 +106,13 @@ public class EnemyShip extends Enemy{
      */
     @Override
     protected void defineEnemy() {
+        //sets the body definitions
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
+        //Sets collision boundaries
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(55 / PirateGame.PPM);
@@ -118,14 +132,18 @@ public class EnemyShip extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
-        hit.play(screen.game.getPreferences().getEffectsVolume());
+        //Play collision sound
+        if (screen.game.getPreferences().isEffectsEnabled()) {
+            hit.play(screen.game.getPreferences().getEffectsVolume());
+        }
+        //Deal with the damage
         health -= damage;
         bar.changeHealth(damage);
         Hud.changePoints(5);
     }
 
     /**
-     * Updates the ship image
+     * Updates the ship image. Particuarly change texture on college destruction
      *
      * @param alignment Associated college
      * @param path Path of new texture

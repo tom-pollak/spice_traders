@@ -31,9 +31,11 @@ class HealthBar {
         this.owner = owner;
         image = new Texture("HealthBar.png");
         healthBar = new Sprite(image);
+        //Sets size of the health bar
         healthBar.setScale(0.0155f);
         healthBar.setSize(healthBar.getWidth(), healthBar.getHeight() - 2f);
 
+        //Sets location of bar
         healthBar.setX (this.owner.b2body.getPosition().x - 0.68f);
         healthBar.setY(this.owner.b2body.getPosition().y + this.owner.getHeight() / 2);
         healthBar.setOrigin(0,0);
@@ -44,6 +46,7 @@ class HealthBar {
      */
     public void update(){
         if (owner != null) {
+            //Update location
             healthBar.setX( (owner.b2body.getPosition().x - 0.68f));
             healthBar.setY(owner.b2body.getPosition().y + owner.getHeight() / 2);
         }
@@ -62,6 +65,7 @@ class HealthBar {
      * @param value Damage recieved
      */
     public void changeHealth(float value){
+        //Changes bar size when damaged
         healthBar.setSize(healthBar.getWidth() - value, healthBar.getHeight());
     }
 }

@@ -44,6 +44,7 @@ public class College extends Enemy{
         noSpawn = invalidSpawn;
         currentCollege = flag;
         enemyCollege = new Texture(flag);
+        //Set the position and size of the college
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
@@ -93,18 +94,22 @@ public class College extends Enemy{
      * @param dt Delta time (elapsed time since last game tick)
      */
     public void update(float dt) {
+        //If college is set to destroy and isnt, destroy it
         if(setToDestroy && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
 
+            //If it is the player ally college, end the game for the player
             if (currentCollege.equals("alcuin_flag.png")){
                 screen.gameOverCheck();
             }
+            //Award the player coins and points for destroying a college
             if (!currentCollege.equals("alcuin_flag.png")){
                 Hud.changePoints(100);
                 Hud.changeCoins(rand.nextInt(10));
             }
         }
+        //If not destroyed, update the college position
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
 
@@ -116,6 +121,7 @@ public class College extends Enemy{
         if(health <= 0) {
             setToDestroy = true;
         }
+        //Update cannon balls
         for(CollegeFire ball : cannonBalls) {
             ball.update(dt);
             if(ball.isDestroyed())
@@ -129,7 +135,9 @@ public class College extends Enemy{
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
+            //Render health bar
             bar.render(batch);
+            //Render balls
             for(CollegeFire ball : cannonBalls)
                 ball.draw(batch);
         }
@@ -140,11 +148,12 @@ public class College extends Enemy{
      */
     @Override
     protected void defineEnemy() {
+        //sets the body definitions
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
-
+        //Sets collision boundaries
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(55 / PirateGame.PPM);
@@ -163,6 +172,7 @@ public class College extends Enemy{
      */
     @Override
     public void onContact() {
+        //Damage the college and lower health bar
         Gdx.app.log("enemy", "collision");
         health -= damage;
         bar.changeHealth(damage);
