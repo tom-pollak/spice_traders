@@ -90,8 +90,5 @@ public class EnemyShip extends Enemy{
         setRegion(enemyShip);
     }
 
-    public void changeDamageRecieved(int value){
-        damage = value;
-    }
 
 }

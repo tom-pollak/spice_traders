@@ -370,11 +370,11 @@ public class GameScreen implements Screen {
     }
     public static void changeDamage(int value){
         for (int i = 0; i < ships.size(); i++){
-            ships.get(i).changeDamageRecieved(value);
+            ships.get(i).changeDamageReceived(value);
         }
-        colleges.get("Anne Lister").changeDamageRecieved(value);
-        colleges.get("Constantine").changeDamageRecieved(value);
-        colleges.get("Goodricke").changeDamageRecieved(value);
+        colleges.get("Anne Lister").changeDamageReceived(value);
+        colleges.get("Constantine").changeDamageReceived(value);
+        colleges.get("Goodricke").changeDamageReceived(value);
 
     }
 

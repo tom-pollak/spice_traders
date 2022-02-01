@@ -30,4 +30,8 @@ public abstract class Enemy extends Sprite {
     protected abstract void defineEnemy();
     public abstract void onContact();
     public abstract void update(float dt);
+
+    public void changeDamageReceived(int value){
+        damage += value;
+    }
 }

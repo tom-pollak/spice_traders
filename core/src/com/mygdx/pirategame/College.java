@@ -125,9 +125,5 @@ public class College extends Enemy{
     public void fire() {
 
     }
-
-
-    public void changeDamageRecieved(int value){
-        damage = value;
-    }
 }
+
