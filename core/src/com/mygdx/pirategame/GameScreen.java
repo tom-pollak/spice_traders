@@ -552,7 +552,8 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Hides game (Not Used)
+     * (Not Used)
+     * Hides game
      */
     @Override
     public void hide() {

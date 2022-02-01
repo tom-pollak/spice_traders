@@ -9,13 +9,29 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+/**
+ * Enemy Ship
+ * Generates enemy ship data
+ * Instantiates an enemy ship
+ *
+ *@author Ethan Alabaster, Sam Pearson, Edward Poulter
+ *@version 1.0
+ */
 public class EnemyShip extends Enemy{
     private Texture enemyShip;
     public String college;
     private Sound destroy;
     private Sound hit;
 
-
+    /**
+     * Instantiates enemy ship
+     *
+     * @param screen Visual data
+     * @param x x coordinates of entity
+     * @param y y coordinates of entity
+     * @param path path of texture file
+     * @param assignment College ship is assigned to
+     */
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
@@ -28,6 +44,12 @@ public class EnemyShip extends Enemy{
         damage = 20;
     }
 
+    /**
+     * Updates the state of each object with delta time
+     * Checks for ship destruction
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void update(float dt) {
         if(setToDestroy && !destroyed) {
             destroy.play(screen.game.getPreferences().getEffectsVolume());
@@ -55,6 +77,11 @@ public class EnemyShip extends Enemy{
         //b2body.setLinearVelocity(target.scl(speed));
     }
 
+    /**
+     * Constructs the ship batch
+     *
+     * @param batch The batch of visual data of the ship
+     */
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
@@ -62,6 +89,10 @@ public class EnemyShip extends Enemy{
         }
     }
 
+    /**
+     * Defines the ship as an enemy
+     * Sets data to act as an enemy
+     */
     @Override
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
@@ -81,6 +112,10 @@ public class EnemyShip extends Enemy{
         b2body.createFixture(fdef).setUserData(this);
     }
 
+    /**
+     * Checks contact
+     * Changes health in accordance with contact and damage
+     */
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
@@ -90,11 +125,15 @@ public class EnemyShip extends Enemy{
         Hud.changePoints(5);
     }
 
+    /**
+     * Updates the ship image
+     *
+     * @param alignment Associated college
+     * @param path Path of new texture
+     */
     public void updateTexture(String alignment, String path){
         college = alignment;
         enemyShip = new Texture(path);
         setRegion(enemyShip);
     }
-
-
 }

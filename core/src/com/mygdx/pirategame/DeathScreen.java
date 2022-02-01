@@ -14,18 +14,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * Death Screen
+ * Produces a death screen on player death
+ *
+ *@author Sam Pearson
+ *@version 1.0
+ */
 public class DeathScreen implements Screen {
 
     private final PirateGame parent;
     private final Stage stage;
 
-
+    /**
+     * Creates a new screen
+     *
+     * @param pirateGame Game data
+     */
     public DeathScreen(PirateGame pirateGame){
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
-
     }
 
+    /**
+     * Shows new screen
+     */
     @Override
     public void show() {
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
@@ -49,8 +62,14 @@ public class DeathScreen implements Screen {
 
         backButton.addListener(new ChangeListener() {
             @Override
+            /**
+             * Switches screen
+             * Returns to menu
+             *
+             * @param event Updates system event state to meny
+             * @param actor updates scene
+             */
             public void changed(ChangeEvent event, Actor actor) {
-
                 parent.changeScreen(PirateGame.MENU);
                 parent.killEndScreen();
             }
@@ -63,39 +82,66 @@ public class DeathScreen implements Screen {
 
     }
 
+    /**
+     * (Not Used)
+     * Updates the state of each object with delta time
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void update(float dt){
-
     }
 
+    /**
+     * Renders visual data with delta time
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     @Override
-    public void render(float delta) {
+    public void render(float dt) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
     }
 
+    /**
+     * Changes the camera size
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * (Not Used)
+     * Pauses game
+     */
     @Override
     public void pause() {
-
     }
 
+    /**
+     * (Not Used)
+     * Resumes game
+     */
     @Override
     public void resume() {
-
     }
 
+    /**
+     * (Not Used)
+     * Hides game
+     */
     @Override
     public void hide() {
-
     }
 
+    /**
+     * (Not Used)
+     * Disposes game data
+     */
     @Override
     public void dispose() {
-
     }
 }
