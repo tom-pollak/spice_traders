@@ -1,5 +1,7 @@
 package com.mygdx.pirategame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
@@ -16,6 +18,7 @@ public class CannonFire extends Sprite {
     private float angle;
     private float velocity;
     private Vector2 bodyVel;
+    private Sound fireNoise;
 
     public CannonFire(GameScreen screen, float x, float y, Body body, float velocity) {
         this.velocity = velocity;
@@ -27,6 +30,10 @@ public class CannonFire extends Sprite {
         setRegion(cannonBall);
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
         defineCannonBall();
+        fireNoise = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
+        if (screen.game.getPreferences().isEffectsEnabled()) {
+            fireNoise.play(screen.game.getPreferences().getEffectsVolume());
+        }
     }
 
     public void defineCannonBall() {
