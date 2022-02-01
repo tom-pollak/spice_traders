@@ -35,6 +35,8 @@ public class EnemyShip extends Enemy{
         if(setToDestroy && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
+            Hud.changePoints(20);
+            Hud.changeCoins(10);
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
@@ -86,6 +88,7 @@ public class EnemyShip extends Enemy{
         Gdx.app.log("enemy", "collision");
         health -= damage;
         bar.changeHealth(damage);
+        Hud.changePoints(5);
     }
 
     public void updateTexture(String alignment, String path){
