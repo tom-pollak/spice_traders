@@ -1,27 +1,21 @@
 package com.mygdx.pirategame;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class CollegeFire extends Sprite {
     private World world;
     private Texture cannonBall;
-    private GameScreen screen;
     private float stateTime;
     private boolean destroyed;
     private boolean setToDestroy;
     private Body b2body;
-    private Sound fireNoise;
     private Vector2 playerPos;
 
     public CollegeFire(GameScreen screen, float x, float y) {
         this.world = screen.getWorld();
-        this.screen = screen;
         playerPos = screen.getPlayerPos();
         cannonBall = new Texture("cannonBall.png");
         setRegion(cannonBall);
@@ -42,9 +36,11 @@ public class CollegeFire extends Sprite {
         fDef.filter.categoryBits = PirateGame.COLLEGEFIRE_BIT;
         fDef.filter.maskBits = PirateGame.PLAYER_BIT;
         fDef.shape = shape;
-        fDef.isSensor = true;
+        //fDef.isSensor = true;
 
         b2body.createFixture(fDef).setUserData(this);
+
+        // Math for firing the cannonball at the player
         playerPos.sub(b2body.getPosition());
         playerPos.nor();
         float speed = 5f;
