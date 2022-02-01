@@ -1,6 +1,7 @@
 package com.mygdx.pirategame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,13 +12,16 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 public class EnemyShip extends Enemy{
     private Texture enemyShip;
     public String college;
-
+    private Sound destroy;
+    private Sound hit;
 
 
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
         college = assignment;
+        destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
+        hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
@@ -26,6 +30,7 @@ public class EnemyShip extends Enemy{
 
     public void update(float dt) {
         if(setToDestroy && !destroyed) {
+            destroy.play(screen.game.getPreferences().getEffectsVolume());
             world.destroyBody(b2body);
             destroyed = true;
             Hud.changePoints(20);
@@ -79,6 +84,7 @@ public class EnemyShip extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
+        hit.play(screen.game.getPreferences().getEffectsVolume());
         health -= damage;
         bar.changeHealth(damage);
         Hud.changePoints(5);

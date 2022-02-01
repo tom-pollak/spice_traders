@@ -6,8 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PirateGame extends Game {
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
 	public static final float PPM = 100;
 
 	public static final short DEFAULT_BIT = 1;
