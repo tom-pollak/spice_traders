@@ -4,6 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+/**
+ * College Fire
+ * Defines college attack method
+ * Defines college cannonball projectiles
+ *
+ *@author Ethan Alabaster
+ *@version 1.0
+ */
 
 public class CollegeFire extends Sprite {
     private World world;
@@ -14,6 +22,14 @@ public class CollegeFire extends Sprite {
     private Body b2body;
     private Vector2 playerPos;
 
+    /**
+     * Defines player position
+     * Defines cannonballs
+     *
+     * @param screen Visual data
+     * @param x x position of player
+     * @param y y position of player
+     */
     public CollegeFire(GameScreen screen, float x, float y) {
         this.world = screen.getWorld();
         playerPos = screen.getPlayerPos();
@@ -23,6 +39,11 @@ public class CollegeFire extends Sprite {
         defineCannonBall();
     }
 
+    /**
+     * Defines cannonball data
+     *
+     *
+     */
     public void defineCannonBall() {
         BodyDef bDef = new BodyDef();
         bDef.position.set(getX(), getY());

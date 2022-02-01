@@ -9,7 +9,12 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 /**
+ * Coin
  * Creates an object for each coin
+ * Extends the entity class to define coin as an entity
+ *
+ *@author Joe Dickinson
+ *@version 1.0
  */
 public class Coin extends Entity {
     private Texture coin;

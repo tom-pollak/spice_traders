@@ -9,15 +9,35 @@ import com.badlogic.gdx.utils.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * College
+ * Class to generate the enemy entity college
+ * Instantiates colleges
+ * Instantiates college fleets
+ *
+ *@author Ethan Alabaster, Edward Poulter
+ *@version 1.0
+ */
+
 public class College extends Enemy{
     private Texture enemyCollege;
     public Random rand = new Random();
     private String currentCollege;
     private Array<CollegeFire> cannonBalls;
     private AvailableSpawn noSpawn;
-
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
+    /**
+     *
+     * @param screen Visual data
+     * @param college College name i.e. "Alcuin" used for fleet assignment
+     * @param x College position on x-axis
+     * @param y College position on y-axis
+     * @param flag College flag sprite (image name)
+     * @param ship College ship sprite (image name)
+     * @param ship_no Number of college ships to produce
+     * @param invalidSpawn Spawn data to check spawn validity when generating ships
+     */
     public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
         super(screen, x, y);
         this.screen = screen;
@@ -28,13 +48,12 @@ public class College extends Enemy{
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
         damage = 10;
-
         cannonBalls = new Array<>();
-
         int ranX = 0;
         int ranY = 0;
         boolean spawnIsValid;
 
+        //Generates college fleet
         for (int i = 0; i < ship_no; i++){
             spawnIsValid = false;
             while (!spawnIsValid){
@@ -48,6 +67,13 @@ public class College extends Enemy{
         }
     }
 
+    /**
+     * Checks ship spawning in at a valid location
+     *
+     * @param x x position to test
+     * @param y y position to test
+     * @return isValid : returns the validity of the proposed spawn point
+     */
     public boolean getCoord(int x, int y) {
         if (x < noSpawn.xBase || x >= noSpawn.xCap || y < noSpawn.yBase || y >= noSpawn.yCap) {
             return false;
@@ -59,6 +85,13 @@ public class College extends Enemy{
         return true;
     }
 
+    /**
+     * Updates the state of each object with delta time
+     * Checks for college destruction
+     * Checks for cannon fire
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void update(float dt) {
         if(setToDestroy && !destroyed) {
             world.destroyBody(b2body);
@@ -90,6 +123,9 @@ public class College extends Enemy{
         }
     }
 
+    /**
+     * Draws the batch of cannonballs
+     */
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
@@ -99,6 +135,9 @@ public class College extends Enemy{
         }
     }
 
+    /**
+     * Sets the data to define a college as an enemy
+     */
     @Override
     protected void defineEnemy() {
         BodyDef bdef = new BodyDef();
@@ -118,6 +157,10 @@ public class College extends Enemy{
         b2body.createFixture(fdef).setUserData(this);
     }
 
+    /**
+     * Contact detection
+     * Allows for the college to take damage
+     */
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
@@ -125,6 +168,9 @@ public class College extends Enemy{
         bar.changeHealth(damage);
     }
 
+    /**
+     * Fires cannonballs
+     */
     public void fire() {
         cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
     }
