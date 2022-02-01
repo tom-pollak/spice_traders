@@ -19,11 +19,15 @@ public class DeathScreen implements Screen {
     private final PirateGame parent;
     private final Stage stage;
 
-    private Label deathMsg;
 
     public DeathScreen(PirateGame pirateGame){
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
+
+    }
+
+    @Override
+    public void show() {
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
@@ -36,7 +40,7 @@ public class DeathScreen implements Screen {
         table2.center();
         table2.setFillParent(true);
 
-        deathMsg = new Label("YOU  DIED", new Label.LabelStyle(new BitmapFont(), Color.RED));
+        Label deathMsg = new Label("YOU  DIED", new Label.LabelStyle(new BitmapFont(), Color.RED));
         deathMsg.setFontScale(4f);
         table.add(deathMsg).center();
         stage.addActor(table);
@@ -59,11 +63,6 @@ public class DeathScreen implements Screen {
 
     }
 
-    @Override
-    public void show() {
-
-    }
-
     public void update(float dt){
 
     }
@@ -77,7 +76,7 @@ public class DeathScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public abstract class InteractiveTileObject {
     protected World world;
-    protected TiledMap map;
     protected TiledMapTile tile;
     protected Rectangle bounds;
     protected Body body;
