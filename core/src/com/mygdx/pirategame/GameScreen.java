@@ -288,7 +288,7 @@ public class GameScreen implements Screen {
         }
 
         for(int i=0;i<Coins.size();i++) {
-            Coins.get(i).update(dt);
+            Coins.get(i).update();
         }
         if(stateTime > 1) {
             colleges.get("Anne Lister").fire();
@@ -345,9 +345,9 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
         Hud.stage.draw();
-        gameOverCheck();
         stage.act();
         stage.draw();
+        gameOverCheck();
     }
 
     @Override

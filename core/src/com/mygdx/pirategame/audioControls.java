@@ -2,6 +2,9 @@ package com.mygdx.pirategame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
+/**
+ * Creates the interface to write and read options
+ */
 public class audioControls {
 
     //Set keys that are stored in the file
@@ -11,50 +14,86 @@ public class audioControls {
     private static final String EFFECT_VOL = "sound";
     private static final String PAGE = "audio";
 
-    //Allows interaction with the file
+    /**
+     *  Interface to access the file
+     *
+     * @return the preferences of that page
+     */
     protected Preferences optionsObtains() {
         return Gdx.app.getPreferences(PAGE);
     }
 
-    //See if effects are enabled
+    /**
+     * See if effect sound is enabled
+     *
+     * @return the boolean
+     */
     public boolean isEffectsEnabled() {
         return optionsObtains().getBoolean(SOUND_ENABLED, true);
     }
 
-    //Set effects on true or false
+    /**
+     * Sets effects enabled or disabled
+     *
+     * @param EffectsOn The value that needs to be stored.
+     */
     public void setEffectsEnabled(boolean EffectsOn) {
         optionsObtains().putBoolean(SOUND_ENABLED, EffectsOn);
         optionsObtains().flush();
     }
 
-    //See if music is enabled
+    /**
+     * See if music sound is enabled
+     *
+     * @return the boolean
+     */
     public boolean isMusicEnabled() {
         return optionsObtains().getBoolean(MUSIC_ENABLED, true);
     }
 
-    //Set music on true or false
+    /**
+     * Sets music enabled or disabled
+     *
+     * @param musicOn value that needs to be stored.
+     */
     public void setMusicEnabled(boolean musicOn) {
         optionsObtains().putBoolean(MUSIC_ENABLED, musicOn);
         optionsObtains().flush();
     }
 
-    //Get the volume of music
+    /**
+     * Gets music volume.
+     *
+     * @return the music volume
+     */
     public float getMusicVolume() {
         return optionsObtains().getFloat(MUSIC_VOLUME, 0.5f);
     }
 
-    //Set the volume of music
+    /**
+     * Sets music volume.
+     *
+     * @param volume the volume to set
+     */
     public void setMusicVolume(float volume) {
         optionsObtains().putFloat(MUSIC_VOLUME, volume);
         optionsObtains().flush();
     }
 
-    //Get the volume of effects
+    /**
+     * Gets effects volume.
+     *
+     * @return the effects volume
+     */
     public float getEffectsVolume() {
         return optionsObtains().getFloat(EFFECT_VOL, 0.5f);
     }
 
-    //Set the volume of effects
+    /**
+     * Sets effects volume.
+     *
+     * @param volume the volume to set
+     */
     public void setEffectsVolume(float volume) {
         optionsObtains().putFloat(EFFECT_VOL, volume);
         optionsObtains().flush();

@@ -8,12 +8,22 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
+/**
+ * Creates an object for each coin
+ */
 public class Coin extends Entity {
     private Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
     private Sound coinPickup;
 
+    /**
+     * Instantiates a new Coin.
+     *
+     * @param screen the screen its going onto
+     * @param x      the x value to be placed at
+     * @param y      the y value to be placed at
+     */
     public Coin(GameScreen screen, float x, float y) {
         super(screen, x, y);
         //Set coin image
@@ -27,7 +37,10 @@ public class Coin extends Entity {
         coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
     }
 
-    public void update(float dt) {
+    /**
+     * Updates the coins state. If needed, deletes the coin if picked up.
+     */
+    public void update() {
         if(setToDestroyed && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
@@ -37,6 +50,9 @@ public class Coin extends Entity {
         }
     }
 
+    /**
+     * Defines all the parts of the coins physical model. Sets it up for collisons
+     */
     @Override
     protected void defineEntity() {
         BodyDef bdef = new BodyDef();
@@ -56,6 +72,9 @@ public class Coin extends Entity {
         b2body.createFixture(fdef).setUserData(this);
     }
 
+    /**
+     * What happens when an entity collides with the coin. The only entity that is able to do so is the player ship
+     */
     @Override
     public void entityContact() {
         Hud.changeCoins(1);
@@ -67,6 +86,11 @@ public class Coin extends Entity {
 
     }
 
+    /**
+     * Draws the coin using batch
+     *
+     * @param batch The batch of the program
+     */
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
