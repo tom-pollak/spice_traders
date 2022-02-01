@@ -17,11 +17,13 @@ public class WorldContactListener implements ContactListener {
      */
     @Override
     public void beginContact(Contact contact) {
+        // Finds contact
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
+        // Fixes contact to an entity
         switch (cDef){
             case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == PirateGame.COIN_BIT) {
@@ -95,6 +97,7 @@ public class WorldContactListener implements ContactListener {
      */
     @Override
     public void endContact(Contact contact) {
+        // Displays contact message
         Gdx.app.log("End Contact", "");
     }
 

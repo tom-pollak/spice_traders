@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * @version 1.0
  */
 public class VictoryScreen implements Screen {
-
     private final PirateGame parent;
     private final Stage stage;
 
@@ -101,11 +100,12 @@ public class VictoryScreen implements Screen {
 
     /**
      * Renders the visual data for all objects
-     * @param delta Delta Time
+     * @param dt Delta Time
      */
 
     @Override
-    public void render(float delta) {
+    public void render(float dt) {
+        // Renders visual data
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.draw();
