@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {
-    private static float maxSpeed = 5f;
+    private static float maxSpeed = 2f;
     private static float accel = 0.05f;
 
     protected static PirateGame game;
@@ -40,11 +40,11 @@ public class GameScreen implements Screen {
 
     private Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
-    private ArrayList<EnemyShip> ships = new ArrayList<>();
+    private static ArrayList<EnemyShip> ships = new ArrayList<>();
     private ArrayList<Coin> Coins = new ArrayList<>();
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
-    private Coin coin;
+
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -334,6 +334,8 @@ public class GameScreen implements Screen {
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
         Hud.resize( width, height);
+        camera.update();
+        renderer.setView(camera);
     }
 
     public TiledMap getMap() {
@@ -365,6 +367,15 @@ public class GameScreen implements Screen {
     }
     public static void changeMaxSpeed(Float percentage){
         maxSpeed = maxSpeed * (1 +(percentage/100));
+    }
+    public static void changeDamage(int value){
+        for (int i = 0; i < ships.size(); i++){
+            ships.get(i).changeDamageRecieved(value);
+        }
+        colleges.get("Anne Lister").changeDamageRecieved(value);
+        colleges.get("Constantine").changeDamageRecieved(value);
+        colleges.get("Goodricke").changeDamageRecieved(value);
+
     }
 
 

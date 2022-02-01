@@ -65,40 +65,36 @@ public class SkillTree implements Screen {
         //create skill tree buttons
 
         movement1 = new TextButton("Movement Speed + 20%", skin);
-        movement1.setTransform(true);
-        movement1.setScale(0.9f); //make slightly smaller
+
 
         //Sets enabled or disabled
         if (states.get(0) == 1){
             movement1.setDisabled(true);
         }
 
+        GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
 
-        damage1 = new TextButton("Damage + 5", skin);
-        damage1.setTransform(true);
-        damage1.setScale(0.9f); //make slightly smaller
 
         //Sets enabled or disabled
         if (states.get(1) == 1){
-            damage1.setDisabled(true);
-        }
-
-        GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
-        GoldMulti1.setTransform(true);
-        GoldMulti1.setScale(0.9f); //make slightly smaller
-
-        //Sets enabled or disabled
-        if (states.get(2) == 1){
             GoldMulti1.setDisabled(true);
         }
 
+
         movement2 = new TextButton("Movement Speed + 20%", skin);
-        movement2.setTransform(true);
-        movement2.setScale(0.9f); //make slightly smaller
 
         //Sets enabled or disabled
-        if (states.get(3) == 1){
+        if (states.get(2) == 1){
             movement2.setDisabled(true);
+        }
+
+
+
+        damage1 = new TextButton("Damage + 5", skin);
+        //Sets enabled or disabled
+        if (states.get(3) == 1){
+            damage1.setDisabled(true);
+
         }
 
         final Label unlock100 = new Label("100 points",skin);
@@ -163,7 +159,7 @@ public class SkillTree implements Screen {
             GameScreen.changeMaxSpeed(20F);
             states.set(2, 0);
         }else if(states.get(3) == 1 && points >= 400){
-            //damage
+            GameScreen.changeDamage(5);
             states.set(3, 0);
         }
 

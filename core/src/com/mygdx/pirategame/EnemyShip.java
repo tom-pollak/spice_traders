@@ -16,6 +16,7 @@ public class EnemyShip extends Enemy{
     public int health = 100;
     public int maxHealth = 100;
     protected HealthBar bar;
+    private int damage;
 
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
@@ -27,6 +28,7 @@ public class EnemyShip extends Enemy{
         setToDestroy = false;
         destroyed = false;
         bar = new HealthBar(this);
+        damage = 20;
     }
 
     public void update(float dt) {
@@ -82,14 +84,18 @@ public class EnemyShip extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
-        health -= 20;
-        bar.changeHealth(20);
+        health -= damage;
+        bar.changeHealth(damage);
     }
 
     public void updateTexture(String alignment, String path){
         college = alignment;
         enemyShip = new Texture(path);
         setRegion(enemyShip);
+    }
+
+    public void changeDamageRecieved(int value){
+        damage = value;
     }
 
 }

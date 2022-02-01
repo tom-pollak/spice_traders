@@ -20,6 +20,7 @@ public class College extends Enemy{
     private String currentCollege;
     private Array<CannonFire> cannonBalls;
     private AvailableSpawn noSpawn;
+    private int damage;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
@@ -35,6 +36,7 @@ public class College extends Enemy{
         setToDestroy = false;
         destroyed = false;
         bar = new HealthBar(this);
+        damage = 10;
 
         cannonBalls = new Array<>();
 
@@ -126,12 +128,17 @@ public class College extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
-        health -= 10;
-        bar.changeHealth(10);
+        health -= damage;
+        bar.changeHealth(damage);
         fire();
     }
 
     public void fire() {
 
+    }
+
+
+    public void changeDamageRecieved(int value){
+        damage = value;
     }
 }
