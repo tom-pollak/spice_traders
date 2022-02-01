@@ -82,11 +82,11 @@ public class GameScreen implements Screen {
         // Spawning enemy ship and coin. x and y is spawn location
         colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
                 "alcuin_flag.png", "alcuin_ship.png", 0));
-        colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
+        colleges.put("Anne Lister", new College(this, 6304 / PirateGame.PPM, 1199 / PirateGame.PPM,
                 "anne_lister_flag.png", "anne_lister_ship.png", 8));
-        colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
+        colleges.put("Constantine", new College(this, 6240 / PirateGame.PPM, 6703 / PirateGame.PPM,
                 "constantine_flag.png", "constantine_ship.png", 8));
-        colleges.put("Goodricke", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
+        colleges.put("Goodricke", new College(this, 1760 / PirateGame.PPM, 6767 / PirateGame.PPM,
                 "goodricke_flag.png", "goodricke_ship.png", 8));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
@@ -357,10 +357,9 @@ public class GameScreen implements Screen {
             game.changeScreen(PirateGame.DEATH);
             game.killGame();
         }
-        else if ( colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Derwent").destroyed){
+        else if (colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Goodricke").destroyed){
             game.changeScreen(PirateGame.VICTORY);
             game.killGame();
-
         }
     }
 

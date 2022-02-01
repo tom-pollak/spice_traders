@@ -38,7 +38,7 @@ public class College extends Enemy{
 
         int ranX = 0;
         int ranY = 0;
-        Boolean spawnIsValid;
+        boolean spawnIsValid;
 
         for (int i = 0; i < ship_no; i++){
             spawnIsValid = false;
@@ -112,6 +112,11 @@ public class College extends Enemy{
                 Hud.changeCoins(rand.nextInt(10));
                 claimCollege();
             }
+            for(CannonFire ball : cannonBalls) {
+                ball.update(dt);
+                if(ball.isDestroyed())
+                    cannonBalls.removeValue(ball, true);
+            }
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
@@ -122,11 +127,6 @@ public class College extends Enemy{
         bar.update();
         if(health <= 0) {
             setToDestroy = true;
-        }
-        for(CannonFire ball : cannonBalls) {
-            ball.update(dt);
-            if(ball.isDestroyed())
-                cannonBalls.removeValue(ball, true);
         }
     }
 
@@ -153,7 +153,6 @@ public class College extends Enemy{
         fdef.filter.maskBits = PirateGame.PLAYER_BIT | PirateGame.CANNON_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
-        fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
     }
 
@@ -162,12 +161,11 @@ public class College extends Enemy{
         Gdx.app.log("enemy", "collision");
         health -= 10;
         bar.changeHealth(10);
+        fire();
     }
 
     public void fire() {
-        Gdx.app.log("enemy", "collision");
-        health -= 10;
-        bar.changeHealth(10);
+
     }
 
     public void claimCollege(){
