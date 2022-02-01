@@ -42,6 +42,7 @@ public class GameScreen implements Screen {
     private static HashMap<String, College> colleges = new HashMap<>();
     private ArrayList<EnemyShip> ships = new ArrayList<>();
     private ArrayList<Coin> Coins = new ArrayList<>();
+    private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
     private Coin coin;
 
@@ -82,49 +83,38 @@ public class GameScreen implements Screen {
 
         // Spawning enemy ship and coin. x and y is spawn location
         colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
-                "alcuin_flag.png", "alcuin_ship.png", 0));
+                "alcuin_flag.png", "alcuin_ship.png", 0, invalidSpawn));
         colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
-                "anne_lister_flag.png", "anne_lister_ship.png", 8));
+                "anne_lister_flag.png", "anne_lister_ship.png", 8, invalidSpawn));
         colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
-                "constantine_flag.png", "constantine_ship.png", 8));
+                "constantine_flag.png", "constantine_ship.png", 8, invalidSpawn));
         colleges.put("Goodricke", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
-                "goodricke_flag.png", "goodricke_ship.png", 8));
+                "goodricke_flag.png", "goodricke_ship.png", 8, invalidSpawn));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
-        //Random middle coins
-        for (int i = 0; i < 20; i++) {
-            Coins.add(new Coin(this, rand.nextInt(56 - 24) + 24, rand.nextInt(53 - 24) + 24));
+        //Random coins
+        Boolean validCoinLoc;
+        int a = 0;
+        int b = 0;
+        for (int i = 0; i < 200; i++) {
+            validCoinLoc = false;
+            while (validCoinLoc == false) {
+                a = rand.nextInt(invalidSpawn.xCap - invalidSpawn.xBase) + invalidSpawn.xBase;
+                b = rand.nextInt(invalidSpawn.yCap - invalidSpawn.yBase) + invalidSpawn.yBase;
+                if (invalidSpawn.tileBlocked.containsKey(a)){
+                    ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(a);
+                    if (!yTest.contains(b)) {
+                        validCoinLoc = true;
+                    }
+                }else{
+                    validCoinLoc = true;
+                }
+            }
+            Coins.add(new Coin(this, a, b));
         }
-
-        //Alcuin coins
-        Coins.add(new Coin(this, 10, 12));
-        Coins.add(new Coin(this, 10, 11));
-        Coins.add(new Coin(this, 8, 16));
-        Coins.add(new Coin(this, 9, 13));
-
-        //Goodrick Coins
-        Coins.add(new Coin(this, 10, 71));
-        Coins.add(new Coin(this, 18, 73));
-        Coins.add(new Coin(this, 24, 71));
-        Coins.add(new Coin(this, 14, 74));
-
-        //Constantine Coins
-        Coins.add(new Coin(this, 57, 70));
-        Coins.add(new Coin(this, 63, 72));
-        Coins.add(new Coin(this, 68, 71));
-        Coins.add(new Coin(this, 72, 70));
-
-        //Anne Lister
-        Coins.add(new Coin(this, 67, 7));
-        Coins.add(new Coin(this, 68, 10));
-        Coins.add(new Coin(this, 66, 9));
-        Coins.add(new Coin(this, 69, 11));
-
-
-        coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
         stage = new Stage(new ScreenViewport());
     }
 
@@ -319,7 +309,6 @@ public class GameScreen implements Screen {
 
             Coins.get(i).draw(game.batch);
         }
-
 
         player.draw(game.batch);
         colleges.get("Alcuin").draw(game.batch);

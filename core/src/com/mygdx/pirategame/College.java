@@ -14,16 +14,21 @@ public class College extends Enemy{
     private boolean setToDestroy;
     protected boolean destroyed;
     public int health = 100;
-    public int maxHealth = 100;
+    //public int maxHealth = 100;
     public Random rand = new Random();
     protected HealthBar bar;
     private String currentCollege;
     private Array<CannonFire> cannonBalls;
+    private AvailableSpawn noSpawn;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
-    public College(GameScreen screen, float x, float y, String flag, String ship, int ship_no) {
+    public String dataA;
+    public int dataB;
+
+    public College(GameScreen screen, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
         super(screen, x, y);
+        noSpawn = invalidSpawn;
         currentCollege = flag;
         enemyCollege = new Texture(flag);
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
@@ -34,7 +39,7 @@ public class College extends Enemy{
         destroyed = false;
         bar = new HealthBar(this);
 
-        cannonBalls = new Array<CannonFire>();
+        cannonBalls = new Array<>();
 
         int ranX = 0;
         int ranY = 0;
@@ -47,59 +52,25 @@ public class College extends Enemy{
                 ranY = rand.nextInt(2000) - 1000;
                 ranX = (int)Math.floor(x + (ranX / PirateGame.PPM));
                 ranY = (int)Math.floor(y + (ranY / PirateGame.PPM));
+                System.out.println(ship);
                 spawnIsValid = getCoord(ranX, ranY);
             }
-
             fleet.add(new EnemyShip(screen, ranX, ranY, ship));
+
         }
+        dataA = ship;
+        dataB = ship_no;
     }
 
     public boolean getCoord(int x, int y) {
-        System.out.println("X: " + x + "   Y: " + y);
-        int a = 1;
-        if (x >= 50 && y <= 50) {
-            if (y <= 7) {
+        if (noSpawn.tileBlocked.containsKey(x)) {
+            if (noSpawn.tileBlocked.get(x).contains(y)) {
                 return false;
-            } else if (x >= 53 && x <= 59 && y >= 10 && y <= 12) {
-                return false;
-            } else if (x >= 58 && x <= 60 && y >= 12 && y <= 13) {
-                return false;
-            } else if (x >= 60 && x <= 65 && y >= 9 && y <= 14) {
-                return false;
-            } else if (x >= 64 && x <= 67 && y >= 12 && y <= 16) {
-                return false;
-            } else if (x >= 68 && x <= 73 && y >= 16 && y <= 24) {
-                return false;
-            } else {
-                return true;
             }
-        } else if (x <= 50 && y >= 50) {
-            if (y >= 75){
-                return false;
-            }else if (x >= 9 && x <= 16 && y >= 60 && y <= 63){
-                return false;
-            }else if (x >= 11 && x <= 25 && y >= 64 && y <= 69){
-                return false;
-            }else if (x >= 12 && x <= 25 && y >= 70 && y <= 71) {
-                return false;
-            }else{
-                return true;
-            }
-        }else if (x >= 50 && y >= 50) {
-            if (y >= 75) {
-                return false;
-            }else if (x >= 58 && x <= 71 && y >= 64 && y <= 70) {
-                return false;
-            }else if (x >= 67 && x <= 71 && y >= 60 && y <= 64) {
-                return false;
-            }else if (x >= 57 && x <= 59 && y >= 57 && y <= 62) {
-                return false;
-            }else{
-                return true;
-            }
-        }else {
-            return true;
+        } else if (x < noSpawn.xBase || x > noSpawn.xCap || y < noSpawn.yBase || y > noSpawn.yCap) {
+            return false;
         }
+        return true;
     }
 
     public void update(float dt) {
@@ -174,6 +145,6 @@ public class College extends Enemy{
 
     public void claimCollege(){
         new College(screen, b2body.getPosition().x / PirateGame.PPM, b2body.getPosition().y / PirateGame.PPM,
-                "alcuin_flag.png", "alcuin_ship.png", 4);
+                "alcuin_flag.png", "alcuin_ship.png", 4, noSpawn);
     }
 }
