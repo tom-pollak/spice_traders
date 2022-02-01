@@ -27,10 +27,6 @@ public class CollegeFire extends Sprite {
         setRegion(cannonBall);
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
         defineCannonBall();
-        fireNoise = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-            fireNoise.play(screen.game.getPreferences().getEffectsVolume());
-        }
     }
 
     public void defineCannonBall() {
@@ -63,7 +59,7 @@ public class CollegeFire extends Sprite {
             destroyed = true;
         }
         // determines cannonball range
-        if(stateTime > 1.5f) {
+        if(stateTime > 2f) {
             setToDestroy();
         }
     }
