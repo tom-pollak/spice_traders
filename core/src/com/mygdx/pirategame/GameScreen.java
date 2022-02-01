@@ -97,22 +97,24 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Goodricke").fleet);
 
         //Random coins
-        Boolean validCoinLoc;
+        Boolean validLoc;
         int a = 0;
         int b = 0;
+        for (int i = 0; i < 20; i++) {
+            validLoc = false;
+            while (!validLoc) {
+                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+                validLoc = checkGenPos(a, b);
+            }
+            ships.add(new EnemyShip(this, a, b, "unaligned_ship.png", "Unaligned"));
+        }
         for (int i = 0; i < 100; i++) {
-            validCoinLoc = false;
-            while (!validCoinLoc) {
-                a = rand.nextInt(invalidSpawn.xCap - invalidSpawn.xBase) + invalidSpawn.xBase;
-                b = rand.nextInt(invalidSpawn.yCap - invalidSpawn.yBase) + invalidSpawn.yBase;
-                if (invalidSpawn.tileBlocked.containsKey(a)){
-                    ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(a);
-                    if (!yTest.contains(b)) {
-                        validCoinLoc = true;
-                    }
-                }else{
-                    validCoinLoc = true;
-                }
+            validLoc = false;
+            while (!validLoc) {
+                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+                validLoc = checkGenPos(a, b);
             }
             Coins.add(new Coin(this, a, b));
         }
@@ -120,6 +122,15 @@ public class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
     }
 
+    private Boolean checkGenPos(int x, int y){
+        if (invalidSpawn.tileBlocked.containsKey(x)){
+            ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
+            if (yTest.contains(y)) {
+                return false;
+            }
+        }
+        return true;
+    }
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -260,7 +271,6 @@ public class GameScreen implements Screen {
     }
 
     public void update(float dt){
-        stateTime += dt;
         handleInput(dt);
         // Stepping the physics engine by time of 1 frame
         world.step(1 / 60f, 6, 2);
@@ -279,12 +289,7 @@ public class GameScreen implements Screen {
         for(int i=0;i<Coins.size();i++) {
             Coins.get(i).update(dt);
         }
-        if(stateTime > 1) {
-            colleges.get("Goodricke").fire();
-            colleges.get("Constantine").fire();
-            colleges.get("Anne Lister").fire();
-            stateTime = 0;
-        }
+
         hud.update(dt);
 
         // Centre camera on player boat
@@ -324,8 +329,10 @@ public class GameScreen implements Screen {
         colleges.get("Constantine").draw(game.batch);
         colleges.get("Goodricke").draw(game.batch);
         for (int i = 0; i < ships.size(); i++){
-            if (colleges.get(ships.get(i).college).destroyed){
-                ships.get(i).updateTexture("Alcuin", "alcuin_ship.png");
+            if (ships.get(i).college != "Unaligned") {
+                if (colleges.get(ships.get(i).college).destroyed) {
+                    ships.get(i).updateTexture("Alcuin", "alcuin_ship.png");
+                }
             }
             ships.get(i).draw(game.batch);
         }
