@@ -41,8 +41,7 @@ public class CollegeFire extends Sprite {
 
     /**
      * Defines cannonball data
-     *
-     *
+     * Defines cannonball shape
      */
     public void defineCannonBall() {
         BodyDef bDef = new BodyDef();
@@ -57,7 +56,6 @@ public class CollegeFire extends Sprite {
         fDef.filter.categoryBits = PirateGame.COLLEGEFIRE_BIT;
         fDef.filter.maskBits = PirateGame.PLAYER_BIT;
         fDef.shape = shape;
-        //fDef.isSensor = true;
 
         b2body.createFixture(fDef).setUserData(this);
 
@@ -68,6 +66,12 @@ public class CollegeFire extends Sprite {
         b2body.setLinearVelocity(playerPos.scl(speed));
     }
 
+    /**
+     * Updates state with delta time
+     * Defines range of cannon fire
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void update(float dt){
         stateTime += dt;
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
@@ -81,11 +85,16 @@ public class CollegeFire extends Sprite {
         }
     }
 
-
+    /**
+     * Changes destruction state
+     */
     public void setToDestroy(){
         setToDestroy = true;
     }
 
+    /**
+     * Returns destruction status
+     */
     public boolean isDestroyed(){
         return destroyed;
     }
