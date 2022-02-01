@@ -11,22 +11,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+/**
+ * Main menu is the first screen the player sees. Allows them to navigate where they want to go to
+ */
 public class MainMenu implements Screen {
 
     private final PirateGame parent;
     private final Stage stage;
 
-    //In the constructor, the parent and stage are set
+    /**
+     * Instantiates a new Main menu.
+     *
+     * @param PirateGame the main starting body of the game. Where screen swapping is carried out.
+     */
     public MainMenu(PirateGame PirateGame){
         parent = PirateGame;
         stage = new Stage(new ScreenViewport());
     }
 
+    /**
+     * What should be displayed on the options screen
+     *
+     */
     @Override
     public void show() {
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
-        // Create a table that fills the screen
+        // Create a table for the buttons
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -58,6 +69,7 @@ public class MainMenu implements Screen {
                 parent.changeScreen(PirateGame.GAME);
             }
         });
+        //Help Screen
         help.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor){
@@ -83,6 +95,10 @@ public class MainMenu implements Screen {
         });
     }
 
+    /**
+     * Renders the visual data for all objects
+     * @param delta Delta Time
+     */
     @Override
     public void render(float delta) {
         //Set the screen
@@ -94,23 +110,44 @@ public class MainMenu implements Screen {
         stage.draw();
     }
 
+    /**
+     * Changes the camera size, Scales the hud to match the camera
+     *
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * (Not Used)
+     * Pauses game
+     */
     @Override
     public void pause() {
     }
 
+    /**
+     * (Not Used)
+     * Resumes game
+     */
     @Override
     public void resume() {
     }
 
+    /**
+     * (Not Used)
+     * Hides game
+     */
     @Override
     public void hide() {
     }
 
+    /**
+     * Disposes game data
+     */
     @Override
     public void dispose() {
         stage.dispose();

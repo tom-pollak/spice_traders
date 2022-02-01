@@ -5,6 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+
+/**
+ * The start of the program. Sets up the main back bone of the game.
+ * This includes most constants used throught for collision and changing screens
+ * Provides access for screens to interact with eachother and the options interface
+ */
 public class PirateGame extends Game {
 	public static final float PPM = 100;
 
@@ -36,6 +42,11 @@ public class PirateGame extends Game {
 	public final static int HELP = 4;
 	public final static int VICTORY = 5;
 
+	/**
+	 * Creates the main body of the game.
+	 * Establises the batch for the whole game as well as sets the first screen
+	 * Also sets up audio interface
+	 */
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -51,6 +62,11 @@ public class PirateGame extends Game {
 		song.setVolume(getPreferences().getMusicVolume());
 	}
 
+	/**
+	 * Changes the screen without killing the prior screen. Allows for the screens to be returned to without making new ones
+	 *
+	 * @param screen the number of the screen that the user wants to swap to
+	 */
 	public void changeScreen(int screen) {
 		switch (screen) {
 			case MENU:
@@ -86,25 +102,43 @@ public class PirateGame extends Game {
 		}//
 	}
 
-	//Allows interaction with the options document
+	/**
+	 * Allows the user to interact with the audio options
+	 *
+	 * @return the options object
+	 */
+//Allows interaction with the options document
 	public audioControls getPreferences() {
 		return this.options;
 	}
 
+	/**
+	 * Kills the game screen and skill tree so they can be refreshed on next game start
+	 */
 	public void killGame(){
 		gameScreen = null;
 		skillTreeScreen = null;
 	}
+
+	/**
+	 * Kill end screens so they can be made again.
+	 */
 	public void killEndScreen(){
 		deathScreen = null;
 		victoryScreen = null;
 	}
-
+	/**
+	 * (Not Used)
+	 * Renders the visual data for all objects
+	 */
 	@Override
 	public void render () {
 		super.render();
 	}
-	
+
+	/**
+	 * Disposes game data
+	 */
 	@Override
 	public void dispose () {
 		batch.dispose();

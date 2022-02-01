@@ -11,25 +11,37 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * Provides a UI for the user to interact with the audioControls interface
+ */
 public class Options implements Screen {
 
     private final PirateGame PirateGame;
     private final Screen parent;
     private final Stage stage;
 
-    //In the constructor, the game base is set as well as screen. Also the parent is set separately to allow for easy return
+    /**
+     * Instantiates a new Options screen
+     *
+     * @param pirateGame the main starting body of the game. Where screen swapping is carried out.
+     * @param parent     the screen that called the options screen. Allows for easy return
+     */
     public Options(PirateGame pirateGame, Screen parent){
         this.PirateGame = pirateGame;
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
     }
 
+    /**
+     * What should be displayed on the options screen
+     *
+     */
     @Override
     public void show() {
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
         stage.clear();
-        // Create a table that fills the screen.
+        // Create the main table
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
@@ -37,9 +49,12 @@ public class Options implements Screen {
         //The skin for the actors
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
-        //Music Sliders and Check
+        //Music Sliders and Check boxes
         final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
-        volumeMusicSlider.setValue( PirateGame.getPreferences().getMusicVolume() ); //Set value to current option
+
+        //Set value to current option
+        volumeMusicSlider.setValue( PirateGame.getPreferences().getMusicVolume() );
+
         volumeMusicSlider.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -51,7 +66,10 @@ public class Options implements Screen {
         });
 
         final CheckBox musicCheckbox = new CheckBox(null, skin);
-        musicCheckbox.setChecked( PirateGame.getPreferences().isMusicEnabled() ); //Check if it should be checked
+
+        //Check if it should be checked or unchecked by default
+        musicCheckbox.setChecked( PirateGame.getPreferences().isMusicEnabled() );
+
         musicCheckbox.addListener( new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -99,7 +117,7 @@ public class Options implements Screen {
             }
         });
 
-        //add buttons and label to table
+
 
         Label titleLabel = new Label("Options", skin);
         Label musicLabel = new Label("Music Volume", skin);
@@ -107,6 +125,7 @@ public class Options implements Screen {
         Label musicOnLabel = new Label("Music On/Off", skin);
         Label effectOnLabel = new Label("Effect On/Off", skin);
 
+        //add buttons,sliders and labels to table
         table.add(titleLabel).colspan(2);
         table.row().pad(10,0,0,0);
         table.add(musicLabel).left();
@@ -124,7 +143,10 @@ public class Options implements Screen {
         table.add(backButton);
 
     }
-
+    /**
+     * Renders the visual data for all objects
+     * @param delta Delta Time
+     */
     @Override
     public void render(float delta) {
         //Set the screen
@@ -138,27 +160,47 @@ public class Options implements Screen {
 
 
     }
-
+    /**
+     * Changes the camera size, Scales the hud to match the camera
+     *
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * (Not Used)
+     * Pauses game
+     */
     @Override
     public void pause() {
         // TODO Auto-generated method stub
     }
 
+    /**
+     * (Not Used)
+     * Resumes game
+     */
     @Override
     public void resume() {
         // TODO Auto-generated method stub
     }
+    /**
+     * (Not Used)
+     * Hides game
+     */
 
     @Override
     public void hide() {
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Disposes game data
+     */
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
