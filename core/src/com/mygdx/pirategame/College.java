@@ -48,12 +48,12 @@ public class College extends Enemy{
     }
 
     public boolean getCoord(int x, int y) {
-        if (noSpawn.tileBlocked.containsKey(x)) {
+        if (x < noSpawn.xBase || x >= noSpawn.xCap || y < noSpawn.yBase || y >= noSpawn.yCap) {
+            return false;
+        }else if (noSpawn.tileBlocked.containsKey(x)) {
             if (noSpawn.tileBlocked.get(x).contains(y)) {
                 return false;
             }
-        } else if (x < noSpawn.xBase || x > noSpawn.xCap || y < noSpawn.yBase || y > noSpawn.yCap) {
-            return false;
         }
         return true;
     }
