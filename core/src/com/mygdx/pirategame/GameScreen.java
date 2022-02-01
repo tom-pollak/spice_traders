@@ -115,6 +115,33 @@ public class GameScreen implements Screen {
             }
             Coins.add(new Coin(this, a, b));
         }
+
+        //Alcuin coins
+        Coins.add(new Coin(this, 10, 12));
+        Coins.add(new Coin(this, 10, 11));
+        Coins.add(new Coin(this, 8, 16));
+        Coins.add(new Coin(this, 9, 13));
+
+        //Goodrick Coins
+        Coins.add(new Coin(this, 10, 71));
+        Coins.add(new Coin(this, 18, 73));
+        Coins.add(new Coin(this, 24, 71));
+        Coins.add(new Coin(this, 14, 74));
+
+        //Constantine Coins
+        Coins.add(new Coin(this, 57, 70));
+        Coins.add(new Coin(this, 63, 72));
+        Coins.add(new Coin(this, 68, 71));
+        Coins.add(new Coin(this, 72, 70));
+
+        //Anne Lister
+        Coins.add(new Coin(this, 67, 7));
+        Coins.add(new Coin(this, 68, 10));
+        Coins.add(new Coin(this, 66, 9));
+        Coins.add(new Coin(this, 69, 11));
+
+
+        coin = new Coin(this, 700 / PirateGame.PPM, 1000 / PirateGame.PPM);
         stage = new Stage(new ScreenViewport());
     }
 

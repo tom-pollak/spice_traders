@@ -14,7 +14,7 @@ public class College extends Enemy{
     private boolean setToDestroy;
     protected boolean destroyed;
     public int health = 100;
-    //public int maxHealth = 100;
+    public int maxHealth = 100;
     public Random rand = new Random();
     protected HealthBar bar;
     private String currentCollege;
@@ -22,9 +22,6 @@ public class College extends Enemy{
     private AvailableSpawn noSpawn;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
-
-    public String dataA;
-    public int dataB;
 
     public College(GameScreen screen, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
         super(screen, x, y);
@@ -56,10 +53,7 @@ public class College extends Enemy{
                 spawnIsValid = getCoord(ranX, ranY);
             }
             fleet.add(new EnemyShip(screen, ranX, ranY, ship));
-
         }
-        dataA = ship;
-        dataB = ship_no;
     }
 
     public boolean getCoord(int x, int y) {
