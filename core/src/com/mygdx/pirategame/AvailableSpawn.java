@@ -3,6 +3,14 @@ package com.mygdx.pirategame;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Available Spawn
+ * Class to determine invalid spawn areas
+ * Instantiates invalid spawn map
+ *
+ *@author Edward Poulter
+ *@version 1.0
+ */
 public class AvailableSpawn {
     public HashMap<Integer, ArrayList<Integer>> tileBlocked = new HashMap<>();
     public static final int xCap = 75;
@@ -10,6 +18,10 @@ public class AvailableSpawn {
     public static final int xBase = 7;
     public static final int yBase = 7;
 
+    /**
+     * Initialises the Available Spawn Map
+     * Generates the validity data for a given area
+     */
     public AvailableSpawn() {
         //Determines island coverage (where ships and coins can't spawn)
         for (int x = 0; x < xCap; x++) {
@@ -59,6 +71,13 @@ public class AvailableSpawn {
         }
     }
 
+    /**
+     * Checks if given value pair is already contained in the map
+     * If not contained in the map, adds the data pair to the map
+     *
+     * @param x the x coord value
+     * @param y the y coord value
+     */
     private void add(int x, int y){
         //Adds to hashmap, prevents duplication of values
         ArrayList<Integer> checkY;

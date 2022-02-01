@@ -16,8 +16,6 @@ public class WorldCreator {
      * Starts the creation of the boundaries
      *
      * @param screen the screen that the boundaries are relevant for
-     *
-     *
      */
     public WorldCreator(GameScreen screen) {
         TiledMap map = screen.getMap();

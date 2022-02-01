@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 
 /**
- * Tells the game what to do when certain entities come into contact with eachother
+ * Tells the game what to do when certain entities come into contact with each other
  *
  * @author Ethan Alabaster
  * @version 1.0
@@ -99,15 +99,22 @@ public class WorldContactListener implements ContactListener {
     }
 
     /**
+     * (Not Used)
      * Can be called before beginContact to pre emptively solve it
      * @param contact The object that contains information about the collision
+     * @param oldManifold Predicted impulse based on old data
      */
-
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
 
     }
 
+    /**
+     * (Not Used)
+     * Can be called before beginContact to post emptively solve it
+     * @param contact The object that contains information about the collision
+     * @param impulse The signal recieved
+     */
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
