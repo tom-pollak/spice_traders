@@ -13,6 +13,7 @@ public class EnemyShip extends Enemy{
     private Texture enemyShip;
     public String college;
     private Sound destroy;
+    private Sound hit;
 
 
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
@@ -20,6 +21,7 @@ public class EnemyShip extends Enemy{
         enemyShip = new Texture(path);
         college = assignment;
         destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
+        hit = Gdx.audio.newSound(Gdx.files.internal("body-punch.wav"));
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
@@ -82,6 +84,7 @@ public class EnemyShip extends Enemy{
     @Override
     public void onContact() {
         Gdx.app.log("enemy", "collision");
+        hit.play(screen.game.getPreferences().getEffectsVolume());
         health -= damage;
         bar.changeHealth(damage);
         Hud.changePoints(5);
