@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Sets up the class for all the Islands. Deals with what happens on collision and its properties
+ * @author Ethan Alabaster
+ * @version 1.0
  */
 public class Islands extends InteractiveTileObject {
     /**

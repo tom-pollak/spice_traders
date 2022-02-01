@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * Provides a UI for the user to interact with the audioControls interface
+ * @author Sam Pearson
+ * @version 1.0
  */
 public class Options implements Screen {
 

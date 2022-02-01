@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.Array;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
+ * @author Ethan Alabaster, Edward Poulter
+ * @version 1.0
  */
 public class Player extends Sprite {
     private final GameScreen screen;

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * The start of the program. Sets up the main back bone of the game.
  * This includes most constants used throught for collision and changing screens
  * Provides access for screens to interact with eachother and the options interface
+ * @author Sam Pearson
+ * @version 1.0
  */
 public class PirateGame extends Game {
 	public static final float PPM = 100;

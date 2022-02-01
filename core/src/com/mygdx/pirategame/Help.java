@@ -16,7 +16,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Screen with instructions for the user
+ * @author Sam Pearson
+ * @version 1.0
+ */
 public class Help implements Screen {
     private final PirateGame parent;
     private final Stage stage;

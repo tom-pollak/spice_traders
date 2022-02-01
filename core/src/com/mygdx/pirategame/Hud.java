@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Hud
  * Produces a hud for the player
  *
- *@author Sam Pearson
+ *@author Ethan Alabaster, Sam Pearson
  *@version 1.0
  */
 public class Hud implements Disposable {

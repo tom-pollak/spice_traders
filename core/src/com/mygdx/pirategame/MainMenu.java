@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Main menu is the first screen the player sees. Allows them to navigate where they want to go to
+ * @author Sam Pearson
+ * @version 1.0
  */
 public class MainMenu implements Screen {
 
