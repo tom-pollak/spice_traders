@@ -81,18 +81,11 @@ public class SkillTree implements Screen {
         if (states.get(0) == 1){
             movement1.setDisabled(true);
         }
-
         GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
-
-
         if (states.get(1) == 1){
             GoldMulti1.setDisabled(true);
         }
-
-
         movement2 = new TextButton("Movement Speed + 20%", skin);
-
-
         if (states.get(2) == 1){
             movement2.setDisabled(true);
         }
@@ -109,7 +102,6 @@ public class SkillTree implements Screen {
         final Label unlock200 = new Label("200 points",skin);
         final Label unlock300 = new Label("300 points",skin);
         final Label unlock400 = new Label("400 points",skin);
-
 
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
@@ -174,8 +166,6 @@ public class SkillTree implements Screen {
             GameScreen.changeDamage(5);
             states.set(3, 0);
         }
-
-
     }
 
     /**
@@ -191,7 +181,6 @@ public class SkillTree implements Screen {
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        // TODO Auto-generated method stub
     }
 
     /**
@@ -212,7 +201,6 @@ public class SkillTree implements Screen {
      */
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
     }
     /**
      * (Not Used)
@@ -220,7 +208,6 @@ public class SkillTree implements Screen {
      */
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
     }
     /**
      * (Not Used)
@@ -228,7 +215,6 @@ public class SkillTree implements Screen {
      */
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
     }
     /**
      * Disposes game data
