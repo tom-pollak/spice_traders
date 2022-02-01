@@ -11,16 +11,10 @@ import java.util.Random;
 
 public class College extends Enemy{
     private Texture enemyCollege;
-    private boolean setToDestroy;
-    protected boolean destroyed;
-    public int health = 100;
-    public int maxHealth = 100;
     public Random rand = new Random();
-    protected HealthBar bar;
     private String currentCollege;
     private Array<CannonFire> cannonBalls;
     private AvailableSpawn noSpawn;
-    private int damage;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
@@ -32,10 +26,6 @@ public class College extends Enemy{
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
-
-        setToDestroy = false;
-        destroyed = false;
-        bar = new HealthBar(this);
         damage = 10;
 
         cannonBalls = new Array<>();
@@ -51,7 +41,6 @@ public class College extends Enemy{
                 ranY = rand.nextInt(2000) - 1000;
                 ranX = (int)Math.floor(x + (ranX / PirateGame.PPM));
                 ranY = (int)Math.floor(y + (ranY / PirateGame.PPM));
-                System.out.println(ship);
                 spawnIsValid = getCoord(ranX, ranY);
             }
             fleet.add(new EnemyShip(screen, ranX, ranY, ship, college));

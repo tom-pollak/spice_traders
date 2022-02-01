@@ -77,13 +77,11 @@ public class PirateGame extends Game {
 				break;
 
 			case HELP:
-				System.out.println("s");
 				if (helpScreen == null) helpScreen = new Help(this);
 				this.setScreen(helpScreen);
 				break;
 
 			case VICTORY:
-				System.out.println("dd");
 				if (victoryScreen == null) victoryScreen = new VictoryScreen(this);
 				this.setScreen(victoryScreen);
 				break;

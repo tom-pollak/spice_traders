@@ -11,7 +11,6 @@ public class AvailableSpawn {
     public static final int yBase = 7;
 
     public AvailableSpawn() {
-        ArrayList<Integer> checkY;
         for (int x = 0; x < xCap; x++) {
             for (int y = 0; y < yCap; y++) {
                 if (x >= 50 && y <= 50) {
@@ -27,9 +26,7 @@ public class AvailableSpawn {
                         add(x, y);
                     }
                 } else if (x <= 50 && y >= 50) {
-                    if (y == 75) {
-                        add(x, y);
-                    } else if (x >= 9 && x <= 13 && y >= 60 && y <= 62) {
+                    if (x >= 9 && x <= 13 && y >= 60 && y <= 62) {
                         add(x, y);
                     } else if (x >= 11 && x <= 26 && y >= 63 && y <= 69) {
                         add(x, y);
