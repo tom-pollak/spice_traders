@@ -285,7 +285,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void update(float dt){
+    public void update(float dt) {
         stateTime += dt;
         handleInput(dt);
         // Stepping the physics engine by time of 1 frame
@@ -298,19 +298,25 @@ public class GameScreen implements Screen {
         colleges.get("Constantine").update(dt);
         colleges.get("Goodricke").update(dt);
 
-        for (int i = 0; i < ships.size(); i++){
+        for (int i = 0; i < ships.size(); i++) {
             ships.get(i).update(dt);
         }
 
-        for(int i=0;i<Coins.size();i++) {
+        for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
         }
-        if(stateTime > 1) {
-            colleges.get("Anne Lister").fire();
-            colleges.get("Constantine").fire();
-            colleges.get("Goodricke").fire();
-            stateTime = 0;
+        if (stateTime > 1) {
+            if (!colleges.get("Anne Lister").destroyed) {
+                colleges.get("Anne Lister").fire();
+            }
+            if (!colleges.get("Constantine").destroyed) {
+                colleges.get("Constantine").fire();
+            }
+            if (!colleges.get("Goodricke").destroyed) {
+                colleges.get("Goodricke").fire();
         }
+        stateTime = 0;
+    }
 
         hud.update(dt);
 
