@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
     public Random rand = new Random();
 
     /**
-     * Initialises the Game Sceen,
+     * Initialises the Game Screen,
      * generates the world data and data for entities that exist upon it,
      * @param game passes game data to current class,
      */
@@ -141,9 +141,9 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Shows the world data and data for entities that exist upon it,
-     * Generates buttons for UI and player hud
-     * Creates menu, death screen, victory screen
+     * Makes this the current screen for the game.
+     * Generates the buttons to be able to interact with what screen is being displayed.
+     * Creates the escape menu and pause button
      */
     @Override
     public void show() {
