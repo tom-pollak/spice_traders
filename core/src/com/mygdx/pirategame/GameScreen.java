@@ -82,13 +82,13 @@ public class GameScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         // Spawning enemy ship and coin. x and y is spawn location
-        colleges.put("Alcuin", new College(this, 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
+        colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
                 "alcuin_flag.png", "alcuin_ship.png", 0, invalidSpawn));
-        colleges.put("Anne Lister", new College(this, 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
+        colleges.put("Anne Lister", new College(this, "Anne Lister", 6250 / PirateGame.PPM, 1150 / PirateGame.PPM,
                 "anne_lister_flag.png", "anne_lister_ship.png", 8, invalidSpawn));
-        colleges.put("Constantine", new College(this, 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
+        colleges.put("Constantine", new College(this, "Constantine", 5900 / PirateGame.PPM, 6750 / PirateGame.PPM,
                 "constantine_flag.png", "constantine_ship.png", 8, invalidSpawn));
-        colleges.put("Goodricke", new College(this, 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
+        colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6752 / PirateGame.PPM,
                 "goodricke_flag.png", "goodricke_ship.png", 8, invalidSpawn));
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
@@ -275,7 +275,6 @@ public class GameScreen implements Screen {
         }
 
         for(int i=0;i<Coins.size();i++) {
-
             Coins.get(i).update(dt);
         }
 
@@ -318,6 +317,9 @@ public class GameScreen implements Screen {
         colleges.get("Constantine").draw(game.batch);
         colleges.get("Goodricke").draw(game.batch);
         for (int i = 0; i < ships.size(); i++){
+            if (colleges.get(ships.get(i).college).destroyed){
+                ships.get(i).updateTexture("Alcuin", "alcuin_ship.png");
+            }
             ships.get(i).draw(game.batch);
         }
         game.batch.end();
@@ -390,4 +392,5 @@ public class GameScreen implements Screen {
         hud.dispose();
         stage.dispose();
     }
+
 }

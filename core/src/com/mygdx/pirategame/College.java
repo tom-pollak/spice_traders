@@ -23,7 +23,7 @@ public class College extends Enemy{
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
-    public College(GameScreen screen, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
+    public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
         super(screen, x, y);
         noSpawn = invalidSpawn;
         currentCollege = flag;
@@ -52,7 +52,7 @@ public class College extends Enemy{
                 System.out.println(ship);
                 spawnIsValid = getCoord(ranX, ranY);
             }
-            fleet.add(new EnemyShip(screen, ranX, ranY, ship));
+            fleet.add(new EnemyShip(screen, ranX, ranY, ship, college));
         }
     }
 
@@ -71,13 +71,13 @@ public class College extends Enemy{
         if(setToDestroy && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
+
             if (currentCollege.equals("alcuin_flag.png")){
                 GameScreen.gameOverCheck();
             }
             if (!currentCollege.equals("alcuin_flag.png")){
                 Hud.changePoints(100);
                 Hud.changeCoins(rand.nextInt(10));
-                claimCollege();
             }
             for(CannonFire ball : cannonBalls) {
                 ball.update(dt);
@@ -133,10 +133,5 @@ public class College extends Enemy{
 
     public void fire() {
 
-    }
-
-    public void claimCollege(){
-        new College(screen, b2body.getPosition().x / PirateGame.PPM, b2body.getPosition().y / PirateGame.PPM,
-                "alcuin_flag.png", "alcuin_ship.png", 4, noSpawn);
     }
 }

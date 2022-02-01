@@ -10,15 +10,17 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class EnemyShip extends Enemy{
     private Texture enemyShip;
+    public String college;
     private boolean setToDestroy;
     private boolean destroyed;
     public int health = 100;
     public int maxHealth = 100;
     protected HealthBar bar;
 
-    public EnemyShip(GameScreen screen, float x, float y, String path) {
+    public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
+        college = assignment;
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
@@ -83,4 +85,11 @@ public class EnemyShip extends Enemy{
         health -= 20;
         bar.changeHealth(20);
     }
+
+    public void updateTexture(String alignment, String path){
+        college = alignment;
+        enemyShip = new Texture(path);
+        setRegion(enemyShip);
+    }
+
 }
