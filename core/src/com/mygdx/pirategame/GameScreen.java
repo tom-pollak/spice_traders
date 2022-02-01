@@ -66,8 +66,8 @@ public class GameScreen implements Screen {
 
     /**
      * Initialises the Game Sceen,
-     * generates the world data and data for entities that exist upon it
-     * @param game passes game data to current class
+     * generates the world data and data for entities that exist upon it,
+     * @param game passes game data to current class,
      */
     public GameScreen(PirateGame game){
         gameStatus = GAME_RUNNING;
@@ -111,7 +111,7 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
-        //Random coins
+        //Random ships
         Boolean validLoc;
         int a = 0;
         int b = 0;
@@ -124,6 +124,8 @@ public class GameScreen implements Screen {
             }
             ships.add(new EnemyShip(this, a, b, "unaligned_ship.png", "Unaligned"));
         }
+
+        //Random coins
         for (int i = 0; i < 100; i++) {
             validLoc = false;
             while (!validLoc) {
@@ -134,18 +136,15 @@ public class GameScreen implements Screen {
             Coins.add(new Coin(this, a, b));
         }
 
+        //Setting stage
         stage = new Stage(new ScreenViewport());
     }
 
-    private Boolean checkGenPos(int x, int y){
-        if (invalidSpawn.tileBlocked.containsKey(x)){
-            ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
-            if (yTest.contains(y)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    /**
+     * Shows the world data and data for entities that exist upon it,
+     * Generates buttons for UI and player hud
+     * Creates menu, death screen, victory screen
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
@@ -192,8 +191,15 @@ public class GameScreen implements Screen {
         pauseTable.add(exit).fillX().uniformX();
         pauseTable.center();
 
-        //BUTTON LISTENERS
+
         pauseButton.addListener(new ChangeListener() {
+            /**
+             * Button Listeners
+             * Changes state to paused
+             *
+             * @param event updates system event state to Paused
+             * @param actor updates scene
+             */
             @Override
             public void changed(ChangeEvent event, Actor actor){
                 table.setVisible(false);
@@ -203,6 +209,13 @@ public class GameScreen implements Screen {
             }
         });
         skill.addListener(new ChangeListener() {
+            /**
+             * Button Listeners
+             * Changes state to Skill Screen
+             *
+             * @param event updates system event state to Skill Screen
+             * @param actor updates scene
+             */
             @Override
             public void changed(ChangeEvent event, Actor actor){
                 pauseTable.setVisible(false);
@@ -210,16 +223,28 @@ public class GameScreen implements Screen {
             }
         });
         start.addListener(new ChangeListener() {
+            /**
+             * Button Listeners
+             * Changes state to Game
+             *
+             * @param event updates system event state to Game
+             * @param actor updates scene
+             */
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
                 table.setVisible(true);
-
                 resume();
-
             }
         });
         options.addListener(new ChangeListener() {
+            /**
+             * Button Listeners
+             * Resets Game
+             *
+             * @param event updates system event state to NEW Game Screen
+             * @param actor updates scene
+             */
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
@@ -228,6 +253,13 @@ public class GameScreen implements Screen {
         }
         );
         exit.addListener(new ChangeListener() {
+            /**
+             * Button Listeners
+             * Closes game
+             *
+             * @param event updates system event state to terminate game
+             * @param actor terminates
+             */
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
@@ -235,6 +267,14 @@ public class GameScreen implements Screen {
         });
     }
 
+    /**
+     * Checks for input and performs an action
+     * Applies to keys "W" "A" "S" "D" "E" "Esc"
+     *
+     * Caps player velocity
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void handleInput(float dt) {
         if (gameStatus == GAME_RUNNING) {
             // Left physics impulse on 'A'
@@ -285,6 +325,11 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Updates the state of each object with delta time
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     public void update(float dt) {
         stateTime += dt;
         handleInput(dt);
@@ -327,13 +372,18 @@ public class GameScreen implements Screen {
         renderer.setView(camera);
     }
 
+    /**
+     * Renders the visual data for all objects
+     * Changes and renders new visual data for ships
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     @Override
-    public void render(float delta) {
-
+    public void render(float dt) {
         if (gameStatus == GAME_RUNNING) {
-            update(delta);
+            update(dt);
         }
-        else{handleInput(delta);}
+        else{handleInput(dt);}
 
         Gdx.gl.glClearColor(46/255f, 204/255f, 113/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -346,10 +396,8 @@ public class GameScreen implements Screen {
         // Order determines layering
 
         for(int i=0;i<Coins.size();i++) {
-
             Coins.get(i).draw(game.batch);
         }
-
 
         player.draw(game.batch);
         colleges.get("Alcuin").draw(game.batch);
@@ -371,27 +419,53 @@ public class GameScreen implements Screen {
         gameOverCheck();
     }
 
+    /**
+     * Changes the camera size, Scales the hud to match the camera
+     *
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
-        Hud.resize( width, height);
+        Hud.resize(width, height);
         camera.update();
         renderer.setView(camera);
     }
 
+    /**
+     * Returns the map
+     *
+     * @return map : returns the world map
+     */
     public TiledMap getMap() {
         return map;
     }
 
+    /**
+     * Returns the world (map and objects)
+     *
+     * @return world : returns the world
+     */
     public World getWorld() {
         return world;
     }
 
+    /**
+     * Returns the college from the colleges hashmap
+     *
+     * @param collegeName uses a college name as an index
+     * @return college : returns the college fetched from colleges
+     */
     public College getCollege(String collegeName) {
         return colleges.get(collegeName);
     }
 
+    /**
+     * Checks if the game is over
+     * i.e. goal reached (all colleges bar "Alcuin" are destroyed
+     */
     public static void gameOverCheck(){
         if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
             game.changeScreen(PirateGame.DEATH);
@@ -403,17 +477,38 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Fetches the player's current position
+     *
+     * @return position vector : returns the position of the player
+     */
     public Vector2 getPlayerPos(){
         return new Vector2(player.b2body. getPosition().x,player.b2body.getPosition().y);
     }
 
-
+    /**
+     * Updates acceleration by a given percentage
+     *
+     * @param percentage percentage increase
+     */
     public static void changeAcceleration(Float percentage){
-        accel = accel * (1 +(percentage/100));
+        accel = accel * (1 + (percentage / 100));
     }
+
+    /**
+     * Updates max speed by a given percentage
+     *
+     * @param percentage percentage increase
+     */
     public static void changeMaxSpeed(Float percentage){
         maxSpeed = maxSpeed * (1 +(percentage/100));
     }
+
+    /**
+     * Deals damage to a given Enemy Entity
+     *
+     * @param value damage dealt
+     */
     public static void changeDamage(int value){
         for (int i = 0; i < ships.size(); i++){
             ships.get(i).changeDamageReceived(value);
@@ -424,22 +519,49 @@ public class GameScreen implements Screen {
 
     }
 
+    /**
+     * Tests validity of randomly generated position
+     *
+     * @param x random x value
+     * @param y random y value
+     */
+    private Boolean checkGenPos(int x, int y){
+        if (invalidSpawn.tileBlocked.containsKey(x)){
+            ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
+            if (yTest.contains(y)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    /**
+     * Pauses game
+     */
     @Override
     public void pause() {
         gameStatus = GAME_PAUSED;
     }
 
+    /**
+     * Resumes game
+     */
     @Override
     public void resume() {
         gameStatus = GAME_RUNNING;
     }
 
+    /**
+     * Hides game (Not Used)
+     */
     @Override
     public void hide() {
 
     }
 
+    /**
+     * Disposes game data
+     */
     @Override
     public void dispose() {
         map.dispose();
@@ -449,5 +571,4 @@ public class GameScreen implements Screen {
         hud.dispose();
         stage.dispose();
     }
-
 }
