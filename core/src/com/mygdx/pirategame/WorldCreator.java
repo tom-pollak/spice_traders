@@ -6,7 +6,19 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 
+/**
+ * This is the class where all boundaries and collisions are created for the map.
+ * @author Ethan Alabaster
+ * @version 1.0
+ */
 public class WorldCreator {
+    /**
+     * Starts the creation of the boundaries
+     *
+     * @param screen the screen that the boundaries are relevant for
+     *
+     *
+     */
     public WorldCreator(GameScreen screen) {
         TiledMap map = screen.getMap();
 

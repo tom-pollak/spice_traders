@@ -3,7 +3,18 @@ package com.mygdx.pirategame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 
+/**
+ * Tells the game what to do when certain entities come into contact with eachother
+ *
+ * @author Ethan Alabaster
+ * @version 1.0
+ */
 public class WorldContactListener implements ContactListener {
+
+    /**
+     * The start of the collision. Tells the game what should happen when the contact begins
+     * @param contact The object that contains information about the collision
+     */
     @Override
     public void beginContact(Contact contact) {
         Fixture fixA = contact.getFixtureA();
@@ -78,10 +89,19 @@ public class WorldContactListener implements ContactListener {
         }
     }
 
+    /**
+     * Run when contact is ended. Nearly empty since nothing special needs to happen when a contact is ended
+     * @param contact The object that contains information about the collision
+     */
     @Override
     public void endContact(Contact contact) {
         Gdx.app.log("End Contact", "");
     }
+
+    /**
+     * Can be called before beginContact to pre emptively solve it
+     * @param contact The object that contains information about the collision
+     */
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
