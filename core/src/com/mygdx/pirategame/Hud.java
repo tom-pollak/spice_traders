@@ -105,11 +105,6 @@ public class Hud implements Disposable {
         if (value > 0) {
             coins += value * coinMulti;
             coinLabel.setText(String.format("%03d", coins));
-
-        }
-        else{
-            coins += value;
-            coinLabel.setText(String.format("%03d", coins));
         }
     }
 

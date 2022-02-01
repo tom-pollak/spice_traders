@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * Creates the class of the player. Everything that involves actions coming from the player boat
+ */
 public class Player extends Sprite {
     private final GameScreen screen;
     private Texture ship;
@@ -16,6 +19,11 @@ public class Player extends Sprite {
     private Sound breakSound;
     private Array<CannonFire> cannonBalls;
 
+    /**
+     * Instantiates a new Player. Constructor only called once per game
+     *
+     * @param screen visual data
+     */
     public Player(GameScreen screen) {
         this.screen = screen;
         ship = new Texture("player_ship.png");
@@ -29,6 +37,11 @@ public class Player extends Sprite {
         cannonBalls = new Array<CannonFire>();
     }
 
+    /**
+     * Update the position of the player. Also updates any cannon balls the player generates
+     *
+     * @param dt Delta Time
+     */
     public void update(float dt) {
         setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
@@ -42,12 +55,18 @@ public class Player extends Sprite {
         }
     }
 
+    /**
+     * Plays the break sound when a boat takes damage
+     */
     public void playBreakSound() {
         if (screen.game.getPreferences().isEffectsEnabled()) {
             breakSound.play(screen.game.getPreferences().getEffectsVolume());
         }
     }
 
+    /**
+     * Defines all the parts of the player's physical model. Sets it up for collisons
+     */
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
         bdef.position.set(1200  / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
@@ -65,6 +84,9 @@ public class Player extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
     }
 
+    /**
+     * Called when E is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
+     */
     public void fire() {
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
@@ -73,8 +95,15 @@ public class Player extends Sprite {
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), -5, b2body.getLinearVelocity()));
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
- */   }
+        }
+         */
+    }
 
+    /**
+     * Draws the player using batch
+     *
+     * @param batch The batch of the program
+     */
     public void draw(Batch batch){
         super.draw(batch);
         for(CannonFire ball : cannonBalls)

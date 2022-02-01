@@ -51,7 +51,10 @@ public class SkillTree implements Screen {
         states.add(1);
         states.add(1);
     }
-
+    /**
+     * What should be displayed on the skill tree screen
+     *
+     */
     @Override
     public void show() {
         //Set the input processor
@@ -61,9 +64,6 @@ public class SkillTree implements Screen {
         table.setFillParent(true);
         stage.addActor(table);
 
-        Table info = new Table();
-        info.setFillParent(true);
-        stage.addActor(info);
 
         // Table for the return button
         final Table Other = new Table();
@@ -75,9 +75,7 @@ public class SkillTree implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
         //create skill tree buttons
-
         movement1 = new TextButton("Movement Speed + 20%", skin);
-
 
         //Sets enabled or disabled
         if (states.get(0) == 1){
@@ -87,7 +85,6 @@ public class SkillTree implements Screen {
         GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
 
 
-        //Sets enabled or disabled
         if (states.get(1) == 1){
             GoldMulti1.setDisabled(true);
         }
@@ -95,20 +92,19 @@ public class SkillTree implements Screen {
 
         movement2 = new TextButton("Movement Speed + 20%", skin);
 
-        //Sets enabled or disabled
+
         if (states.get(2) == 1){
             movement2.setDisabled(true);
         }
 
-
-
         damage1 = new TextButton("Damage + 5", skin);
-        //Sets enabled or disabled
+
         if (states.get(3) == 1){
             damage1.setDisabled(true);
 
         }
 
+        //Point unlock labels
         final Label unlock100 = new Label("100 points",skin);
         final Label unlock200 = new Label("200 points",skin);
         final Label unlock300 = new Label("300 points",skin);
@@ -118,8 +114,6 @@ public class SkillTree implements Screen {
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
 
-        //Change the value and set below skills to be available.Update list accordingly
-
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -128,7 +122,7 @@ public class SkillTree implements Screen {
             }
         });
 
-        //add buttons to main table
+        //add buttons and labels to main table
         table.add(movement1);
         table.add(unlock100);
         table.row().pad(10, 0, 10, 0);
@@ -142,20 +136,19 @@ public class SkillTree implements Screen {
         table.add(unlock400);
         table.top();
 
-
         //add return button
         Other.add(backButton);
         Other.bottom().left();
-
     }
 
     /**
-     * Points check.
+     * Allows the game to check whether a points threshold has been reached
      *
-     * @param points the points
+     * @param points the current amount of points
      */
     public static void pointsCheck(int points){
 
+        //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
         if(states.get(0) == 1 && points >= 100){
             //Change acceleration
             GameScreen.changeAcceleration(20F);
@@ -165,7 +158,7 @@ public class SkillTree implements Screen {
 
         }
         else if(states.get(1) == 1 && points >= 200){
-            Hud.changeCoins(-1);
+            //Change multiplier
             Hud.changeCoinsMulti(2);
             states.set(1, 0);
         }
@@ -175,7 +168,9 @@ public class SkillTree implements Screen {
             //Change Max speed
             GameScreen.changeMaxSpeed(20F);
             states.set(2, 0);
+
         }else if(states.get(3) == 1 && points >= 400){
+            //Increase damage
             GameScreen.changeDamage(5);
             states.set(3, 0);
         }
@@ -183,6 +178,10 @@ public class SkillTree implements Screen {
 
     }
 
+    /**
+     * Renders the visual data for all objects
+     * @param delta Delta Time
+     */
 
     @Override
     public void render(float delta) {
@@ -195,26 +194,45 @@ public class SkillTree implements Screen {
         // TODO Auto-generated method stub
     }
 
+    /**
+     * Changes the camera size, Scales the hud to match the camera
+     *
+     * @param width the width of the viewable area
+     * @param height the height of the viewable area
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+
+    /**
+     * (Not Used)
+     * Pauses game
+     */
     @Override
     public void pause() {
         // TODO Auto-generated method stub
     }
-
+    /**
+     * (Not Used)
+     * Resumes game
+     */
     @Override
     public void resume() {
         // TODO Auto-generated method stub
     }
-
+    /**
+     * (Not Used)
+     * Hides game
+     */
     @Override
     public void hide() {
         // TODO Auto-generated method stub
     }
-
+    /**
+     * Disposes game data
+     */
     @Override
     public void dispose() {
         stage.dispose();
