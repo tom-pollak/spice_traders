@@ -84,6 +84,7 @@ public class GameScreen implements Screen {
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
         b2dr = new Box2DDebugRenderer();
+        b2dr.setDrawBodies(false);
         player = new Player(this);
 
         // making the Tiled tmx file render as a map
