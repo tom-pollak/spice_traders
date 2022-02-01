@@ -21,7 +21,7 @@ public class EnemyShip extends Enemy{
         enemyShip = new Texture(path);
         college = assignment;
         destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
-        hit = Gdx.audio.newSound(Gdx.files.internal("body-punch.wav"));
+        hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
