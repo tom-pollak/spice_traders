@@ -50,7 +50,7 @@ public class Player extends Sprite {
 
     private void definePlayer() {
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1800  / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
+        bdef.position.set(1200  / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -60,7 +60,7 @@ public class Player extends Sprite {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ISLAND_BIT |PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
     }

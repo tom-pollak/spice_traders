@@ -8,24 +8,21 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class CannonFire extends Sprite {
+public class CollegeFire extends Sprite {
     private World world;
     private Texture cannonBall;
+    private GameScreen screen;
     private float stateTime;
     private boolean destroyed;
     private boolean setToDestroy;
     private Body b2body;
-    private float angle;
-    private float velocity;
-    private Vector2 bodyVel;
     private Sound fireNoise;
+    private Vector2 playerPos;
 
-    public CannonFire(GameScreen screen, float x, float y, Body body, float velocity) {
-        this.velocity = velocity;
+    public CollegeFire(GameScreen screen, float x, float y) {
         this.world = screen.getWorld();
-        bodyVel = body.getLinearVelocity();
-        angle = body.getAngle();
-
+        this.screen = screen;
+        playerPos = screen.getPlayerPos();
         cannonBall = new Texture("cannonBall.png");
         setRegion(cannonBall);
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
@@ -46,15 +43,16 @@ public class CannonFire extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
 
-        fDef.filter.categoryBits = PirateGame.CANNON_BIT;
-        fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT | PirateGame.COLLEGE_BIT;
+        fDef.filter.categoryBits = PirateGame.COLLEGEFIRE_BIT;
+        fDef.filter.maskBits = PirateGame.PLAYER_BIT;
         fDef.shape = shape;
-        //fDef.isSensor = true;
+        fDef.isSensor = true;
 
         b2body.createFixture(fDef).setUserData(this);
-        float velX = MathUtils.cos(angle) * velocity + bodyVel.x;
-        float velY = MathUtils.sin(angle) * velocity + bodyVel.y;
-        b2body.applyLinearImpulse(new Vector2(velX, velY), b2body.getWorldCenter(), true);
+        playerPos.sub(b2body.getPosition());
+        playerPos.nor();
+        float speed = 5f;
+        b2body.setLinearVelocity(playerPos.scl(speed));
     }
 
     public void update(float dt){
@@ -65,7 +63,7 @@ public class CannonFire extends Sprite {
             destroyed = true;
         }
         // determines cannonball range
-        if(stateTime > 0.98f) {
+        if(stateTime > 1.5f) {
             setToDestroy();
         }
     }

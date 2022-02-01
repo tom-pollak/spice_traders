@@ -50,7 +50,7 @@ public class Coin extends Entity {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.COIN_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);

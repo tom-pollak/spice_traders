@@ -13,7 +13,7 @@ public class College extends Enemy{
     private Texture enemyCollege;
     public Random rand = new Random();
     private String currentCollege;
-    private Array<CannonFire> cannonBalls;
+    private Array<CollegeFire> cannonBalls;
     private AvailableSpawn noSpawn;
 
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
@@ -70,14 +70,10 @@ public class College extends Enemy{
                 Hud.changePoints(100);
                 Hud.changeCoins(rand.nextInt(10));
             }
-            for(CannonFire ball : cannonBalls) {
-                ball.update(dt);
-                if(ball.isDestroyed())
-                    cannonBalls.removeValue(ball, true);
-            }
         }
         else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
+
         }
         if(health <= 0) {
             setToDestroy = true;
@@ -86,12 +82,19 @@ public class College extends Enemy{
         if(health <= 0) {
             setToDestroy = true;
         }
+        for(CollegeFire ball : cannonBalls) {
+            ball.update(dt);
+            if(ball.isDestroyed())
+                cannonBalls.removeValue(ball, true);
+        }
     }
 
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
             bar.render(batch);
+            for(CollegeFire ball : cannonBalls)
+                ball.draw(batch);
         }
     }
 
@@ -104,11 +107,11 @@ public class College extends Enemy{
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(750 / PirateGame.PPM);
+        shape.setRadius(55 / PirateGame.PPM);
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.COLLEGESENSOR_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.PLAYER_BIT | PirateGame.CANNON_BIT;
+        fdef.filter.maskBits = PirateGame.PLAYER_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
@@ -119,11 +122,10 @@ public class College extends Enemy{
         Gdx.app.log("enemy", "collision");
         health -= damage;
         bar.changeHealth(damage);
-        fire();
     }
 
     public void fire() {
-
+        cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
     }
 }
 

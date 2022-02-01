@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {
-    private static float maxSpeed = 2f;
+    private static float maxSpeed = 2.5f;
     private static float accel = 0.05f;
+    private float stateTime;
 
     protected static PirateGame game;
     private OrthographicCamera camera;
@@ -99,9 +100,9 @@ public class GameScreen implements Screen {
         Boolean validCoinLoc;
         int a = 0;
         int b = 0;
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 100; i++) {
             validCoinLoc = false;
-            while (validCoinLoc == false) {
+            while (!validCoinLoc) {
                 a = rand.nextInt(invalidSpawn.xCap - invalidSpawn.xBase) + invalidSpawn.xBase;
                 b = rand.nextInt(invalidSpawn.yCap - invalidSpawn.yBase) + invalidSpawn.yBase;
                 if (invalidSpawn.tileBlocked.containsKey(a)){
@@ -259,6 +260,7 @@ public class GameScreen implements Screen {
     }
 
     public void update(float dt){
+        stateTime += dt;
         handleInput(dt);
         // Stepping the physics engine by time of 1 frame
         world.step(1 / 60f, 6, 2);
@@ -277,7 +279,12 @@ public class GameScreen implements Screen {
         for(int i=0;i<Coins.size();i++) {
             Coins.get(i).update(dt);
         }
-
+        if(stateTime > 1) {
+            colleges.get("Goodricke").fire();
+            colleges.get("Constantine").fire();
+            colleges.get("Anne Lister").fire();
+            stateTime = 0;
+        }
         hud.update(dt);
 
         // Centre camera on player boat
@@ -359,6 +366,10 @@ public class GameScreen implements Screen {
             game.changeScreen(PirateGame.VICTORY);
             game.killGame();
         }
+    }
+
+    public Vector2 getPlayerPos(){
+        return new Vector2(player.b2body. getPosition().x,player.b2body.getPosition().y);
     }
 
 

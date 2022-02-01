@@ -75,7 +75,7 @@ public class EnemyShip extends Enemy{
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ISLAND_BIT | PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT;
         fdef.shape = shape;
         fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
