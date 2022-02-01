@@ -22,6 +22,15 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * Game Screen
+ * Class to generate the various screens used to play the game.
+ * Instantiates all screen types and displays current screen.
+ *
+ *@author Ethan Alabaster, Adam Crook, Joe Dickinson, Sam Pearson, Tom Perry, Edward Poulter
+ *@version 1.0
+ */
 public class GameScreen implements Screen {
     private static float maxSpeed = 2.5f;
     private static float accel = 0.05f;
@@ -46,7 +55,6 @@ public class GameScreen implements Screen {
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
 
-
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
     private static int gameStatus;
@@ -56,6 +64,11 @@ public class GameScreen implements Screen {
 
     public Random rand = new Random();
 
+    /**
+     * Initialises the Game Sceen,
+     * generates the world data and data for entities that exist upon it
+     * @param game passes game data to current class
+     */
     public GameScreen(PirateGame game){
         gameStatus = GAME_RUNNING;
         this.game = game;
@@ -83,6 +96,7 @@ public class GameScreen implements Screen {
         world.setContactListener(new WorldContactListener());
 
         // Spawning enemy ship and coin. x and y is spawn location
+        colleges = new HashMap<>();
         colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
                 "alcuin_flag.png", "alcuin_ship.png", 0, invalidSpawn));
         colleges.put("Anne Lister", new College(this, "Anne Lister", 6304 / PirateGame.PPM, 1199 / PirateGame.PPM,
@@ -91,6 +105,7 @@ public class GameScreen implements Screen {
                 "constantine_flag.png", "constantine_ship.png", 8, invalidSpawn));
         colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6767 / PirateGame.PPM,
                 "goodricke_flag.png", "goodricke_ship.png", 8, invalidSpawn));
+        ships = new ArrayList<>();
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
