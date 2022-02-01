@@ -51,7 +51,7 @@ public class GameScreen implements Screen {
     private Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
     private static ArrayList<EnemyShip> ships = new ArrayList<>();
-    private ArrayList<Coin> Coins = new ArrayList<>();
+    private static ArrayList<Coin> Coins = new ArrayList<>();
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
 
@@ -126,6 +126,7 @@ public class GameScreen implements Screen {
         }
 
         //Random coins
+        Coins = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             validLoc = false;
             while (!validLoc) {

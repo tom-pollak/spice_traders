@@ -3,7 +3,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 /**
+ * Audio Controls
  * Creates the interface to write and read options
+ *
+ * @author Sam Pearson
+ * @version 1.0
  */
 public class audioControls {
 
