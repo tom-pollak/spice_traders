@@ -15,11 +15,10 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Player extends Sprite {
     private final GameScreen screen;
-    private Texture ship;
     public World world;
     public Body b2body;
-    private Sound breakSound;
-    private Array<CannonFire> cannonBalls;
+    private final Sound breakSound;
+    private final Array<CannonFire> cannonBalls;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -29,7 +28,7 @@ public class Player extends Sprite {
     public Player(GameScreen screen) {
         // Retrieves world data and creates ship texture
         this.screen = screen;
-        ship = new Texture("player_ship.png");
+        Texture ship = new Texture("player_ship.png");
         this.world = screen.getWorld();
 
         // Defines a player, and the players position on screen and world
@@ -42,7 +41,7 @@ public class Player extends Sprite {
         breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
 
         // Sets cannonball array
-        cannonBalls = new Array<CannonFire>();
+        cannonBalls = new Array<>();
     }
 
     /**
@@ -70,8 +69,8 @@ public class Player extends Sprite {
      */
     public void playBreakSound() {
         // Plays damage sound effect
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-            breakSound.play(screen.game.getPreferences().getEffectsVolume());
+        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
+            breakSound.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
     }
 

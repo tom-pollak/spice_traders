@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
+
+import java.util.Objects;
 import java.util.Random;
 
 import java.util.ArrayList;
@@ -37,23 +39,22 @@ public class GameScreen implements Screen {
     private float stateTime;
 
     protected static PirateGame game;
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    private final OrthographicCamera camera;
+    private final Viewport viewport;
     private final Stage stage;
 
-    private TmxMapLoader maploader;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
+    private final TiledMap map;
+    private final OrthogonalTiledMapRenderer renderer;
 
-    private World world;
-    private Box2DDebugRenderer b2dr;
+    private final World world;
+    private final Box2DDebugRenderer b2dr;
 
-    private Player player;
+    private final Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
     private static ArrayList<EnemyShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
-    private AvailableSpawn invalidSpawn = new AvailableSpawn();
-    private Hud hud;
+    private final AvailableSpawn invalidSpawn = new AvailableSpawn();
+    private final Hud hud;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -71,7 +72,7 @@ public class GameScreen implements Screen {
      */
     public GameScreen(PirateGame game){
         gameStatus = GAME_RUNNING;
-        this.game = game;
+        GameScreen.game = game;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
         camera.zoom = 0.0155f;
@@ -87,7 +88,7 @@ public class GameScreen implements Screen {
         player = new Player(this);
 
         // making the Tiled tmx file render as a map
-        maploader = new TmxMapLoader();
+        TmxMapLoader maploader = new TmxMapLoader();
         map = maploader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
         new WorldCreator(this);
@@ -112,7 +113,7 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Goodricke").fleet);
 
         //Random ships
-        Boolean validLoc;
+        boolean validLoc;
         int a = 0;
         int b = 0;
         for (int i = 0; i < 20; i++) {
@@ -154,7 +155,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         //GAME BUTTONS
         final TextButton pauseButton = new TextButton("Pause",skin);
@@ -318,13 +319,13 @@ public class GameScreen implements Screen {
         colleges.get("Goodricke").update(dt);
 
         //Update ships
-        for (int i = 0; i < ships.size(); i++) {
-            ships.get(i).update(dt);
+        for (EnemyShip ship : ships) {
+            ship.update(dt);
         }
 
         //Updates coin
-        for (int i = 0; i < Coins.size(); i++) {
-            Coins.get(i).update();
+        for (Coin coin : Coins) {
+            coin.update();
         }
         //After a delay check if a college is destroyed. If not, if can fire
         if (stateTime > 1) {
@@ -373,8 +374,8 @@ public class GameScreen implements Screen {
         // Order determines layering
 
         //Renders coins
-        for(int i=0;i<Coins.size();i++) {
-            Coins.get(i).draw(game.batch);
+        for (Coin coin : Coins) {
+            coin.draw(game.batch);
         }
 
         //Renders colleges
@@ -385,15 +386,15 @@ public class GameScreen implements Screen {
         colleges.get("Goodricke").draw(game.batch);
 
         //Updates all ships
-        for (int i = 0; i < ships.size(); i++){
-            if (ships.get(i).college != "Unaligned") {
+        for (EnemyShip ship : ships) {
+            if (!Objects.equals(ship.college, "Unaligned")) {
                 //Flips a colleges allegence if their college is destroyed
-                if (colleges.get(ships.get(i).college).destroyed) {
+                if (colleges.get(ship.college).destroyed) {
 
-                    ships.get(i).updateTexture("Alcuin", "alcuin_ship.png");
+                    ship.updateTexture("Alcuin", "alcuin_ship.png");
                 }
             }
-            ships.get(i).draw(game.batch);
+            ship.draw(game.batch);
         }
         game.batch.end();
         Hud.stage.draw();
@@ -497,8 +498,8 @@ public class GameScreen implements Screen {
      */
     public static void changeDamage(int value){
 
-        for (int i = 0; i < ships.size(); i++){
-            ships.get(i).changeDamageReceived(value);
+        for (EnemyShip ship : ships) {
+            ship.changeDamageReceived(value);
         }
         colleges.get("Anne Lister").changeDamageReceived(value);
         colleges.get("Constantine").changeDamageReceived(value);
@@ -515,9 +516,7 @@ public class GameScreen implements Screen {
     private Boolean checkGenPos(int x, int y){
         if (invalidSpawn.tileBlocked.containsKey(x)){
             ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
-            if (yTest.contains(y)) {
-                return false;
-            }
+            return !yTest.contains(y);
         }
         return true;
     }

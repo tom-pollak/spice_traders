@@ -45,7 +45,7 @@ public class MainMenu implements Screen {
         stage.addActor(table);
 
         //The skin for the actors
-        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         //create buttons
         TextButton newGame = new TextButton("New Game", skin);
