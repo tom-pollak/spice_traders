@@ -123,8 +123,31 @@ project(":core") {
     }
 }
 
-tasks.register("runOnGitHub") { // 1
-    dependsOn(":app:lint", ":app:testDebugUnitTest")  // 2 ==> CUSTOMIZE THIS LINE
-    group = "custom"      // 3
-    description = "$ ./gradlew runOnGitHub # runs on GitHub Action" //3
+project(":tests") {
+     apply plugin: "java"
+
+    sourceSets.test.java.srcDirs = ["src/"]
+
+    dependencies {
+        implementation project(":core")
+
+        implementation "junit:junit:4.+"
+        implementation "org.mockito:mockito-all:1.9.+"
+
+        implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+        testImplementation 'junit:junit:4.+'
+        testImplementation "org.mockito:mockito-all:1.9.+"
+
+        testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    }
+}
+
+tasks.register("runOnGitHub") {
+    dependsOn(":tests:test")
+    group = "custom"
+//     description = "$ ./gradlew runOnGitHub # runs on GitHub Action"
 }
