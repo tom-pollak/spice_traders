@@ -1,38 +1,32 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.pirategame.PirateGame;
 
-import java.util.ArrayList;
-import java.util.List;
 /**
  * Screen with instructions for the user
+ *
  * @author Sam Pearson
  * @version 1.0
  */
-public class Help implements Screen {
-    private final PirateGame parent;
-    private final Stage stage;
+public class HelpScreen extends AbstractScreen {
 
     /**
      * In the constructor, the parent and stage are set. Also the states list is set
      *
      * @param pirateGame Game data
      */
-    public Help(PirateGame pirateGame){
-        parent = pirateGame;
-        stage = new Stage(new ScreenViewport());
+    public HelpScreen(PirateGame pirateGame) {
+        super(pirateGame);
     }
 
     /**
@@ -71,7 +65,7 @@ public class Help implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                parent.changeScreen(PirateGame.MENU);
+                parent.setScreen(parent.MENU);
             }
         });
 
@@ -101,7 +95,7 @@ public class Help implements Screen {
     /**
      * Renders visual data with delta time
      *
-     * @param dt Delta time (elapsed time since last game tick)
+     * @param dt Delta time (elapsed time since last parent tick)
      */
     @Override
     public void render(float dt) {
@@ -111,50 +105,6 @@ public class Help implements Screen {
         // tell our stage to do actions and draw itself
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Changes the camera size
-     *
-     * @param width the width of the viewable area
-     * @param height the height of the viewable area
-     */
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    /**
-     * (Not Used)
-     * Pauses game
-     */
-    @Override
-    public void pause() {
-    }
-
-    /**
-     * (Not Used)
-     * Resumes game
-     */
-    @Override
-    public void resume() {
-    }
-
-    /**
-     * (Not Used)
-     * Hides game
-     */
-    @Override
-    public void hide() {
-    }
-
-    /**
-     * Disposes game data
-     */
-    @Override
-    public void dispose() {
-        stage.dispose();
     }
 }
 

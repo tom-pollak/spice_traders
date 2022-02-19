@@ -10,8 +10,6 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        
-
     }
 }
 
@@ -19,6 +17,12 @@ allprojects {
     apply plugin: "eclipse"
 
     version = '1.0'
+
+    tasks.withType(Jar) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+
     ext {
         appName = "pirategame"
         gdxVersion = '1.10.0'
@@ -151,3 +155,4 @@ tasks.register("runOnGitHub") {
     group = "custom"
 //     description = "$ ./gradlew runOnGitHub # runs on GitHub Action"
 }
+

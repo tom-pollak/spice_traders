@@ -1,11 +1,13 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.gui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -14,26 +16,24 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * Hud
  * Produces a hud for the player
  *
- *@author Ethan Alabaster, Sam Pearson
- *@version 1.0
+ * @author Ethan Alabaster, Sam Pearson
+ * @version 1.0
  */
 public class Hud implements Disposable {
     public static Stage stage;
-    private Viewport viewport;
-
-    private float timeCount;
     private static Integer score;
     private static Integer health;
-    private Texture hp;
-    private Texture boxBackground;
-    private Texture coinPic;
-
     private static Label scoreLabel;
     private static Label healthLabel;
     private static Label coinLabel;
     private static Label pointsText;
     private static Integer coins;
     private static Integer coinMulti;
+    private Viewport viewport;
+    private float timeCount;
+    private Texture hp;
+    private Texture boxBackground;
+    private Texture coinPic;
     private Image hpImg;
     private Image box;
     private Image coin;
@@ -95,29 +95,6 @@ public class Hud implements Disposable {
     }
 
     /**
-     * Updates the state of the hud
-     *
-     * @param dt Delta time (elapsed time since last game tick)
-     */
-    public void update(float dt) {
-        timeCount += dt;
-        if(timeCount >= 1) {
-            //Regen health every second
-            if(health != 100) {
-                health += 1;
-                healthLabel.setText(String.format("%02d", health));
-            }
-            //Gain point every second
-            score += 1;
-            scoreLabel.setText(String.format("%03d", score));
-            timeCount = 0;
-
-            //Check if a points boundary is met
-            SkillTree.pointsCheck(score);
-        }
-    }
-
-    /**
      * Changes health by value increase
      *
      * @param value Increase to health
@@ -163,10 +140,10 @@ public class Hud implements Disposable {
     /**
      * Changes the camera size, Scales the hud to match the camera
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
-    public static void resize(int width, int height){
+    public static void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
@@ -175,7 +152,7 @@ public class Hud implements Disposable {
      *
      * @return health : returns health value
      */
-    public static Integer getHealth(){
+    public static Integer getHealth() {
         return health;
     }
 
@@ -185,12 +162,35 @@ public class Hud implements Disposable {
      *
      * @return health : returns coins value
      */
-    public static Integer getCoins(){
+    public static Integer getCoins() {
         return coins;
     }
 
     /**
-     * Disposes game data
+     * Updates the state of the hud
+     *
+     * @param dt Delta time (elapsed time since last parent tick)
+     */
+    public void update(float dt) {
+        timeCount += dt;
+        if (timeCount >= 1) {
+            //Regen health every second
+            if (health != 100) {
+                health += 1;
+                healthLabel.setText(String.format("%02d", health));
+            }
+            //Gain point every second
+            score += 1;
+            scoreLabel.setText(String.format("%03d", score));
+            timeCount = 0;
+
+            //Check if a points boundary is met
+            SkillTree.pointsCheck(score);
+        }
+    }
+
+    /**
+     * Disposes parent data
      */
     @Override
     public void dispose() {

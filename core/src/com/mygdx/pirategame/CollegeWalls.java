@@ -1,13 +1,15 @@
 package com.mygdx.pirategame;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * College Walls (Alcuin)
  * Checks interaction with walls from map
  *
- *@author Ethan Alabaster, Sam Pearson
- *@version 1.0
+ * @author Ethan Alabaster, Sam Pearson
+ * @version 1.0
  */
 public class CollegeWalls extends InteractiveTileObject {
     private GameScreen screen;

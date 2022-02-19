@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -7,21 +7,25 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.pirategame.CannonFire;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
+ *
  * @author Ethan Alabaster, Edward Poulter
  * @version 1.0
  */
 public class Player extends Sprite {
     private final GameScreen screen;
-    public World world;
-    public Body b2body;
     private final Sound breakSound;
     private final Array<CannonFire> cannonBalls;
+    public World world;
+    public Body b2body;
 
     /**
-     * Instantiates a new Player. Constructor only called once per game
+     * Instantiates a new Player. Constructor only called once per parent
      *
      * @param screen visual data
      */
@@ -33,9 +37,9 @@ public class Player extends Sprite {
 
         // Defines a player, and the players position on screen and world
         definePlayer();
-        setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
+        setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(ship);
-        setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
+        setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
 
         // Sound effect for damage
         breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
@@ -53,14 +57,13 @@ public class Player extends Sprite {
         // Updates position and orientation of player
         setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
-        b2body.setTransform(b2body.getWorldCenter(), angle - ((float)Math.PI) / 2.0f);
+        b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
         setRotation((float) (b2body.getAngle() * 180 / Math.PI));
 
         // Updates cannonball data
-        for(CannonFire ball : cannonBalls) {
+        for (CannonFire ball : cannonBalls) {
             ball.update(dt);
-            if(ball.isDestroyed())
-                cannonBalls.removeValue(ball, true);
+            if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
         }
     }
 
@@ -69,8 +72,8 @@ public class Player extends Sprite {
      */
     public void playBreakSound() {
         // Plays damage sound effect
-        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
-            breakSound.play(GameScreen.game.getPreferences().getEffectsVolume());
+        if (GameScreen.parent.getPreferences().isEffectsEnabled()) {
+            breakSound.play(GameScreen.parent.getPreferences().getEffectsVolume());
         }
     }
 
@@ -80,7 +83,7 @@ public class Player extends Sprite {
     private void definePlayer() {
         // Defines a players position
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1200  / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
+        bdef.position.set(1200 / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -121,10 +124,10 @@ public class Player extends Sprite {
      *
      * @param batch The batch of the program
      */
-    public void draw(Batch batch){
+    public void draw(Batch batch) {
         // Draws player and cannonballs
         super.draw(batch);
-        for(CannonFire ball : cannonBalls)
+        for (CannonFire ball : cannonBalls)
             ball.draw(batch);
     }
 }

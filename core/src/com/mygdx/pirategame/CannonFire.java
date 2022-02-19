@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Cannon Fire
@@ -14,8 +15,8 @@ import com.badlogic.gdx.physics.box2d.*;
  * Used by player and colleges,
  * Use should extend to enemy ships when implementing ship combat
  *
- *@author Ethan Alabaster
- *@version 1.0
+ * @author Ethan Alabaster
+ * @version 1.0
  */
 public class CannonFire extends Sprite {
     private World world;
@@ -34,10 +35,10 @@ public class CannonFire extends Sprite {
      * Determines general cannonball data
      * Determines firing sound
      *
-     * @param screen visual data
-     * @param x x value of origin
-     * @param y y value of origin
-     * @param body body of origin
+     * @param screen   visual data
+     * @param x        x value of origin
+     * @param y        y value of origin
+     * @param body     body of origin
      * @param velocity velocity of the cannon ball
      */
     public CannonFire(GameScreen screen, float x, float y, Body body, float velocity) {
@@ -55,8 +56,8 @@ public class CannonFire extends Sprite {
         defineCannonBall();
         //set sound for fire and play if on
         fireNoise = Gdx.audio.newSound(Gdx.files.internal("explosion.wav"));
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-            fireNoise.play(screen.game.getPreferences().getEffectsVolume());
+        if (screen.parent.getPreferences().isEffectsEnabled()) {
+            fireNoise.play(screen.parent.getPreferences().getEffectsVolume());
         }
     }
 
@@ -93,20 +94,20 @@ public class CannonFire extends Sprite {
      * Updates state with delta time
      * Defines range of cannon fire
      *
-     * @param dt Delta time (elapsed time since last game tick)
+     * @param dt Delta time (elapsed time since last parent tick)
      */
-    public void update(float dt){
+    public void update(float dt) {
         stateTime += dt;
         //Update position of ball
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
 
         //If ball is set to destroy and isnt, destroy it
-        if((setToDestroy) && !destroyed) {
+        if ((setToDestroy) && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
         }
         // determines cannonball range
-        if(stateTime > 0.98f) {
+        if (stateTime > 0.98f) {
             setToDestroy();
         }
     }
@@ -114,14 +115,14 @@ public class CannonFire extends Sprite {
     /**
      * Changes destruction state
      */
-    public void setToDestroy(){
+    public void setToDestroy() {
         setToDestroy = true;
     }
 
     /**
      * Returns destruction status
      */
-    public boolean isDestroyed(){
+    public boolean isDestroyed() {
         return destroyed;
     }
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * Provides a UI for the user to interact with the audioControls interface
+ *
  * @author Sam Pearson
  * @version 1.0
  */
@@ -25,10 +26,10 @@ public class Options implements Screen {
     /**
      * Instantiates a new Options screen
      *
-     * @param pirateGame the main starting body of the game. Where screen swapping is carried out.
+     * @param pirateGame the main starting body of the parent. Where screen swapping is carried out.
      * @param parent     the screen that called the options screen. Allows for easy return
      */
-    public Options(PirateGame pirateGame, Screen parent){
+    public Options(PirateGame pirateGame, Screen parent) {
         this.PirateGame = pirateGame;
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
@@ -36,7 +37,6 @@ public class Options implements Screen {
 
     /**
      * What should be displayed on the options screen
-     *
      */
     @Override
     public void show() {
@@ -52,12 +52,12 @@ public class Options implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
         //Music Sliders and Check boxes
-        final Slider volumeMusicSlider = new Slider( 0f, 1f, 0.1f,false, skin );
+        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
 
         //Set value to current option
-        volumeMusicSlider.setValue( PirateGame.getPreferences().getMusicVolume() );
+        volumeMusicSlider.setValue(PirateGame.getPreferences().getMusicVolume());
 
-        volumeMusicSlider.addListener( new EventListener() {
+        volumeMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 PirateGame.getPreferences().setMusicVolume(volumeMusicSlider.getValue());  //Change music value in options to slider
@@ -70,28 +70,28 @@ public class Options implements Screen {
         final CheckBox musicCheckbox = new CheckBox(null, skin);
 
         //Check if it should be checked or unchecked by default
-        musicCheckbox.setChecked( PirateGame.getPreferences().isMusicEnabled() );
+        musicCheckbox.setChecked(PirateGame.getPreferences().isMusicEnabled());
 
-        musicCheckbox.addListener( new EventListener() {
+        musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked(); //Get checked value
-                PirateGame.getPreferences().setMusicEnabled( enabled ); //Set
+                PirateGame.getPreferences().setMusicEnabled(enabled); //Set
 
-                if(PirateGame.getPreferences().isMusicEnabled()){ //Play or don't
+                if (PirateGame.getPreferences().isMusicEnabled()) { //Play or don't
                     PirateGame.song.play();
+                } else {
+                    PirateGame.song.pause();
                 }
-                else {
-                    PirateGame.song.pause();}
 
                 return false;
             }
         });
 
         //EFFECTS
-        final Slider volumeEffectSlider = new Slider( 0f, 1f, 0.1f,false, skin );
-        volumeEffectSlider.setValue( PirateGame.getPreferences().getEffectsVolume() ); //Set value to current option
-        volumeEffectSlider.addListener( new EventListener() {
+        final Slider volumeEffectSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        volumeEffectSlider.setValue(PirateGame.getPreferences().getEffectsVolume()); //Set value to current option
+        volumeEffectSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 PirateGame.getPreferences().setEffectsVolume(volumeEffectSlider.getValue()); //Change effect value in options to slider
@@ -100,12 +100,12 @@ public class Options implements Screen {
         });
 
         final CheckBox effectCheckbox = new CheckBox(null, skin);
-        effectCheckbox.setChecked( PirateGame.getPreferences().isEffectsEnabled() );
-        effectCheckbox.addListener( new EventListener() {
+        effectCheckbox.setChecked(PirateGame.getPreferences().isEffectsEnabled());
+        effectCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = effectCheckbox.isChecked(); //Get checked value
-                PirateGame.getPreferences().setEffectsEnabled( enabled ); //Set
+                PirateGame.getPreferences().setEffectsEnabled(enabled); //Set
                 return false;
             }
         });
@@ -120,7 +120,6 @@ public class Options implements Screen {
         });
 
 
-
         Label titleLabel = new Label("Options", skin);
         Label musicLabel = new Label("Music Volume", skin);
         Label effectLabel = new Label("Effect Volume", skin);
@@ -129,24 +128,26 @@ public class Options implements Screen {
 
         //add buttons,sliders and labels to table
         table.add(titleLabel).colspan(2);
-        table.row().pad(10,0,0,0);
+        table.row().pad(10, 0, 0, 0);
         table.add(musicLabel).left();
         table.add(volumeMusicSlider);
-        table.row().pad(10,0,0,0);
+        table.row().pad(10, 0, 0, 0);
         table.add(musicOnLabel).left();
         table.add(musicCheckbox);
-        table.row().pad(10,0,0,0);
+        table.row().pad(10, 0, 0, 0);
         table.add(effectLabel).left();
         table.add(volumeEffectSlider);
-        table.row().pad(10,0,0,0);
+        table.row().pad(10, 0, 0, 0);
         table.add(effectOnLabel).left();
         table.add(effectCheckbox);
-        table.row().pad(10,0,0,10);
+        table.row().pad(10, 0, 0, 10);
         table.add(backButton);
 
     }
+
     /**
      * Renders the visual data for all objects
+     *
      * @param delta Delta Time
      */
     @Override
@@ -157,12 +158,12 @@ public class Options implements Screen {
         stage.draw();
 
 
-
     }
+
     /**
      * Changes the camera size, Scales the hud to match the camera
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
     @Override
@@ -172,7 +173,7 @@ public class Options implements Screen {
 
     /**
      * (Not Used)
-     * Pauses game
+     * Pauses parent
      */
     @Override
     public void pause() {
@@ -181,15 +182,16 @@ public class Options implements Screen {
 
     /**
      * (Not Used)
-     * Resumes game
+     * Resumes parent
      */
     @Override
     public void resume() {
         // TODO Auto-generated method stub
     }
+
     /**
      * (Not Used)
-     * Hides game
+     * Hides parent
      */
 
     @Override
@@ -198,7 +200,7 @@ public class Options implements Screen {
     }
 
     /**
-     * Disposes game data
+     * Disposes parent data
      */
     @Override
     public void dispose() {

@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.gui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,14 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The type for the skill tree screen.
- * It is a visual representation for the skills that the game automatically unlocks for the player.
+ * It is a visual representation for the skills that the parent automatically unlocks for the player.
  * Automatically unlocked when a points threshold is reached
  *
  * @author Sam Pearson
@@ -24,13 +27,11 @@ import java.util.List;
  */
 public class SkillTree implements Screen {
 
-    private final PirateGame parent;
-    private final Stage stage;
-
     //To store whether buttons are enabled or disabled
     private static final List<Integer> states = new ArrayList<Integer>();
-
     private static TextButton movement1;
+    private final PirateGame parent;
+    private final Stage stage;
     private TextButton damage1;
     private TextButton GoldMulti1;
     private TextButton movement2;
@@ -38,10 +39,10 @@ public class SkillTree implements Screen {
     /**
      * Instantiates a new Skill tree.
      *
-     * @param pirateGame the main starting body of the game. Where screen swapping is carried out.
+     * @param pirateGame the main starting body of the parent. Where screen swapping is carried out.
      */
-//In the constructor, the parent and stage are set. Also the states list is set
-    public SkillTree(PirateGame pirateGame){
+    //In the constructor, the parent and stage are set. Also the states list is set
+    public SkillTree(PirateGame pirateGame) {
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
 
@@ -51,9 +52,42 @@ public class SkillTree implements Screen {
         states.add(1);
         states.add(1);
     }
+
+    /**
+     * Allows the parent to check whether a points threshold has been reached
+     *
+     * @param points the current amount of points
+     */
+    public static void pointsCheck(int points) {
+
+        //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
+        if (states.get(0) == 1 && points >= 100) {
+            //Change acceleration
+            GameScreen.changeAcceleration(20F);
+            //Change Max speed
+            GameScreen.changeMaxSpeed(20F);
+            states.set(0, 0);
+
+        } else if (states.get(1) == 1 && points >= 200) {
+            //Change multiplier
+            Hud.changeCoinsMulti(2);
+            states.set(1, 0);
+        } else if (states.get(2) == 1 && points >= 300) {
+            //Change acceleration
+            GameScreen.changeAcceleration(20F);
+            //Change Max speed
+            GameScreen.changeMaxSpeed(20F);
+            states.set(2, 0);
+
+        } else if (states.get(3) == 1 && points >= 400) {
+            //Increase damage
+            GameScreen.changeDamage(5);
+            states.set(3, 0);
+        }
+    }
+
     /**
      * What should be displayed on the skill tree screen
-     *
      */
     @Override
     public void show() {
@@ -78,30 +112,30 @@ public class SkillTree implements Screen {
         movement1 = new TextButton("Movement Speed + 20%", skin);
 
         //Sets enabled or disabled
-        if (states.get(0) == 1){
+        if (states.get(0) == 1) {
             movement1.setDisabled(true);
         }
         GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
-        if (states.get(1) == 1){
+        if (states.get(1) == 1) {
             GoldMulti1.setDisabled(true);
         }
         movement2 = new TextButton("Movement Speed + 20%", skin);
-        if (states.get(2) == 1){
+        if (states.get(2) == 1) {
             movement2.setDisabled(true);
         }
 
         damage1 = new TextButton("Damage + 5", skin);
 
-        if (states.get(3) == 1){
+        if (states.get(3) == 1) {
             damage1.setDisabled(true);
 
         }
 
         //Point unlock labels
-        final Label unlock100 = new Label("100 points",skin);
-        final Label unlock200 = new Label("200 points",skin);
-        final Label unlock300 = new Label("300 points",skin);
-        final Label unlock400 = new Label("400 points",skin);
+        final Label unlock100 = new Label("100 points", skin);
+        final Label unlock200 = new Label("200 points", skin);
+        final Label unlock300 = new Label("300 points", skin);
+        final Label unlock400 = new Label("400 points", skin);
 
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
@@ -110,7 +144,7 @@ public class SkillTree implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
 
-                parent.changeScreen(PirateGame.GAME); //Return to game
+                parent.setScreen(parent.GAME); //Return to parent
             }
         });
 
@@ -134,42 +168,8 @@ public class SkillTree implements Screen {
     }
 
     /**
-     * Allows the game to check whether a points threshold has been reached
-     *
-     * @param points the current amount of points
-     */
-    public static void pointsCheck(int points){
-
-        //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
-        if(states.get(0) == 1 && points >= 100){
-            //Change acceleration
-            GameScreen.changeAcceleration(20F);
-            //Change Max speed
-            GameScreen.changeMaxSpeed(20F);
-            states.set(0, 0);
-
-        }
-        else if(states.get(1) == 1 && points >= 200){
-            //Change multiplier
-            Hud.changeCoinsMulti(2);
-            states.set(1, 0);
-        }
-        else if(states.get(2) == 1 && points >= 300){
-            //Change acceleration
-            GameScreen.changeAcceleration(20F);
-            //Change Max speed
-            GameScreen.changeMaxSpeed(20F);
-            states.set(2, 0);
-
-        }else if(states.get(3) == 1 && points >= 400){
-            //Increase damage
-            GameScreen.changeDamage(5);
-            states.set(3, 0);
-        }
-    }
-
-    /**
      * Renders the visual data for all objects
+     *
      * @param delta Delta Time
      */
 
@@ -186,7 +186,7 @@ public class SkillTree implements Screen {
     /**
      * Changes the camera size, Scales the hud to match the camera
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
     @Override
@@ -197,27 +197,30 @@ public class SkillTree implements Screen {
 
     /**
      * (Not Used)
-     * Pauses game
+     * Pauses parent
      */
     @Override
     public void pause() {
     }
+
     /**
      * (Not Used)
-     * Resumes game
+     * Resumes parent
      */
     @Override
     public void resume() {
     }
+
     /**
      * (Not Used)
-     * Hides game
+     * Hides parent
      */
     @Override
     public void hide() {
     }
+
     /**
-     * Disposes game data
+     * Disposes parent data
      */
     @Override
     public void dispose() {

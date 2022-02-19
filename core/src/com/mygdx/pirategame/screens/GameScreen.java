@@ -1,89 +1,89 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.*;
-
-import java.util.Objects;
-import java.util.Random;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.pirategame.AvailableSpawn;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.WorldContactListener;
+import com.mygdx.pirategame.WorldCreator;
+import com.mygdx.pirategame.entities.College;
+import com.mygdx.pirategame.entities.EnemyShip;
+import com.mygdx.pirategame.entities.Player;
+import com.mygdx.pirategame.gui.Hud;
+import com.mygdx.pirategame.items.Coin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Random;
 
 
 /**
  * Game Screen
- * Class to generate the various screens used to play the game.
+ * Class to generate the various screens used to play the parent.
  * Instantiates all screen types and displays current screen.
  *
- *@author Ethan Alabaster, Adam Crook, Joe Dickinson, Sam Pearson, Tom Perry, Edward Poulter
- *@version 1.0
+ * @author Ethan Alabaster, Adam Crook, Joe Dickinson, Sam Pearson, Tom Perry, Edward Poulter
+ * @version 1.0
  */
-public class GameScreen implements Screen {
+public class GameScreen extends AbstractScreen {
+    public static final int GAME_RUNNING = 0;
+    public static final int GAME_PAUSED = 1;
     private static float maxSpeed = 2.5f;
     private static float accel = 0.05f;
-    private float stateTime;
-
-    protected static PirateGame game;
-    private final OrthographicCamera camera;
-    private final Viewport viewport;
-    private final Stage stage;
-
-    private final TiledMap map;
-    private final OrthogonalTiledMapRenderer renderer;
-
-    private final World world;
-    private final Box2DDebugRenderer b2dr;
-
-    private final Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
     private static ArrayList<EnemyShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
+    private static int gameStatus;
+    private final OrthographicCamera camera;
+    private final Viewport viewport;
+    private final TiledMap map;
+    private final OrthogonalTiledMapRenderer renderer;
+    private final World world;
+    private final Box2DDebugRenderer b2dr;
+    private final Player player;
     private final AvailableSpawn invalidSpawn = new AvailableSpawn();
     private final Hud hud;
-
-    public static final int GAME_RUNNING = 0;
-    public static final int GAME_PAUSED = 1;
-    private static int gameStatus;
-
+    public Random rand = new Random();
+    private float stateTime;
     private Table pauseTable;
     private Table table;
-
-    public Random rand = new Random();
 
     /**
      * Initialises the Game Screen,
      * generates the world data and data for entities that exist upon it,
-     * @param game passes game data to current class,
+     *
+     * @param parent passes parent data to current class,
      */
-    public GameScreen(PirateGame game){
+    public GameScreen(PirateGame parent) {
+        super(parent);
         gameStatus = GAME_RUNNING;
-        GameScreen.game = game;
-        // Initialising camera and extendable viewport for viewing game
+        // Initialising camera and extendable viewport for viewing parent
         camera = new OrthographicCamera();
         camera.zoom = 0.0155f;
         viewport = new ScreenViewport(camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         // Initialize a hud
-        hud = new Hud(game.batch);
+        hud = new Hud(parent.batch);
 
         // Initialising box2d physics
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
         player = new Player(this);
 
@@ -98,14 +98,10 @@ public class GameScreen implements Screen {
 
         // Spawning enemy ship and coin. x and y is spawn location
         colleges = new HashMap<>();
-        colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
-                "alcuin_flag.png", "alcuin_ship.png", 0, invalidSpawn));
-        colleges.put("Anne Lister", new College(this, "Anne Lister", 6304 / PirateGame.PPM, 1199 / PirateGame.PPM,
-                "anne_lister_flag.png", "anne_lister_ship.png", 8, invalidSpawn));
-        colleges.put("Constantine", new College(this, "Constantine", 6240 / PirateGame.PPM, 6703 / PirateGame.PPM,
-                "constantine_flag.png", "constantine_ship.png", 8, invalidSpawn));
-        colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6767 / PirateGame.PPM,
-                "goodricke_flag.png", "goodricke_ship.png", 8, invalidSpawn));
+        colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM, "alcuin_flag.png", "alcuin_ship.png", 0, invalidSpawn));
+        colleges.put("Anne Lister", new College(this, "Anne Lister", 6304 / PirateGame.PPM, 1199 / PirateGame.PPM, "anne_lister_flag.png", "anne_lister_ship.png", 8, invalidSpawn));
+        colleges.put("Constantine", new College(this, "Constantine", 6240 / PirateGame.PPM, 6703 / PirateGame.PPM, "constantine_flag.png", "constantine_ship.png", 8, invalidSpawn));
+        colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6767 / PirateGame.PPM, "goodricke_flag.png", "goodricke_ship.png", 8, invalidSpawn));
         ships = new ArrayList<>();
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
@@ -142,13 +138,44 @@ public class GameScreen implements Screen {
             //Add a coins at the random coords
             Coins.add(new Coin(this, a, b));
         }
-
-        //Setting stage
-        stage = new Stage(new ScreenViewport());
     }
 
     /**
-     * Makes this the current screen for the game.
+     * Updates acceleration by a given percentage. Accessed by skill tree
+     *
+     * @param percentage percentage increase
+     */
+    public static void changeAcceleration(Float percentage) {
+        accel = accel * (1 + (percentage / 100));
+    }
+
+    /**
+     * Updates max speed by a given percentage. Accessed by skill tree
+     *
+     * @param percentage percentage increase
+     */
+    public static void changeMaxSpeed(Float percentage) {
+        maxSpeed = maxSpeed * (1 + (percentage / 100));
+    }
+
+    /**
+     * Changes the amount of damage done by each hit. Accessed by skill tree
+     *
+     * @param value damage dealt
+     */
+    public static void changeDamage(int value) {
+
+        for (EnemyShip ship : ships) {
+            ship.changeDamageReceived(value);
+        }
+        colleges.get("Anne Lister").changeDamageReceived(value);
+        colleges.get("Constantine").changeDamageReceived(value);
+        colleges.get("Goodricke").changeDamageReceived(value);
+
+    }
+
+    /**
+     * Makes this the current screen for the parent.
      * Generates the buttons to be able to interact with what screen is being displayed.
      * Creates the escape menu and pause button
      */
@@ -158,7 +185,7 @@ public class GameScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         //GAME BUTTONS
-        final TextButton pauseButton = new TextButton("Pause",skin);
+        final TextButton pauseButton = new TextButton("Pause", skin);
         final TextButton skill = new TextButton("Skill Tree", skin);
 
         //PAUSE MENU BUTTONS
@@ -178,11 +205,10 @@ public class GameScreen implements Screen {
 
 
         //Set the visability of the tables. Particuarly used when coming back from options or skillTree
-        if (gameStatus == GAME_PAUSED){
+        if (gameStatus == GAME_PAUSED) {
             table.setVisible(false);
             pauseTable.setVisible(true);
-        }
-        else{
+        } else {
             pauseTable.setVisible(false);
             table.setVisible(true);
         }
@@ -204,7 +230,7 @@ public class GameScreen implements Screen {
 
         pauseButton.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
+            public void changed(ChangeEvent event, Actor actor) {
                 table.setVisible(false);
                 pauseTable.setVisible(true);
                 pause();
@@ -213,9 +239,9 @@ public class GameScreen implements Screen {
         });
         skill.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
+            public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
-                game.changeScreen(PirateGame.SKILL);
+                parent.setScreen(parent.SKILL);
             }
         });
         start.addListener(new ChangeListener() {
@@ -230,10 +256,9 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
-                game.setScreen(new Options(game,game.getScreen()));
+                parent.setScreen(parent.OPTIONS);
             }
-        }
-        );
+        });
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -245,10 +270,10 @@ public class GameScreen implements Screen {
     /**
      * Checks for input and performs an action
      * Applies to keys "W" "A" "S" "D" "E" "Esc"
-     *
+     * <p>
      * Caps player velocity
      *
-     * @param dt Delta time (elapsed time since last game tick)
+     * @param dt Delta time (elapsed time since last parent tick)
      */
     public void handleInput(float dt) {
         if (gameStatus == GAME_RUNNING) {
@@ -287,12 +312,11 @@ public class GameScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if(gameStatus == GAME_PAUSED) {
+            if (gameStatus == GAME_PAUSED) {
                 resume();
                 table.setVisible(true);
                 pauseTable.setVisible(false);
-            }
-            else {
+            } else {
                 table.setVisible(false);
                 pauseTable.setVisible(true);
                 pause();
@@ -303,7 +327,7 @@ public class GameScreen implements Screen {
     /**
      * Updates the state of each object with delta time
      *
-     * @param dt Delta time (elapsed time since last game tick)
+     * @param dt Delta time (elapsed time since last parent tick)
      */
     public void update(float dt) {
         stateTime += dt;
@@ -337,9 +361,9 @@ public class GameScreen implements Screen {
             }
             if (!colleges.get("Goodricke").destroyed) {
                 colleges.get("Goodricke").fire();
+            }
+            stateTime = 0;
         }
-        stateTime = 0;
-    }
 
         hud.update(dt);
 
@@ -354,36 +378,37 @@ public class GameScreen implements Screen {
      * Renders the visual data for all objects
      * Changes and renders new visual data for ships
      *
-     * @param dt Delta time (elapsed time since last game tick)
+     * @param dt Delta time (elapsed time since last parent tick)
      */
     @Override
     public void render(float dt) {
         if (gameStatus == GAME_RUNNING) {
             update(dt);
+        } else {
+            handleInput(dt);
         }
-        else{handleInput(dt);}
 
-        Gdx.gl.glClearColor(46/255f, 204/255f, 113/255f, 1);
+        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
         //b2dr.render(world, camera.combined);
 
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
+        parent.batch.setProjectionMatrix(camera.combined);
+        parent.batch.begin();
         // Order determines layering
 
         //Renders coins
         for (Coin coin : Coins) {
-            coin.draw(game.batch);
+            coin.draw(parent.batch);
         }
 
         //Renders colleges
-        player.draw(game.batch);
-        colleges.get("Alcuin").draw(game.batch);
-        colleges.get("Anne Lister").draw(game.batch);
-        colleges.get("Constantine").draw(game.batch);
-        colleges.get("Goodricke").draw(game.batch);
+        player.draw(parent.batch);
+        colleges.get("Alcuin").draw(parent.batch);
+        colleges.get("Anne Lister").draw(parent.batch);
+        colleges.get("Constantine").draw(parent.batch);
+        colleges.get("Goodricke").draw(parent.batch);
 
         //Updates all ships
         for (EnemyShip ship : ships) {
@@ -394,20 +419,20 @@ public class GameScreen implements Screen {
                     ship.updateTexture("Alcuin", "alcuin_ship.png");
                 }
             }
-            ship.draw(game.batch);
+            ship.draw(parent.batch);
         }
-        game.batch.end();
+        parent.batch.end();
         Hud.stage.draw();
         stage.act();
         stage.draw();
-        //Checks game over conditions
+        //Checks parent over conditions
         gameOverCheck();
     }
 
     /**
      * Changes the camera size, Scales the hud to match the camera
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
     @Override
@@ -448,19 +473,19 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Checks if the game is over
+     * Checks if the parent is over
      * i.e. goal reached (all colleges bar "Alcuin" are destroyed)
      */
-    public void gameOverCheck(){
-        //Lose game if ship on 0 health or Alcuin is destroyed
+    public void gameOverCheck() {
+        //Lose parent if ship on 0 health or Alcuin is destroyed
         if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
-            game.changeScreen(PirateGame.DEATH);
-            game.killGame();
+            parent.setScreen(parent.DEATH);
+            parent.killGame();
         }
-        //Win game if all colleges destroyed
-        else if (colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Goodricke").destroyed){
-            game.changeScreen(PirateGame.VICTORY);
-            game.killGame();
+        //Win parent if all colleges destroyed
+        else if (colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Goodricke").destroyed) {
+            parent.setScreen(parent.VICTORY);
+            parent.killGame();
         }
     }
 
@@ -469,42 +494,8 @@ public class GameScreen implements Screen {
      *
      * @return position vector : returns the position of the player
      */
-    public Vector2 getPlayerPos(){
-        return new Vector2(player.b2body. getPosition().x,player.b2body.getPosition().y);
-    }
-
-    /**
-     * Updates acceleration by a given percentage. Accessed by skill tree
-     *
-     * @param percentage percentage increase
-     */
-    public static void changeAcceleration(Float percentage){
-        accel = accel * (1 + (percentage / 100));
-    }
-
-    /**
-     * Updates max speed by a given percentage. Accessed by skill tree
-     *
-     * @param percentage percentage increase
-     */
-    public static void changeMaxSpeed(Float percentage){
-        maxSpeed = maxSpeed * (1 +(percentage/100));
-    }
-
-    /**
-     * Changes the amount of damage done by each hit. Accessed by skill tree
-     *
-     * @param value damage dealt
-     */
-    public static void changeDamage(int value){
-
-        for (EnemyShip ship : ships) {
-            ship.changeDamageReceived(value);
-        }
-        colleges.get("Anne Lister").changeDamageReceived(value);
-        colleges.get("Constantine").changeDamageReceived(value);
-        colleges.get("Goodricke").changeDamageReceived(value);
-
+    public Vector2 getPlayerPos() {
+        return new Vector2(player.b2body.getPosition().x, player.b2body.getPosition().y);
     }
 
     /**
@@ -513,8 +504,8 @@ public class GameScreen implements Screen {
      * @param x random x value
      * @param y random y value
      */
-    private Boolean checkGenPos(int x, int y){
-        if (invalidSpawn.tileBlocked.containsKey(x)){
+    private Boolean checkGenPos(int x, int y) {
+        if (invalidSpawn.tileBlocked.containsKey(x)) {
             ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
             return !yTest.contains(y);
         }
@@ -522,7 +513,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Pauses game
+     * Pauses parent
      */
     @Override
     public void pause() {
@@ -530,7 +521,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Resumes game
+     * Resumes parent
      */
     @Override
     public void resume() {
@@ -538,16 +529,7 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * (Not Used)
-     * Hides game
-     */
-    @Override
-    public void hide() {
-
-    }
-
-    /**
-     * Disposes game data
+     * Disposes parent data
      */
     @Override
     public void dispose() {

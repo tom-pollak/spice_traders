@@ -1,39 +1,33 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.mygdx.pirategame.PirateGame;
 
 /**
  * Main menu is the first screen the player sees. Allows them to navigate where they want to go to
+ *
  * @author Sam Pearson
  * @version 1.0
  */
-public class MainMenu implements Screen {
-
-    private final PirateGame parent;
-    private final Stage stage;
+public class MainMenu extends AbstractScreen {
 
     /**
      * Instantiates a new Main menu.
      *
-     * @param PirateGame the main starting body of the game. Where screen swapping is carried out.
+     * @param pirateGame the main starting body of the parent. Where screen swapping is carried out.
      */
-    public MainMenu(PirateGame PirateGame){
-        parent = PirateGame;
-        stage = new Stage(new ScreenViewport());
+    public MainMenu(PirateGame pirateGame) {
+        super(pirateGame);
     }
 
     /**
      * What should be displayed on the options screen
-     *
      */
     @Override
     public void show() {
@@ -64,31 +58,31 @@ public class MainMenu implements Screen {
 
         //add listeners to the buttons
 
-        //Start a game
+        //Start a parent
         newGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
-                parent.changeScreen(PirateGame.GAME);
+            public void changed(ChangeEvent event, Actor actor) {
+                parent.setScreen(parent.GAME);
             }
         });
         //Help Screen
         help.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
-                parent.changeScreen(PirateGame.HELP);
+            public void changed(ChangeEvent event, Actor actor) {
+                parent.setScreen(parent.HELP);
             }
         });
 
         //Go to edit options
         options.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
-                parent.setScreen(new Options(parent,parent.getScreen()));
+            public void changed(ChangeEvent event, Actor actor) {
+                parent.setScreen(parent.OPTIONS);
             }
         });
 
 
-        //Quit game
+        //Quit parent
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -99,6 +93,7 @@ public class MainMenu implements Screen {
 
     /**
      * Renders the visual data for all objects
+     *
      * @param delta Delta Time
      */
     @Override
@@ -107,49 +102,6 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-    }
-
-    /**
-     * Changes the camera size, Scales the hud to match the camera
-     *
-     * @param width the width of the viewable area
-     * @param height the height of the viewable area
-     */
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    /**
-     * (Not Used)
-     * Pauses game
-     */
-    @Override
-    public void pause() {
-    }
-
-    /**
-     * (Not Used)
-     * Resumes game
-     */
-    @Override
-    public void resume() {
-    }
-
-    /**
-     * (Not Used)
-     * Hides game
-     */
-    @Override
-    public void hide() {
-    }
-
-    /**
-     * Disposes game data
-     */
-    @Override
-    public void dispose() {
-        stage.dispose();
     }
 }
 
