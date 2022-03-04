@@ -16,13 +16,13 @@ import com.mygdx.pirategame.screens.GameScreen;
  */
 
 public class CollegeFire extends Sprite {
-    private World world;
-    private Texture cannonBall;
+    private final World world;
+    private final Texture cannonBall;
     private float stateTime;
     private boolean destroyed;
     private boolean setToDestroy;
     private Body b2body;
-    private Vector2 playerPos;
+    private final Vector2 playerPos;
 
     /**
      * Defines player position

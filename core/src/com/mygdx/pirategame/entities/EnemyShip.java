@@ -19,11 +19,11 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @author Ethan Alabaster, Sam Pearson, Edward Poulter
  * @version 1.0
  */
-public class EnemyShip extends Enemy {
-    public String college;
-    private Texture enemyShip;
+public class EnemyShip extends Ship {
     private final Sound destroy;
     private final Sound hit;
+    public String college;
+    private Texture enemyShip;
 
     /**
      * Instantiates enemy ship

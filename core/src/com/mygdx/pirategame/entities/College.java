@@ -26,13 +26,13 @@ import java.util.Random;
  * @version 1.0
  */
 
-public class College extends Enemy {
+public class College extends AbstractEntity {
     public Random rand = new Random();
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
-    private Texture enemyCollege;
-    private String currentCollege;
-    private Array<CollegeFire> cannonBalls;
-    private AvailableSpawn noSpawn;
+    private final Texture enemyCollege;
+    private final String currentCollege;
+    private final Array<CollegeFire> cannonBalls;
+    private final AvailableSpawn noSpawn;
 
     /**
      * @param screen       Visual data
@@ -82,12 +82,10 @@ public class College extends Enemy {
      * @return isValid : returns the validity of the proposed spawn point
      */
     public boolean getCoord(int x, int y) {
-        if (x < noSpawn.xBase || x >= noSpawn.xCap || y < noSpawn.yBase || y >= noSpawn.yCap) {
+        if (x < AvailableSpawn.xBase || x >= AvailableSpawn.xCap || y < AvailableSpawn.yBase || y >= AvailableSpawn.yCap) {
             return false;
         } else if (noSpawn.tileBlocked.containsKey(x)) {
-            if (noSpawn.tileBlocked.get(x).contains(y)) {
-                return false;
-            }
+            return !noSpawn.tileBlocked.get(x).contains(y);
         }
         return true;
     }

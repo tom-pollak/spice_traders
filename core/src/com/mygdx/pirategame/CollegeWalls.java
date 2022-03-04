@@ -2,6 +2,7 @@ package com.mygdx.pirategame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.pirategame.logic.InteractiveTileObject;
 import com.mygdx.pirategame.screens.GameScreen;
 
 /**
@@ -12,7 +13,7 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @version 1.0
  */
 public class CollegeWalls extends InteractiveTileObject {
-    private GameScreen screen;
+    private final GameScreen screen;
 
     /**
      * Sets bounds of college walls

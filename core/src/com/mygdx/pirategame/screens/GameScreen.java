@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -18,14 +20,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.pirategame.AvailableSpawn;
+import com.mygdx.pirategame.CollegeWalls;
+import com.mygdx.pirategame.Islands;
 import com.mygdx.pirategame.PirateGame;
-import com.mygdx.pirategame.WorldContactListener;
-import com.mygdx.pirategame.WorldCreator;
 import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.gui.Hud;
 import com.mygdx.pirategame.items.Coin;
+import com.mygdx.pirategame.logic.WorldContactListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +94,7 @@ public class GameScreen extends AbstractScreen {
         TmxMapLoader maploader = new TmxMapLoader();
         map = maploader.load("map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
-        new WorldCreator(this);
+        this.createWorld();
 
         // Setting up contact listener for collisions
         world.setContactListener(new WorldContactListener());
@@ -124,6 +127,7 @@ public class GameScreen extends AbstractScreen {
             //Add a ship at the random coords
             ships.add(new EnemyShip(this, a, b, "unaligned_ship.png", "Unaligned"));
         }
+
 
         //Random coins
         Coins = new ArrayList<>();
@@ -172,6 +176,37 @@ public class GameScreen extends AbstractScreen {
         colleges.get("Constantine").changeDamageReceived(value);
         colleges.get("Goodricke").changeDamageReceived(value);
 
+    }
+
+    private void createWorld() {
+        TiledMap map = getMap();
+
+        // Object class is islands, stuff for boat to collide with
+        for (RectangleMapObject object : map.getLayers().get(4).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+
+            new Islands(this, rect);
+        }
+        for (RectangleMapObject object : map.getLayers().get(5).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+
+            new CollegeWalls(this, rect);
+        }
+        for (RectangleMapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+
+            new CollegeWalls2(this, rect);
+        }
+        for (RectangleMapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+
+            new CollegeWalls3(this, rect);
+        }
+        for (RectangleMapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+
+            new CollegeWalls4(this, rect);
+        }
     }
 
     /**
@@ -480,12 +515,12 @@ public class GameScreen extends AbstractScreen {
         //Lose parent if ship on 0 health or Alcuin is destroyed
         if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
             parent.setScreen(parent.DEATH);
-            parent.killGame();
+            parent.dispose();
         }
         //Win parent if all colleges destroyed
         else if (colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Goodricke").destroyed) {
             parent.setScreen(parent.VICTORY);
-            parent.killGame();
+            parent.dispose();
         }
     }
 

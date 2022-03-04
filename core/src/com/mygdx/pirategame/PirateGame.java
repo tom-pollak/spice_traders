@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.pirategame.gui.SkillTree;
 import com.mygdx.pirategame.screens.*;
 
 
@@ -36,7 +35,7 @@ public class PirateGame extends Game {
     public Screen GAME = new GameScreen(this);
     public Screen SKILL = new SkillTree(this);
     public Screen DEATH = new DeathScreen(this);
-    public Screen HELP = new HelpScreen(this);
+    public Screen HELP = new Help(this);
     public Screen VICTORY = new VictoryScreen(this);
     public Screen OPTIONS = new Options(this, this.getScreen());
     private AudioControls options;
@@ -69,9 +68,10 @@ public class PirateGame extends Game {
         this.GAME = new GameScreen(this);
         this.SKILL = new SkillTree(this);
         this.DEATH = new DeathScreen(this);
-        this.HELP = new HelpScreen(this);
+        this.HELP = new Help(this);
         this.VICTORY = new VictoryScreen(this);
     }
+
 
     /**
      * Allows the user to interact with the audio options
@@ -82,30 +82,6 @@ public class PirateGame extends Game {
         return this.options;
     }
 
-    /**
-     * Kills the parent screen and skill tree so they can be refreshed on next parent start
-     */
-    public void killGame() {
-        gameScreen = null;
-        skillTreeScreen = null;
-    }
-
-    /**
-     * Kill end screens so they can be made again.
-     */
-    public void killEndScreen() {
-        deathScreen = null;
-        victoryScreen = null;
-    }
-
-    /**
-     * (Not Used)
-     * Renders the visual data for all objects
-     */
-    @Override
-    public void render() {
-        super.render();
-    }
 
     /**
      * Disposes parent data
@@ -113,5 +89,12 @@ public class PirateGame extends Game {
     @Override
     public void dispose() {
         batch.dispose();
+        song.dispose();
+        MENU.dispose();
+        GAME.dispose();
+        SKILL.dispose();
+        DEATH.dispose();
+        HELP.dispose();
+        VICTORY.dispose();
     }
 }

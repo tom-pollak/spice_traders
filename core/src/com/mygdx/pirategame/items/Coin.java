@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.pirategame.PirateGame;
-import com.mygdx.pirategame.entities.Entity;
 import com.mygdx.pirategame.gui.Hud;
 import com.mygdx.pirategame.screens.GameScreen;
 
@@ -20,11 +19,11 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @author Joe Dickinson
  * @version 1.0
  */
-public class Coin extends Entity {
-    private Texture coin;
+public class Coin extends AbstractItem {
+    private final Texture coin;
+    private final Sound coinPickup;
     private boolean setToDestroyed;
     private boolean destroyed;
-    private Sound coinPickup;
 
     /**
      * Instantiates a new Coin.
@@ -33,15 +32,11 @@ public class Coin extends Entity {
      * @param x      the x value to be placed at
      * @param y      the y value to be placed at
      */
-    public Coin(GameScreen screen, float x, float y) {
-        super(screen, x, y);
-        //Set coin image
-        coin = new Texture("coin.png");
+    public Coin(GameScreen screen, String texturePath) {
+        super(screen, texturePath);
+
         //Set the position and size of the coin
         setBounds(0, 0, 48 / PirateGame.PPM, 48 / PirateGame.PPM);
-        //Set the texture
-        setRegion(coin);
-        //Sets origin of the coin
         setOrigin(24 / PirateGame.PPM, 24 / PirateGame.PPM);
         coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
     }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.pirategame.screens.SkillTree;
 
 /**
  * Hud
@@ -29,14 +30,14 @@ public class Hud implements Disposable {
     private static Label pointsText;
     private static Integer coins;
     private static Integer coinMulti;
-    private Viewport viewport;
+    private final Viewport viewport;
     private float timeCount;
-    private Texture hp;
-    private Texture boxBackground;
-    private Texture coinPic;
-    private Image hpImg;
-    private Image box;
-    private Image coin;
+    private final Texture hp;
+    private final Texture boxBackground;
+    private final Texture coinPic;
+    private final Image hpImg;
+    private final Image box;
+    private final Image coin;
 
     /**
      * Retrieves information and displays it in the hud

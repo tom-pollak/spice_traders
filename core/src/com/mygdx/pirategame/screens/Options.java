@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.pirategame.PirateGame;
 
 /**
  * Provides a UI for the user to interact with the audioControls interface
@@ -19,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  */
 public class Options implements Screen {
 
-    private final PirateGame PirateGame;
+    private final com.mygdx.pirategame.PirateGame PirateGame;
     private final Screen parent;
     private final Stage stage;
 

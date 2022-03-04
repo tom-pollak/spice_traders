@@ -1,9 +1,12 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.pirategame.AbstractActor;
+import com.mygdx.pirategame.CannonFire;
+import com.mygdx.pirategame.CollegeFire;
+import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.entities.Enemy;
-import com.mygdx.pirategame.entities.Entity;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.gui.Hud;
 
@@ -28,13 +31,15 @@ public class WorldContactListener implements ContactListener {
 
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
+
         // Fixes contact to an entity
         switch (cDef) {
             case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.COIN_BIT) {
-                    ((Entity) fixA.getUserData()).entityContact();
+                    ((AbstractActor) fixA.getUserData()).entityContact();
+
                 } else {
-                    ((Entity) fixB.getUserData()).entityContact();
+                    ((AbstractActor) fixB.getUserData()).entityContact();
                 }
                 break;
             case PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT:

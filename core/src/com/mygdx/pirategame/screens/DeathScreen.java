@@ -66,7 +66,6 @@ public class DeathScreen extends AbstractScreen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 parent.setScreen(parent.MENU);
-                parent.killEndScreen();
             }
         });
 

@@ -18,14 +18,14 @@ import com.mygdx.pirategame.PirateGame;
  * @author Sam Pearson
  * @version 1.0
  */
-public class HelpScreen extends AbstractScreen {
+public class Help extends AbstractScreen {
 
     /**
      * In the constructor, the parent and stage are set. Also the states list is set
      *
      * @param pirateGame Game data
      */
-    public HelpScreen(PirateGame pirateGame) {
+    public Help(PirateGame pirateGame) {
         super(pirateGame);
     }
 

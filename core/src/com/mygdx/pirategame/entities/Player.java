@@ -2,10 +2,11 @@ package com.mygdx.pirategame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.CannonFire;
 import com.mygdx.pirategame.PirateGame;
@@ -17,11 +18,9 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @author Ethan Alabaster, Edward Poulter
  * @version 1.0
  */
-public class Player extends Sprite {
-    private final GameScreen screen;
+public class Player extends Ship {
     private final Sound breakSound;
     private final Array<CannonFire> cannonBalls;
-    public World world;
     public Body b2body;
 
     /**
@@ -31,11 +30,9 @@ public class Player extends Sprite {
      */
     public Player(GameScreen screen) {
         // Retrieves world data and creates ship texture
-        this.screen = screen;
-        Texture ship = new Texture("player_ship.png");
-        this.world = screen.getWorld();
 
         // Defines a player, and the players position on screen and world
+        super(screen, "player.png");
         definePlayer();
         setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(ship);

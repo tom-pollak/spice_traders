@@ -33,8 +33,7 @@ public abstract class AbstractScreen implements Screen {
      * (Not Used)
      * Updates the state of each object
      */
-    public void update() {
-    }
+    public abstract void update();
 
     /**
      * Renders visual data with delta time
@@ -47,7 +46,8 @@ public abstract class AbstractScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // tell our stage to do actions and draw itself
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        // stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act();
         stage.draw();
     }
 
