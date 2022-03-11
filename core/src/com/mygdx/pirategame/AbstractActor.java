@@ -1,23 +1,22 @@
 package com.mygdx.pirategame;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.pirategame.logic.Alliance;
+import com.mygdx.pirategame.screens.GameScreen;
 
 public abstract class AbstractActor extends Actor {
-    protected final Screen screen;
+    protected final GameScreen screen;
     protected Texture texture;
+    protected Alliance alliance = Alliance.NEUTRAL;
 
-    public AbstractActor(Screen screen, String texturePath) {
+    public AbstractActor(GameScreen screen, String texturePath) {
         this.screen = screen;
-        this.texture = new Texture(texturePath);
-    }
-
-    public AbstractActor(Screen screen) {
-        this.screen = screen;
+        setTexture(new Texture(texturePath));
     }
 
     public static Texture getScaledTexture(String imgPath, int width, int height) {
@@ -30,7 +29,7 @@ public abstract class AbstractActor extends Actor {
         return texture;
     }
 
-    public abstract void entityContact();
+    public abstract void collide(AbstractActor collidingActor);
 
     public void setTexture(Texture texture) {
         this.texture = texture;
@@ -76,4 +75,26 @@ public abstract class AbstractActor extends Actor {
         texture.dispose();
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        super.draw(batch, parentAlpha);
+    }
+
+    public void die() {
+        remove();
+        dispose();
+        Gdx.app.log(this.toString(), "died");
+    }
+
+    public Alliance getAlliance() {
+        return alliance;
+    }
+
+    public void setAlliance(Alliance newAlliance) {
+        alliance.removeAlly(this);
+
+        this.alliance = newAlliance;
+        newAlliance.addAlly(this);
+    }
 }

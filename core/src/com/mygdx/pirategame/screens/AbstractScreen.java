@@ -30,12 +30,6 @@ public abstract class AbstractScreen implements Screen {
     public abstract void show();
 
     /**
-     * (Not Used)
-     * Updates the state of each object
-     */
-    public abstract void update();
-
-    /**
      * Renders visual data with delta time
      *
      * @param dt Delta time (elapsed time since last parent tick)
@@ -50,6 +44,7 @@ public abstract class AbstractScreen implements Screen {
         stage.act();
         stage.draw();
     }
+
 
     /**
      * Changes the camera size

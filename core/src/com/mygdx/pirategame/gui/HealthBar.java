@@ -4,7 +4,7 @@ package com.mygdx.pirategame.gui;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.mygdx.pirategame.entities.Enemy;
+import com.mygdx.pirategame.entities.AbstractEntity;
 
 /**
  * Health Bar
@@ -16,11 +16,10 @@ import com.mygdx.pirategame.entities.Enemy;
  * @author Sam Pearson
  * @version 1.0
  */
-class HealthBar {
-    private Sprite healthBar;
-    private Texture image;
+public class HealthBar extends Sprite {
+    private final Sprite healthBar;
 
-    private Enemy owner;
+    private final AbstractEntity owner;
 
     /**
      * Instantiates health bar
@@ -28,29 +27,28 @@ class HealthBar {
      *
      * @param owner Parent entity of health bar
      */
-    public HealthBar(Enemy owner) {
+    public HealthBar(AbstractEntity owner) {
         this.owner = owner;
-        image = new Texture("HealthBar.png");
+        Texture image = new Texture("HealthBar.png");
         healthBar = new Sprite(image);
         //Sets size of the health bar
         healthBar.setScale(0.0155f);
         healthBar.setSize(healthBar.getWidth(), healthBar.getHeight() - 2f);
 
-        //Sets location of bar
-        healthBar.setX(this.owner.b2body.getPosition().x - 0.68f);
-        healthBar.setY(this.owner.b2body.getPosition().y + this.owner.getHeight() / 2);
-        healthBar.setOrigin(0, 0);
+        update();
+        healthBar.setOrigin(0, 0); // TODO Not sure if this line works
     }
 
     /**
      * Updates health bar
      */
     public void update() {
-        if (owner != null) {
-            //Update location
-            healthBar.setX((owner.b2body.getPosition().x - 0.68f));
-            healthBar.setY(owner.b2body.getPosition().y + owner.getHeight() / 2);
-        }
+        healthBar.setX((owner.getX() - 0.68f));
+        healthBar.setY(owner.getY() + owner.getHeight() / 2);
+    }
+
+    public void remove() {
+        healthBar.getTexture().dispose();
     }
 
     /**
@@ -60,12 +58,13 @@ class HealthBar {
         healthBar.draw(batch);
     }
 
+
     /**
      * Updates healthbar with regards to damage
      *
      * @param value Damage recieved
      */
-    public void changeHealth(float value) {
+    public void setHealth(float value) {
         //Changes bar size when damaged
         healthBar.setSize(healthBar.getWidth() - value, healthBar.getHeight());
     }

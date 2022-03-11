@@ -110,7 +110,7 @@ public class Hud implements Disposable {
      *
      * @param value Increase to coins
      */
-    public static void changeCoins(int value) {
+    public static void addCoins(int value) {
         if (value > 0) {
             coins += value * coinMulti;
             coinLabel.setText(String.format("%03d", coins));

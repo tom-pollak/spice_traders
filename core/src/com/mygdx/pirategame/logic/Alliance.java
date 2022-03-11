@@ -1,7 +1,9 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.logic;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.pirategame.AbstractActor;
 import com.mygdx.pirategame.entities.College;
+import com.mygdx.pirategame.entities.Ship;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,22 +48,21 @@ public class Alliance {
     }
 
     // Make isEnemy which is isAlly \cup NEUTRAL?
-
     public ArrayList<Ship> getShips() {
         ArrayList<Ship> ships = new ArrayList<>();
-        for (GameActor gameActor : alliedActors) {
-            if (gameActor instanceof Ship) {
-                ships.add((Ship) gameActor);
+        for (AbstractActor actor : alliedActors) {
+            if (actor instanceof Ship) {
+                ships.add((Ship) actor);
             }
         }
         return ships;
     }
 
-    public HashSet<GameActor> getAllies() {
+    public HashSet<AbstractActor> getAllies() {
         return alliedActors;
     }
 
-    public boolean isAlly(GameActor actor) {
+    public boolean isAlly(AbstractActor actor) {
         return this.equals(actor.getAlliance());
     }
 

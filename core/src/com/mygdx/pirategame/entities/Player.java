@@ -1,12 +1,10 @@
 package com.mygdx.pirategame.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.CannonFire;
 import com.mygdx.pirategame.PirateGame;
@@ -19,9 +17,123 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @version 1.0
  */
 public class Player extends Ship {
+    public final InputProcessor input = new InputProcessor() {
+        @Override
+        public boolean keyDown(int keycode) {
+            switch (keycode) {
+                case Input.Keys.W:
+                    velocity.y = speed;
+                    break;
+                case Input.Keys.S:
+                    velocity.y = -speed;
+                    break;
+                case Input.Keys.A:
+                    velocity.x = -speed;
+                    break;
+                case Input.Keys.D:
+                    velocity.x = speed;
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean keyUp(int keycode) {
+            switch (keycode) {
+                case Input.Keys.A:
+                    /* D is pressed and A is released, reverse the direction */
+                    if (!Gdx.input.isKeyPressed(Input.Keys.D)) velocity.x = 0;
+                    else velocity.x = speed;
+                    break;
+                case Input.Keys.D:
+                    if (!Gdx.input.isKeyPressed(Input.Keys.A)) velocity.x = 0;
+                    else velocity.x = -speed;
+                    break;
+                case Input.Keys.W:
+                    if (!Gdx.input.isKeyPressed(Input.Keys.S)) velocity.y = 0;
+                    else velocity.y = -speed;
+                    break;
+                case Input.Keys.S:
+                    if (!Gdx.input.isKeyPressed(Input.Keys.W)) velocity.y = 0;
+                    else velocity.y = speed;
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
+        @Override
+        public boolean keyTyped(char character) {
+            switch (character) {
+                case 'e':
+                    pickup();
+                    break;
+                case 'f':
+                    drop();
+                    break;
+                case ' ':
+                    useItem();
+                    System.out.println(getX() + " " + getY());
+                    break;
+                case 'r':
+                    System.out.println("Inventory:");
+                    for (int i = 0; i < getInventory().size(); i++) {
+                        Item item = getInventory().get(i);
+                        System.out.println("\t(" + (i + 1) + ") " + item.getName() + ": " + item.getDescription());
+                    }
+                    break;
+
+            }
+
+            /* Select holding item */
+            if (Character.isDigit(character)) {
+                switchItem(Character.getNumericValue(character) - 1);
+            }
+            return true;
+
+        }
+
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return false;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return false;
+        }
+
+        @Override
+        public boolean scrolled(float amountX, float amountY) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDown(int x, int y, int pointer, int button) {
+            Vector3 v = new Vector3(x, y, 0);
+            try {
+                Vector3 position = getStage().getCamera().unproject(v);
+                if (button == Input.Buttons.LEFT) {
+                    useItem(position.x, position.y);
+                }
+                return true;
+
+            } catch (Exception e) {
+                return false;
+            }
+        }
+    };
     private final Sound breakSound;
     private final Array<CannonFire> cannonBalls;
-    public Body b2body;
 
     /**
      * Instantiates a new Player. Constructor only called once per parent
@@ -33,9 +145,7 @@ public class Player extends Ship {
 
         // Defines a player, and the players position on screen and world
         super(screen, "player.png");
-        definePlayer();
         setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
-        setRegion(ship);
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
 
         // Sound effect for damage
@@ -46,85 +156,18 @@ public class Player extends Ship {
     }
 
     /**
-     * Update the position of the player. Also updates any cannon balls the player generates
-     *
-     * @param dt Delta Time
-     */
-    public void update(float dt) {
-        // Updates position and orientation of player
-        setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
-        float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
-        b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
-        setRotation((float) (b2body.getAngle() * 180 / Math.PI));
-
-        // Updates cannonball data
-        for (CannonFire ball : cannonBalls) {
-            ball.update(dt);
-            if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
-        }
-    }
-
-    /**
      * Plays the break sound when a boat takes damage
      */
     public void playBreakSound() {
         // Plays damage sound effect
-        if (GameScreen.parent.getPreferences().isEffectsEnabled()) {
-            breakSound.play(GameScreen.parent.getPreferences().getEffectsVolume());
+        if (screen.parent.getPreferences().isEffectsEnabled()) {
+            breakSound.play(screen.parent.getPreferences().getEffectsVolume());
         }
-    }
-
-    /**
-     * Defines all the parts of the player's physical model. Sets it up for collisons
-     */
-    private void definePlayer() {
-        // Defines a players position
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(1200 / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        // Defines a player's shape and contact borders
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(55 / PirateGame.PPM);
-
-        // setting BIT identifier
-        fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
-
-        // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT;
-        fdef.shape = shape;
-        b2body.createFixture(fdef).setUserData(this);
     }
 
     /**
      * Called when E is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
      */
     public void fire() {
-        // Fires cannons
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
-
-        // Cone fire below
-        /*cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), -5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
-        }
-         */
-    }
-
-    /**
-     * Draws the player using batch
-     * Draws cannonballs using batch
-     *
-     * @param batch The batch of the program
-     */
-    public void draw(Batch batch) {
-        // Draws player and cannonballs
-        super.draw(batch);
-        for (CannonFire ball : cannonBalls)
-            ball.draw(batch);
     }
 }

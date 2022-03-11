@@ -1,16 +1,9 @@
 package com.mygdx.pirategame.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.AvailableSpawn;
-import com.mygdx.pirategame.CollegeFire;
-import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.gui.Hud;
+import com.mygdx.pirategame.logic.ActorTable;
+import com.mygdx.pirategame.logic.Alliance;
 import com.mygdx.pirategame.screens.GameScreen;
 
 import java.util.ArrayList;
@@ -28,50 +21,21 @@ import java.util.Random;
 
 public class College extends AbstractEntity {
     public Random rand = new Random();
-    public ArrayList<EnemyShip> fleet = new ArrayList<>();
-    private final Texture enemyCollege;
-    private final String currentCollege;
-    private final Array<CollegeFire> cannonBalls;
-    private final AvailableSpawn noSpawn;
+    public ArrayList<Ship> fleet = new ArrayList<>();
 
     /**
-     * @param screen       Visual data
-     * @param college      College name i.e. "Alcuin" used for fleet assignment
-     * @param x            College position on x-axis
-     * @param y            College position on y-axis
-     * @param flag         College flag sprite (image name)
-     * @param ship         College ship sprite (image name)
-     * @param ship_no      Number of college ships to produce
-     * @param invalidSpawn Spawn data to check spawn validity when generating ships
+     * @param screen      Visual data
+     * @param college     College name i.e. "Alcuin" used for fleet assignment
+     * @param x           College position on x-axis
+     * @param y           College position on y-axis
+     * @param texturePath College flag sprite (image name)
      */
-    public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
-        super(screen, x, y);
-        this.screen = screen;
-        noSpawn = invalidSpawn;
-        currentCollege = flag;
-        enemyCollege = new Texture(flag);
-        //Set the position and size of the college
-        setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
-        setRegion(enemyCollege);
-        setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
-        damage = 10;
-        cannonBalls = new Array<>();
-        int ranX = 0;
-        int ranY = 0;
-        boolean spawnIsValid;
-
-        //Generates college fleet
-        for (int i = 0; i < ship_no; i++) {
-            spawnIsValid = false;
-            while (!spawnIsValid) {
-                ranX = rand.nextInt(2000) - 1000;
-                ranY = rand.nextInt(2000) - 1000;
-                ranX = (int) Math.floor(x + (ranX / PirateGame.PPM));
-                ranY = (int) Math.floor(y + (ranY / PirateGame.PPM));
-                spawnIsValid = getCoord(ranX, ranY);
-            }
-            fleet.add(new EnemyShip(screen, ranX, ranY, ship, college));
-        }
+    public College(GameScreen screen, ActorTable actorTable, float x, float y, String texturePath) {
+        super(screen, actorTable, texturePath);
+        setAlliance(new Alliance(name, this, shipTexture));
+        setPosition(x, y);
+        setHealth(100);
+        actorTable.addActor(this);
     }
 
     /**
@@ -90,6 +54,20 @@ public class College extends AbstractEntity {
         return true;
     }
 
+    @Override
+    public void die() {
+        super.die();
+        //If it is the player ally college, end the parent for the player
+        if (currentCollege.equals("alcuin_flag.png")) {
+            screen.gameOverCheck();
+        }
+        //Award the player coins and points for destroying a college
+        if (!currentCollege.equals("alcuin_flag.png")) {
+            Hud.changePoints(100);
+            Hud.addCoins(rand.nextInt(10));
+        }
+    }
+
     /**
      * Updates the state of each object with delta time
      * Checks for college destruction
@@ -97,95 +75,25 @@ public class College extends AbstractEntity {
      *
      * @param dt Delta time (elapsed time since last parent tick)
      */
-    public void update(float dt) {
+    public void act(float dt) {
         //If college is set to destroy and isnt, destroy it
-        if (setToDestroy && !destroyed) {
-            world.destroyBody(b2body);
-            destroyed = true;
 
-            //If it is the player ally college, end the parent for the player
-            if (currentCollege.equals("alcuin_flag.png")) {
-                screen.gameOverCheck();
-            }
-            //Award the player coins and points for destroying a college
-            if (!currentCollege.equals("alcuin_flag.png")) {
-                Hud.changePoints(100);
-                Hud.changeCoins(rand.nextInt(10));
-            }
-        }
         //If not destroyed, update the college position
-        else if (!destroyed) {
-            setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
+        setPosition(getX() - getWidth() / 2f, getY() - getHeight() / 2f);
 
-        }
         if (health <= 0) {
-            setToDestroy = true;
+            die();
         }
-        bar.update();
-        if (health <= 0) {
-            setToDestroy = true;
-        }
+        healthBar.update();
         //Update cannon balls
-        for (CollegeFire ball : cannonBalls) {
-            ball.update(dt);
-            if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
-        }
-    }
-
-    /**
-     * Draws the batch of cannonballs
-     */
-    public void draw(Batch batch) {
-        if (!destroyed) {
-            super.draw(batch);
-            //Render health bar
-            bar.render(batch);
-            //Render balls
-            for (CollegeFire ball : cannonBalls)
-                ball.draw(batch);
-        }
-    }
-
-    /**
-     * Sets the data to define a college as an enemy
-     */
-    @Override
-    protected void defineEnemy() {
-        //sets the body definitions
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(getX(), getY());
-        bdef.type = BodyDef.BodyType.StaticBody;
-        b2body = world.createBody(bdef);
-        //Sets collision boundaries
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(55 / PirateGame.PPM);
-        // setting BIT identifier
-        fdef.filter.categoryBits = PirateGame.COLLEGESENSOR_BIT;
-        // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.PLAYER_BIT;
-        fdef.shape = shape;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this);
-    }
-
-    /**
-     * Contact detection
-     * Allows for the college to take damage
-     */
-    @Override
-    public void onContact() {
-        //Damage the college and lower health bar
-        Gdx.app.log("enemy", "collision");
-        health -= damage;
-        bar.changeHealth(damage);
     }
 
     /**
      * Fires cannonballs
      */
     public void fire() {
-        cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
+        //        cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
+        // TODO: Fire a cannonball
     }
 }
 
