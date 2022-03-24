@@ -3,14 +3,12 @@ package com.mygdx.pirategame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.mygdx.pirategame.AvailableSpawn;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
@@ -20,9 +18,6 @@ import com.mygdx.pirategame.items.Coin;
 import com.mygdx.pirategame.logic.ActorTable;
 import com.mygdx.pirategame.logic.BackgroundTiledMap;
 import com.mygdx.pirategame.logic.Pathfinding;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**
@@ -34,10 +29,14 @@ import java.util.HashMap;
  * @version 1.0
  */
 public class GameScreen extends AbstractScreen {
-    private static final HashMap<String, College> colleges = new HashMap<>();
     private final Hud hud;
+    ActorTable actorTable;
     private Table pauseTable;
     private Table table;
+    private BackgroundTiledMap map;
+    private GameState gameState = GameState.PLAY;
+    private Player player;
+    private College bossCollege;
 
     /**
      * Initialises the Game Screen,
@@ -47,25 +46,7 @@ public class GameScreen extends AbstractScreen {
      */
     public GameScreen(PirateGame parent) {
         super(parent);
-
-    }
-
-    /**
-     * Updates acceleration by a given percentage. Accessed by skill tree
-     *
-     * @param percentage percentage increase
-     */
-    public static void changeAcceleration(Float percentage) {
-        accel = accel * (1 + (percentage / 100));
-    }
-
-    /**
-     * Updates max speed by a given percentage. Accessed by skill tree
-     *
-     * @param percentage percentage increase
-     */
-    public static void changeMaxSpeed(Float percentage) {
-        maxSpeed = maxSpeed * (1 + (percentage / 100));
+        hud = new Hud(parent.batch);
     }
 
     /**
@@ -75,63 +56,29 @@ public class GameScreen extends AbstractScreen {
      */
     @Override
     public void show() {
-
-
-        Pathfinding pathfinding = new Pathfinding("map.tmx");
-        BackgroundTiledMap map = new BackgroundTiledMap(stage, "map.tmx");
+        map = new BackgroundTiledMap(stage);
+        Pathfinding pathfinding = new Pathfinding(map.getMapPath());
         stage.addActor(map);
-        ActorTable actorTable = new ActorTable(stage, map);
-        Hud hud = new Hud(parent.batch);
+        actorTable = new ActorTable(stage, map);
 
         Player player = new Player(this);
         stage.addActor(player);
         stage.setKeyboardFocus(player);
         Gdx.input.setInputProcessor(player.input);
 
-        // Spawning enemy ship and coin. x and y is spawn location
-        colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM, "alcuin_flag.png"));
-        colleges.put("Anne Lister", new College(this, "Anne Lister", 6304 / PirateGame.PPM, 1199 / PirateGame.PPM, "anne_lister_flag.png"));
-        colleges.put("Constantine", new College(this, "Constantine", 6240 / PirateGame.PPM, 6703 / PirateGame.PPM, "constantine_flag.png"));
-        colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6767 / PirateGame.PPM, "goodricke_flag.png"));
-        ships = new ArrayList<>();
-        ships.addAll(colleges.get("Alcuin").fleet);
-        ships.addAll(colleges.get("Anne Lister").fleet);
-        ships.addAll(colleges.get("Constantine").fleet);
-        ships.addAll(colleges.get("Goodricke").fleet);
+        College alcuin = new College(this, "Alcuin", actorTable, new Vector2(1900, 2100), "colleges/alcuin_flag.png", "colleges/alcuin_ship.png");
+        new College(this, "Anne Lister", actorTable, new Vector2(6304, 1199), "colleges/anne_lister_flag.png", "colleges/anne_lister_ship.png");
+        new College(this, "Constantine", actorTable, new Vector2(6240, 6703), "colleges/constantine_flag.png", "colleges/constantine_ship.png");
+        new College(this, "Goodricke", actorTable, new Vector2(1760, 6767), "colleges/goodricke_flag.png", "colleges/goodricke_ship.png");
 
+        setBossCollege(alcuin);
+
+        float x = 0, y = 0;
         //Random ships
-        boolean validLoc;
-        int a = 0;
-        int b = 0;
-        for (int i = 0; i < 20; i++) {
-            validLoc = false;
-            while (!validLoc) {
-                //Get random x and y coords
-                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
-                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
-                //Check if valid
-                validLoc = checkGenPos(a, b);
-            }
-            //Add a ship at the random coords
-            ships.add(new EnemyShip(this, a, b, "unaligned_ship.png", "Unaligned"));
-        }
+        new EnemyShip(this, actorTable, alcuin.getAlliance(), x, y);
+        new Coin(this, x, y);
 
-
-        //Random coins
-        Coins = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            validLoc = false;
-            while (!validLoc) {
-                //Get random x and y coords
-                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
-                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
-                validLoc = checkGenPos(a, b);
-            }
-            //Add a coins at the random coords
-            Coins.add(new Coin(this, a, b));
-        }
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
-
         //GAME BUTTONS
         final TextButton pauseButton = new TextButton("Pause", skin);
         final TextButton skill = new TextButton("Skill Tree", skin);
@@ -153,7 +100,7 @@ public class GameScreen extends AbstractScreen {
 
 
         //Set the visability of the tables. Particuarly used when coming back from options or skillTree
-        if (gameStatus == GAME_PAUSED) {
+        if (gameState == GameState.PAUSE) {
             table.setVisible(false);
             pauseTable.setVisible(true);
         } else {
@@ -224,7 +171,7 @@ public class GameScreen extends AbstractScreen {
      * @param dt Delta time (elapsed time since last parent tick)
      */
     public void handleInput(float dt) {
-        if (gameStatus == GAME_RUNNING) {
+        if (gameState == GameState.PLAY) {
             // Left physics impulse on 'A'
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
@@ -260,7 +207,7 @@ public class GameScreen extends AbstractScreen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (gameStatus == GAME_PAUSED) {
+            if (gameState == GameState.PAUSE) {
                 resume();
                 table.setVisible(true);
                 pauseTable.setVisible(false);
@@ -291,12 +238,9 @@ public class GameScreen extends AbstractScreen {
         stage.draw();
 
         // Centre camera on player boat
-        camera.position.x = player.getX() + player.getWidth() / 2;
-        camera.position.y = player.getY() + player.getHeight() / 2;
-        camera.update();
-        renderer.setView(camera);
-        renderer.render();
-        //Checks parent over conditions
+        stage.getCamera().position.set(stage.getCamera().viewportWidth / 2, stage.getCamera().viewportHeight / 2, 0);
+        stage.getCamera().update();
+
         gameOverCheck();
     }
 
@@ -308,11 +252,11 @@ public class GameScreen extends AbstractScreen {
      */
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
-        stage.getViewport().update(width, height, true);
-        Hud.resize(width, height);
-        camera.update();
-        renderer.setView(camera);
+        stage.getViewport().update(width, height);
+        stage.getCamera().viewportWidth = width / 1.5f;
+        stage.getCamera().viewportHeight = height / 1.5f;
+        stage.getCamera().position.set(stage.getCamera().viewportWidth / 2, stage.getCamera().viewportHeight / 2, 0);
+        stage.getCamera().update();
     }
 
     /**
@@ -320,18 +264,8 @@ public class GameScreen extends AbstractScreen {
      *
      * @return map : returns the world map
      */
-    public TiledMap getMap() {
+    public BackgroundTiledMap getMap() {
         return map;
-    }
-
-    /**
-     * Returns the college from the colleges hashmap
-     *
-     * @param collegeName uses a college name as an index
-     * @return college : returns the college fetched from colleges
-     */
-    public College getCollege(String collegeName) {
-        return colleges.get(collegeName);
     }
 
     /**
@@ -340,29 +274,15 @@ public class GameScreen extends AbstractScreen {
      */
     public void gameOverCheck() {
         //Lose parent if ship on 0 health or Alcuin is destroyed
-        if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
+        if (Hud.getHealth() <= 0 || player.getAlliance().getLeader().destroyed) {
             parent.setScreen(parent.DEATH);
             parent.dispose();
         }
-        //Win parent if all colleges destroyed
-        else if (colleges.get("Anne Lister").destroyed && colleges.get("Constantine").destroyed && colleges.get("Goodricke").destroyed) {
+        //Win parent if boss college destroyed
+        else if (getBossCollege().destroyed) {
             parent.setScreen(parent.VICTORY);
             parent.dispose();
         }
-    }
-
-    /**
-     * Tests validity of randomly generated position
-     *
-     * @param x random x value
-     * @param y random y value
-     */
-    private Boolean checkGenPos(int x, int y) {
-        if (invalidSpawn.tileBlocked.containsKey(x)) {
-            ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
-            return !yTest.contains(y);
-        }
-        return true;
     }
 
     /**
@@ -370,7 +290,8 @@ public class GameScreen extends AbstractScreen {
      */
     @Override
     public void pause() {
-        gameStatus = GAME_PAUSED;
+        gameState = GameState.PAUSE;
+        parent.pause();
     }
 
     /**
@@ -378,7 +299,8 @@ public class GameScreen extends AbstractScreen {
      */
     @Override
     public void resume() {
-        gameStatus = GAME_RUNNING;
+        gameState = GameState.PLAY;
+        parent.resume();
     }
 
     /**
@@ -387,8 +309,24 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void dispose() {
         map.dispose();
-        renderer.dispose();
         hud.dispose();
         stage.dispose();
     }
+
+    public College getBossCollege() {
+        return bossCollege;
+    }
+
+    public void setBossCollege(College bossCollege) {
+        this.bossCollege = bossCollege;
+    }
+
+    public ActorTable getActorTable() {
+        return actorTable;
+    }
+
+    enum GameState {
+        PLAY, PAUSE, END
+    }
+
 }

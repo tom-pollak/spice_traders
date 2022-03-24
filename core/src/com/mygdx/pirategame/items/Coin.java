@@ -20,10 +20,6 @@ public class Coin extends AbstractItem {
     private boolean setToDestroyed;
     private boolean destroyed;
 
-    public Coin(GameScreen screen) {
-        super(screen, "coin.png");
-    }
-
     public Coin(GameScreen screen, float x, float y) {
         super(screen, "coin.png");
         setPosition(x, y);
@@ -44,10 +40,7 @@ public class Coin extends AbstractItem {
         }
     }
 
-
-    /**
-     * Draws the coin using batch
-     *
-     * @param batch The batch of the program
-     */
+    public String getDescription() {
+        return "A shiny coin. Is it chocolate? No.";
+    }
 }

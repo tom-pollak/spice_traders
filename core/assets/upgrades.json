@@ -1,0 +1,14 @@
+{
+  "ship": {
+    "speed": [
+      {
+        "name": "Max speed +10%",
+        "cost": 100
+      },
+      {
+        "name": "Max speed +10%",
+        "cost": 100
+      }
+    ]
+  }
+}

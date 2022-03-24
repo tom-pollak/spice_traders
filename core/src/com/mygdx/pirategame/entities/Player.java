@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.CannonFire;
 import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.items.AbstractItem;
 import com.mygdx.pirategame.screens.GameScreen;
 
 /**
@@ -81,14 +82,14 @@ public class Player extends Ship {
                 case 'r':
                     System.out.println("Inventory:");
                     for (int i = 0; i < getInventory().size(); i++) {
-                        Item item = getInventory().get(i);
+                        AbstractItem item = getInventory().get(i);
                         System.out.println("\t(" + (i + 1) + ") " + item.getName() + ": " + item.getDescription());
                     }
                     break;
 
             }
 
-            /* Select holding item */
+            /* Select inventory item */
             if (Character.isDigit(character)) {
                 switchItem(Character.getNumericValue(character) - 1);
             }

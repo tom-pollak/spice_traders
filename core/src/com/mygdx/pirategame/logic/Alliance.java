@@ -47,7 +47,6 @@ public class Alliance {
         alliedActors.add(actor);
     }
 
-    // Make isEnemy which is isAlly \cup NEUTRAL?
     public ArrayList<Ship> getShips() {
         ArrayList<Ship> ships = new ArrayList<>();
         for (AbstractActor actor : alliedActors) {
@@ -62,8 +61,21 @@ public class Alliance {
         return alliedActors;
     }
 
+    /**
+     * @param actor actor to check
+     * @return if actor is part of the same alliance
+     */
     public boolean isAlly(AbstractActor actor) {
         return this.equals(actor.getAlliance());
+    }
+
+    /**
+     * Opposite of isAlly, however will also count a neutral actor as not an enemy
+     *
+     * @return if actor is enemy
+     */
+    public boolean isEnemy(AbstractActor actor) {
+        return !(isAlly(actor) || actor.getAlliance().equals(Alliance.NEUTRAL));
     }
 
     public String getName() {

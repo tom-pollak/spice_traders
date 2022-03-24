@@ -40,6 +40,7 @@ public class SkillTree implements Screen {
      * Instantiates a new Skill tree.
      *
      * @param pirateGame the main starting body of the parent. Where screen swapping is carried out.
+     * @param player
      */
     //In the constructor, the parent and stage are set. Also the states list is set
     public SkillTree(PirateGame pirateGame) {

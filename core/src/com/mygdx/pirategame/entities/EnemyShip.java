@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.mygdx.pirategame.logic.ActorTable;
+import com.mygdx.pirategame.logic.Alliance;
 import com.mygdx.pirategame.screens.GameScreen;
 
 /**
@@ -20,17 +22,9 @@ public class EnemyShip extends Ship {
     public String college;
     private Texture enemyShip;
 
-    /**
-     * Instantiates enemy ship
-     *
-     * @param screen     Visual data
-     * @param x          x coordinates of entity
-     * @param y          y coordinates of entity
-     * @param path       path of texture file
-     * @param assignment College ship is assigned to
-     */
-    public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
-        super(screen, x, y);
+    public EnemyShip(GameScreen screen, ActorTable actorTable, Alliance alliance, float x, float y) {
+        super(screen, actorTable);
+        alliance.addAlly(this);
     }
 
 

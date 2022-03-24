@@ -67,7 +67,7 @@ public class VictoryScreen extends AbstractScreen {
 
                 //Return to main screen
                 parent.setScreen(parent.MENU);
-                parent.killEndScreen();
+                parent.dispose();
             }
         });
 

@@ -113,6 +113,7 @@ project(":desktop") {
         implementation "org.lwjgl:lwjgl-tinyfd:$lwjgl3Version:natives-macos-arm64"
         implementation "org.lwjgl:lwjgl-tinyfd:$lwjgl3Version:natives-windows"
         implementation "org.lwjgl:lwjgl-tinyfd:$lwjgl3Version:natives-windows-x86"
+
     }
 }
 
@@ -123,6 +124,7 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        implementation "com.googlecode.json-simple:json-simple:1.1"
 
     }
 }

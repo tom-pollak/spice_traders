@@ -33,11 +33,11 @@ public class PirateGame extends Game {
     public Music song;
     public Screen MENU = new MainMenu(this);
     public Screen GAME = new GameScreen(this);
-    public Screen SKILL = new SkillTree(this);
     public Screen DEATH = new DeathScreen(this);
     public Screen HELP = new Help(this);
     public Screen VICTORY = new VictoryScreen(this);
     public Screen OPTIONS = new Options(this, this.getScreen());
+    public Screen SKILL = new SkillTree(this);
     private AudioControls options;
 
     //Constant for swapping between screens
@@ -63,13 +63,6 @@ public class PirateGame extends Game {
             song.play();
         }
         song.setVolume(getPreferences().getMusicVolume());
-
-        this.MENU = new MainMenu(this);
-        this.GAME = new GameScreen(this);
-        this.SKILL = new SkillTree(this);
-        this.DEATH = new DeathScreen(this);
-        this.HELP = new Help(this);
-        this.VICTORY = new VictoryScreen(this);
     }
 
 

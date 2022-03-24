@@ -16,11 +16,6 @@ public class Ship extends AbstractEntity {
     public Vector2 velocity = new Vector2();
     public Vector2 acceleration = new Vector2();
 
-    public Ship(GameScreen screen, ActorTable actorTable, String texturePath) {
-        super(screen, actorTable, texturePath);
-        actorTable.addActor(this);
-        setHealth(100);
-    }
 
     public Ship(GameScreen screen, ActorTable actorTable) {
         super(screen, actorTable, "unaligned_ship.png");
@@ -43,10 +38,14 @@ public class Ship extends AbstractEntity {
         if (screen.parent.getPreferences().isEffectsEnabled()) {
             hitSound.play(screen.parent.getPreferences().getEffectsVolume());
         }
-        //Deal with the damage
-        health -= damage;
+        health -= getCollisionDamage(collidingActor);
         healthBar.setHealth(health);
         Hud.changePoints(5);
+    }
+
+    public Integer getCollisionDamage(AbstractActor collidingActor) {
+        // TODO return absolute velocity of both actors * multiplier (can be changed by upgrades)
+        return 0;
     }
 
     @Override
@@ -59,7 +58,7 @@ public class Ship extends AbstractEntity {
         setPosition(getX() + velocity.x * delta, getY() + velocity.y * delta);
 
 
-        Pair<Boolean, Boolean> collisions = map.getMapCollisions(this, oldX, oldY);
+        Pair<Boolean, Boolean> collisions = screen.getMap().getMapCollisions(this, oldX, oldY);
         boolean collisionX = collisions.fst;
         boolean collisionY = collisions.snd;
 

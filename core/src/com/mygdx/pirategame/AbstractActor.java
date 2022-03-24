@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.pirategame.logic.Alliance;
+import com.mygdx.pirategame.logic.Pair;
+import com.mygdx.pirategame.logic.Upgrades;
 import com.mygdx.pirategame.screens.GameScreen;
 
 public abstract class AbstractActor extends Actor {
     protected final GameScreen screen;
     protected Texture texture;
     protected Alliance alliance = Alliance.NEUTRAL;
+    protected Upgrades upgrades = new Upgrades(this);
 
     public AbstractActor(GameScreen screen, String texturePath) {
         this.screen = screen;
@@ -96,5 +99,16 @@ public abstract class AbstractActor extends Actor {
 
         this.alliance = newAlliance;
         newAlliance.addAlly(this);
+    }
+
+    public Pair<Integer, Integer> findEmptyTile(float startX, float startY) {
+        for (int x = (int) ((int) startX - 2 * getWidth()); x <= startX + 2 * getWidth(); x++) {
+            for (int y = (int) ((int) startY - 2 * getHeight()); y <= startY + 2 * getHeight(); y++) {
+                if (screen.getActorTable().willCollide(this, x, y) && !screen.getMap().isTileBlocked(x, y)) {
+                    return new Pair<>(x, y);
+                }
+            }
+        }
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package com.mygdx.pirategame.logic;
 
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.pirategame.AbstractActor;
 import com.mygdx.pirategame.entities.AbstractEntity;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.entities.Ship;
@@ -23,14 +25,35 @@ public class ActorTable {
         this.map = map;
     }
 
-    public boolean willItemCollide(AbstractItem item, float x, float y) {
-        for (AbstractItem checkItem : items) {
-            if (map.isCollision(item.getHitbox(), checkItem.getHitbox())) {
+    /**
+     * Check if actor is placed on a tile it will produce a collsion.
+     * It will only be checked against its own type.
+     * (a.k.a entities will be checked against entities, items against items)
+     *
+     * @param actor actor to check
+     * @param x     x coordinate of tile
+     * @param y     y coordinate of tile
+     * @return true if actor would collide with tile, false otherwise
+     */
+    public boolean willCollide(AbstractActor actor, float x, float y) {
+        Polygon actorHitbox = actor.getHitbox();
+        actorHitbox.setPosition(x, y);
+
+        ArrayList<AbstractActor> checkActors = new ArrayList<>();
+        if (actor instanceof AbstractEntity) {
+            checkActors.addAll(entities);
+        } else if (actor instanceof AbstractItem) {
+            checkActors.addAll(items);
+        }
+
+        for (AbstractActor checkActor : checkActors) {
+            if (map.isCollision(actorHitbox, checkActor.getHitbox())) {
                 return true;
             }
         }
         return false;
     }
+
 
     public void addActor(AbstractEntity entity) {
         if (entity instanceof Player) {
@@ -120,6 +143,6 @@ public class ActorTable {
         if (closest == null) {
             return null;
         }
-        return new Pair<>(closest, distance / map.getTileWidth());
+        return new Pair<>(closest, distance / BackgroundTiledMap.getTilePixelWidth());
     }
 }
