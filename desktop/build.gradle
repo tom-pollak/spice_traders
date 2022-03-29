@@ -5,7 +5,7 @@ sourceSets.main.resources.srcDirs = ["../core/assets"]
 project.ext.mainClassName = "com.mygdx.pirategame.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
-task run(dependsOn: classes, type: JavaExec) {
+task develop(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in

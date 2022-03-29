@@ -2,7 +2,7 @@ package com.mygdx.pirategame.logic;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.pirategame.AbstractActor;
-import com.mygdx.pirategame.entities.College;
+import com.mygdx.pirategame.entities.AbstractEntity;
 import com.mygdx.pirategame.entities.Ship;
 
 import java.util.ArrayList;
@@ -13,9 +13,9 @@ public class Alliance {
     private final String name;
     private final HashSet<AbstractActor> alliedActors = new HashSet<>();
     private final Texture shipTexture;
-    private College leader;
+    private AbstractEntity leader;
 
-    public Alliance(String name, College leader, Texture shipTexture) {
+    public Alliance(String name, AbstractEntity leader, Texture shipTexture) {
         this.name = name;
         this.leader = leader;
         this.shipTexture = shipTexture;
@@ -30,11 +30,11 @@ public class Alliance {
         return "Alliance{" + "name='" + name + '\'' + '}';
     }
 
-    public College getLeader() {
+    public AbstractEntity getLeader() {
         return leader;
     }
 
-    public void setLeader(College leader) {
+    public void setLeader(AbstractEntity leader) {
         this.leader = leader;
     }
 
@@ -81,4 +81,5 @@ public class Alliance {
     public String getName() {
         return name;
     }
+
 }

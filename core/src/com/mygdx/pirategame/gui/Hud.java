@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.pirategame.screens.SkillTree;
 
 /**
  * Hud
@@ -27,17 +26,9 @@ public class Hud implements Disposable {
     private static Label scoreLabel;
     private static Label healthLabel;
     private static Label coinLabel;
-    private static Label pointsText;
     private static Integer coins;
     private static Integer coinMulti;
-    private final Viewport viewport;
     private float timeCount;
-    private final Texture hp;
-    private final Texture boxBackground;
-    private final Texture coinPic;
-    private final Image hpImg;
-    private final Image box;
-    private final Image coin;
 
     /**
      * Retrieves information and displays it in the hud
@@ -50,16 +41,15 @@ public class Hud implements Disposable {
         score = 0;
         coins = 0;
         coinMulti = 1;
-        //Set images
-        hp = new Texture("hp.png");
-        boxBackground = new Texture("hudBG.png");
-        coinPic = new Texture("coin.png");
+        Texture hp = new Texture("hp.png");
+        Texture boxBackground = new Texture("hudBG.png");
+        Texture coinPic = new Texture("coin.png");
 
-        hpImg = new Image(hp);
-        box = new Image(boxBackground);
-        coin = new Image(coinPic);
+        Image hpImg = new Image(hp);
+        Image box = new Image(boxBackground);
+        Image coin = new Image(coinPic);
 
-        viewport = new ScreenViewport();
+        Viewport viewport = new ScreenViewport();
         stage = new Stage(viewport, sb);
 
         //Creates tables
@@ -77,7 +67,7 @@ public class Hud implements Disposable {
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
-        pointsText = new Label("Points:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        Label pointsText = new Label("Points:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
         table3.add(box).width(140).height(140).padBottom(15).padLeft(30);
         table2.add(hpImg).width(32).height(32).padTop(16).padRight(90);
@@ -125,8 +115,6 @@ public class Hud implements Disposable {
     public static void changePoints(int value) {
         score += value;
         scoreLabel.setText(String.format("%03d", score));
-        //Check if a points boundary is met
-        SkillTree.pointsCheck(score);
     }
 
     /**
@@ -184,9 +172,6 @@ public class Hud implements Disposable {
             score += 1;
             scoreLabel.setText(String.format("%03d", score));
             timeCount = 0;
-
-            //Check if a points boundary is met
-            SkillTree.pointsCheck(score);
         }
     }
 

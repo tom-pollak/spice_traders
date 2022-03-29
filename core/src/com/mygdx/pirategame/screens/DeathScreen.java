@@ -34,6 +34,7 @@ public class DeathScreen extends AbstractScreen {
      */
     @Override
     public void show() {
+        super.show();
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 

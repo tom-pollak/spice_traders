@@ -55,14 +55,19 @@ public class ActorTable {
     }
 
 
-    public void addActor(AbstractEntity entity) {
-        if (entity instanceof Player) {
-            this.player = (Player) entity;
+    public void addActor(AbstractActor actor) {
+        if (actor.getStage() == null) {
+            stage.addActor(actor);
         }
-        if (entity.getStage() == null) {
-            stage.addActor(entity);
+
+        if (actor instanceof AbstractEntity) {
+            if (actor instanceof Player) {
+                this.player = (Player) actor;
+            }
+            entities.add((AbstractEntity) actor);
+        } else if (actor instanceof AbstractItem) {
+            items.add((AbstractItem) actor);
         }
-        entities.add(entity);
     }
 
     public Player getPlayer() {

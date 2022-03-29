@@ -33,6 +33,7 @@ public class VictoryScreen extends AbstractScreen {
      */
     @Override
     public void show() {
+        super.show();
         //Creates the skin for the buttons and labels to use
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
         //Sets stage to be the input processor

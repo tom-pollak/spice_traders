@@ -5,7 +5,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.pirategame.logic.ActorTable;
 import com.mygdx.pirategame.logic.Alliance;
 import com.mygdx.pirategame.logic.Pair;
 import com.mygdx.pirategame.logic.Upgrades;
@@ -13,13 +18,23 @@ import com.mygdx.pirategame.screens.GameScreen;
 
 public abstract class AbstractActor extends Actor {
     protected final GameScreen screen;
+    protected final ActorTable actorTable;
+    public Body body;
+    protected World world;
     protected Texture texture;
     protected Alliance alliance = Alliance.NEUTRAL;
     protected Upgrades upgrades = new Upgrades(this);
 
     public AbstractActor(GameScreen screen, String texturePath) {
-        this.screen = screen;
+        this(screen);
         setTexture(new Texture(texturePath));
+    }
+
+    public AbstractActor(GameScreen screen) {
+        this.screen = screen;
+        this.actorTable = screen.getActorTable();
+        this.actorTable.addActor(this);
+        this.world = screen.getWorld();
     }
 
     public static Texture getScaledTexture(String imgPath, int width, int height) {
@@ -32,14 +47,16 @@ public abstract class AbstractActor extends Actor {
         return texture;
     }
 
-    public abstract void collide(AbstractActor collidingActor);
+    public abstract void createBody();
+
+    public abstract void collide(AbstractActor other);
 
     public void setTexture(Texture texture) {
         this.texture = texture;
         this.setWidth(texture.getWidth());
         this.setHeight(texture.getHeight());
         this.setBounds(getX(), getY(), getWidth(), getHeight());
-        this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
+        this.setCenter(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     @Override
@@ -47,29 +64,45 @@ public abstract class AbstractActor extends Actor {
         super.act(delta);
     }
 
+    public Vector2 getCenter() {
+        return new Vector2(getX() + getWidth() / 2, getY() + getHeight() / 2);
+    }
+
+    public void setCenter(Vector2 center) {
+        setPosition(center.x - getWidth() / 2, center.y - getHeight() / 2);
+    }
+
+    public void setCenter(float x, float y) {
+        setPosition(x - getWidth() / 2, y - getHeight() / 2);
+    }
+
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
+        this.setCenter(getX() + getWidth() / 2, getY() + getHeight() / 2);
 
     }
 
     @Override
     public void setX(float x) {
         super.setX(x);
-        this.setOriginX(getX() + getWidth() / 2);
     }
 
     @Override
     public void setY(float y) {
         super.setY(y);
-        this.setOriginY(getY() + getHeight() / 2);
     }
 
     public Polygon getHitbox() {
         Polygon hitbox = new Polygon();
         hitbox.setVertices(new float[]{0, 0, getWidth(), 0, 0, getHeight(), getWidth(), getHeight()});
         hitbox.setPosition(getX(), getY());
+        return hitbox;
+    }
+
+    public PolygonShape getShape() {
+        PolygonShape hitbox = new PolygonShape();
+        hitbox.set(new float[]{0, 0, getWidth(), 0, 0, getHeight(), getWidth(), getHeight()});
         return hitbox;
     }
 

@@ -36,7 +36,7 @@ public class HealthBar extends Sprite {
         healthBar.setSize(healthBar.getWidth(), healthBar.getHeight() - 2f);
 
         update();
-        healthBar.setOrigin(0, 0); // TODO Not sure if this line works
+        healthBar.setOrigin(0, 0);
     }
 
     /**

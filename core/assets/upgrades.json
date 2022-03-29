@@ -1,5 +1,5 @@
 {
-  "ship": {
+  "Ship": {
     "speed": [
       {
         "name": "Max speed +10%",
@@ -7,6 +7,38 @@
       },
       {
         "name": "Max speed +10%",
+        "cost": 100
+      }
+    ],
+    "health": [
+      {
+        "name": "Health +10%",
+        "cost": 100
+      },
+      {
+        "name": "Health +10%",
+        "cost": 100
+      }
+    ],
+    "health regen": [
+      {
+        "name": "Health regen +10%",
+        "cost": 100
+      },
+      {
+        "name": "Health regen +10%",
+        "cost": 100
+      }
+    ]
+  },
+  "College": {
+    "health": [
+      {
+        "name": "Health +10%",
+        "cost": 100
+      },
+      {
+        "name": "Health +10%",
         "cost": 100
       }
     ]

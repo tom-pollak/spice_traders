@@ -1,10 +1,7 @@
 package com.mygdx.pirategame.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.mygdx.pirategame.logic.ActorTable;
 import com.mygdx.pirategame.logic.Alliance;
 import com.mygdx.pirategame.screens.GameScreen;
 
@@ -17,13 +14,11 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @version 1.0
  */
 public class EnemyShip extends Ship {
-    private final Sound destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
-    private final Sound hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
     public String college;
     private Texture enemyShip;
 
-    public EnemyShip(GameScreen screen, ActorTable actorTable, Alliance alliance, float x, float y) {
-        super(screen, actorTable);
+    public EnemyShip(GameScreen screen, Alliance alliance) {
+        super(screen);
         alliance.addAlly(this);
     }
 
@@ -40,7 +35,7 @@ public class EnemyShip extends Ship {
 
 
     /**
-     * Updates the ship image. Particuarly change texture on college destruction
+     * Updates the ship image. Particularly change texture on college destruction
      *
      * @param alignment Associated college
      * @param path      Path of new texture
@@ -49,4 +44,5 @@ public class EnemyShip extends Ship {
         college = alignment;
         enemyShip = new Texture(path);
     }
+
 }

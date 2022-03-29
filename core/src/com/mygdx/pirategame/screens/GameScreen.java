@@ -1,10 +1,12 @@
 package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -15,9 +17,7 @@ import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.gui.Hud;
 import com.mygdx.pirategame.items.Coin;
-import com.mygdx.pirategame.logic.ActorTable;
-import com.mygdx.pirategame.logic.BackgroundTiledMap;
-import com.mygdx.pirategame.logic.Pathfinding;
+import com.mygdx.pirategame.logic.*;
 
 
 /**
@@ -29,14 +29,17 @@ import com.mygdx.pirategame.logic.Pathfinding;
  * @version 1.0
  */
 public class GameScreen extends AbstractScreen {
-    private final Hud hud;
+    public GameState gameState = GameState.PLAY;
+    public float ppt;
+    public Table pauseTable;
+    public Table table;
     ActorTable actorTable;
-    private Table pauseTable;
-    private Table table;
+    private Hud hud;
     private BackgroundTiledMap map;
-    private GameState gameState = GameState.PLAY;
     private Player player;
     private College bossCollege;
+    private World world;
+    private Box2DDebugRenderer b2dr;
 
     /**
      * Initialises the Game Screen,
@@ -46,7 +49,6 @@ public class GameScreen extends AbstractScreen {
      */
     public GameScreen(PirateGame parent) {
         super(parent);
-        hud = new Hud(parent.batch);
     }
 
     /**
@@ -56,26 +58,35 @@ public class GameScreen extends AbstractScreen {
      */
     @Override
     public void show() {
+        super.show();
+        hud = new Hud(parent.batch);
         map = new BackgroundTiledMap(stage);
-        Pathfinding pathfinding = new Pathfinding(map.getMapPath());
         stage.addActor(map);
+
+        world = new World(new Vector2(0, 0), false);
+        world.setContactListener(new WorldContactListener());
+        b2dr = new Box2DDebugRenderer();
+        MapBodyBuilder.buildTiles(map, this);
+
+        Pathfinding pathfinding = new Pathfinding(map.getMapPath());
         actorTable = new ActorTable(stage, map);
 
-        Player player = new Player(this);
+        player = new Player(this);
         stage.addActor(player);
         stage.setKeyboardFocus(player);
-        Gdx.input.setInputProcessor(player.input);
+        Gdx.input.setInputProcessor(new MyInputProcessor(this));
 
-        College alcuin = new College(this, "Alcuin", actorTable, new Vector2(1900, 2100), "colleges/alcuin_flag.png", "colleges/alcuin_ship.png");
-        new College(this, "Anne Lister", actorTable, new Vector2(6304, 1199), "colleges/anne_lister_flag.png", "colleges/anne_lister_ship.png");
-        new College(this, "Constantine", actorTable, new Vector2(6240, 6703), "colleges/constantine_flag.png", "colleges/constantine_ship.png");
-        new College(this, "Goodricke", actorTable, new Vector2(1760, 6767), "colleges/goodricke_flag.png", "colleges/goodricke_ship.png");
+
+        College alcuin = new College(this, "Alcuin", new Vector2(1900, 2100), "colleges/alcuin_flag.png", "colleges/alcuin_ship.png");
+        new College(this, "Anne Lister", new Vector2(6304, 1199), "colleges/anne_lister_flag.png", "colleges/anne_lister_ship.png");
+        new College(this, "Constantine", new Vector2(6240, 6703), "colleges/constantine_flag.png", "colleges/constantine_ship.png");
+        new College(this, "Goodricke", new Vector2(1760, 6767), "colleges/goodricke_flag.png", "colleges/goodricke_ship.png");
 
         setBossCollege(alcuin);
 
         float x = 0, y = 0;
         //Random ships
-        new EnemyShip(this, actorTable, alcuin.getAlliance(), x, y);
+        new EnemyShip(this, alcuin.getAlliance());
         new Coin(this, x, y);
 
         Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
@@ -162,62 +173,6 @@ public class GameScreen extends AbstractScreen {
         });
     }
 
-    /**
-     * Checks for input and performs an action
-     * Applies to keys "W" "A" "S" "D" "E" "Esc"
-     * <p>
-     * Caps player velocity
-     *
-     * @param dt Delta time (elapsed time since last parent tick)
-     */
-    public void handleInput(float dt) {
-        if (gameState == GameState.PLAY) {
-            // Left physics impulse on 'A'
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
-            }
-            // Right physics impulse on 'D'
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
-            }
-            // Up physics impulse on 'W'
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
-            }
-            // Down physics impulse on 'S'
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
-            }
-            // Cannon fire on 'E'
-            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                player.fire();
-            }
-            // Checking if player at max velocity, and keeping them below max
-            if (player.b2body.getLinearVelocity().x >= maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
-            }
-            if (player.b2body.getLinearVelocity().x <= -maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
-            }
-            if (player.b2body.getLinearVelocity().y >= maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
-            }
-            if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (gameState == GameState.PAUSE) {
-                resume();
-                table.setVisible(true);
-                pauseTable.setVisible(false);
-            } else {
-                table.setVisible(false);
-                pauseTable.setVisible(true);
-                pause();
-            }
-        }
-    }
 
     /**
      * Renders the visual data for all objects
@@ -227,8 +182,6 @@ public class GameScreen extends AbstractScreen {
      */
     @Override
     public void render(float dt) {
-        handleInput(dt); // TODO Not sure if this is needed
-
         Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -274,12 +227,12 @@ public class GameScreen extends AbstractScreen {
      */
     public void gameOverCheck() {
         //Lose parent if ship on 0 health or Alcuin is destroyed
-        if (Hud.getHealth() <= 0 || player.getAlliance().getLeader().destroyed) {
+        if (Hud.getHealth() <= 0 || player.getAlliance().getLeader() == null) {
             parent.setScreen(parent.DEATH);
             parent.dispose();
         }
         //Win parent if boss college destroyed
-        else if (getBossCollege().destroyed) {
+        else if (getBossCollege() == null) {
             parent.setScreen(parent.VICTORY);
             parent.dispose();
         }
@@ -325,8 +278,19 @@ public class GameScreen extends AbstractScreen {
         return actorTable;
     }
 
-    enum GameState {
-        PLAY, PAUSE, END
+    public World getWorld() {
+        return world;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public enum GameState {
+        PLAY, PAUSE, END
+    }
 }

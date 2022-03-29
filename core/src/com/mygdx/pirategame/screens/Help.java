@@ -34,6 +34,7 @@ public class Help extends AbstractScreen {
      */
     @Override
     public void show() {
+        super.show();
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
         // Create a table that fills the screen

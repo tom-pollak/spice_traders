@@ -22,12 +22,10 @@ public class PirateGame extends Game {
     //Bits used in collisions
     public static final short DEFAULT_BIT = 1;
     public static final short PLAYER_BIT = 2;
-    public static final short COLLEGEFIRE_BIT = 4;
-    public static final short COIN_BIT = 8;
-    public static final short CANNON_BIT = 16;
-    public static final short ENEMY_BIT = 32;
-    public static final short COLLEGE_BIT = 64;
-    public static final short COLLEGESENSOR_BIT = 128;
+    public static final short ENTITY_BIT = 4;
+    public static final short ITEM_BIT = 8;
+    public static final short PROJECTILE_BIT = 16;
+    public static final short COIN_BIT = 32;
 
     public SpriteBatch batch;
     public Music song;

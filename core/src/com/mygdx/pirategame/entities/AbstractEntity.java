@@ -2,12 +2,14 @@ package com.mygdx.pirategame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.pirategame.AbstractActor;
+import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.gui.HealthBar;
 import com.mygdx.pirategame.items.AbstractItem;
-import com.mygdx.pirategame.items.Coin;
-import com.mygdx.pirategame.items.Key;
-import com.mygdx.pirategame.logic.ActorTable;
 import com.mygdx.pirategame.logic.Alliance;
 import com.mygdx.pirategame.logic.Pair;
 import com.mygdx.pirategame.screens.GameScreen;
@@ -19,22 +21,38 @@ import java.util.HashSet;
  * @author Tom Pollak
  */
 public abstract class AbstractEntity extends AbstractActor {
+    protected final float friction = 0.2f;
     private final ArrayList<AbstractItem> inventory = new ArrayList<>();
     private final Integer movementRange = 0;
+    private final int inventoryCapacity = 3;
     public float maxHealth = 0;
     public float health = maxHealth;
-    protected HealthBar healthBar;
-    protected ActorTable actorTable;
-    private int itemIndex;
-    private int inventoryCapacity;
+    public float accel = 0.5f;
+    protected HealthBar healthBar = new HealthBar(this);
+    private int inventoryIndex = 0;
 
-    public AbstractEntity(GameScreen screen, ActorTable actorTable, String texturePath) {
+    public AbstractEntity(GameScreen screen, String texturePath) {
         super(screen, texturePath);
-        this.actorTable = actorTable;
+        createBody();
     }
 
-    public void setHealth(float health) {
-        this.health = health;
+    public AbstractEntity(GameScreen screen) {
+        super(screen);
+        this.world = screen.getWorld();
+        createBody();
+    }
+
+
+    public void setHealth(float newHealth) {
+        if (newHealth < 0) {
+            System.out.println("Health cannot be less than 0!");
+        } else if (newHealth > maxHealth) {
+            System.out.println("Health was set greater than max health!");
+            System.out.println("Health: " + newHealth + " Max Health: " + maxHealth);
+            this.health = maxHealth;
+        } else {
+            this.health = newHealth;
+        }
     }
 
     public void setMaxHealth(float maxHealth) {
@@ -48,6 +66,29 @@ public abstract class AbstractEntity extends AbstractActor {
         }
     }
 
+    /**
+     * Applies drag to entity
+     * Max speed will be: sqrt(accel / friction)
+     */
+    protected void applyDrag() {
+        Vector2 vel = body.getLinearVelocity();
+        float speed2 = vel.len2();
+        body.applyForce(vel.scl(-friction * speed2), body.getWorldCenter(), false);
+    }
+
+    public void createBody() {
+        BodyDef bDef = new BodyDef();
+        bDef.position.set(getX(), getY());
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bDef);
+
+        FixtureDef fDef = new FixtureDef();
+        fDef.filter.categoryBits = PirateGame.ENTITY_BIT;
+        fDef.shape = getShape();
+        fDef.friction = friction;
+        body.createFixture(fDef).setUserData(this);
+    }
+
     @Override
     public void draw(Batch batch, float delta) {
         super.draw(batch, delta);
@@ -57,10 +98,13 @@ public abstract class AbstractEntity extends AbstractActor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (healthBar != null) {
-            healthBar.setHealth(health);
-            healthBar.update();
-        }
+        Vector2 position = body.getPosition();
+        float a = body.getAngle() * MathUtils.radiansToDegrees;
+
+        setCenter(position);
+        setRotation(a);
+        healthBar.setHealth(health);
+        healthBar.update();
     }
 
     @Override
@@ -69,6 +113,7 @@ public abstract class AbstractEntity extends AbstractActor {
         Gdx.app.log(this.toString(), "Collided with " + other.toString());
         if (other instanceof AbstractEntity) {
             AbstractEntity entity = (AbstractEntity) other;
+
             // TODO: Change this to something that actually damages the entity
         }
     }
@@ -79,9 +124,7 @@ public abstract class AbstractEntity extends AbstractActor {
         alliance.removeAlly(this);
         dropAll();
         if (!(this instanceof CannonBall)) System.out.println(this + " was destroyed!");
-        if (healthBar != null) {
-            healthBar.remove();
-        }
+        healthBar.remove();
     }
 
     public ArrayList<AbstractItem> getInventory() {
@@ -91,12 +134,9 @@ public abstract class AbstractEntity extends AbstractActor {
     public boolean isOutOfRange(float x, float y) {
         float xDiff = Math.abs(getX() - x);
         float yDiff = Math.abs(getY() - y);
-        return Math.sqrt(xDiff * xDiff + yDiff * yDiff) > getMovementRange();
+        return Math.sqrt(xDiff * xDiff + yDiff * yDiff) > movementRange;
     }
 
-    private double getMovementRange() {
-        return movementRange;
-    }
 
     @Override
     public void setAlliance(Alliance newAlliance) {
@@ -117,20 +157,17 @@ public abstract class AbstractEntity extends AbstractActor {
 
     public AbstractItem getHeldItem() {
         try {
-            return inventory.get(itemIndex);
+            return inventory.get(inventoryIndex);
         } catch (IndexOutOfBoundsException e) {
             return null;
         }
     }
 
     public void addItem(AbstractItem item, int index) {
-        item.onPickup(getAlliance());
-        if (!(item instanceof Coin)) inventory.add(index, item);
-    }
-
-    public void addItem(AbstractItem item) {
-        item.onPickup(getAlliance());
-        inventory.add(item);
+        item.onPickup(alliance);
+        if (item.canBeHeld) {
+            inventory.add(index, item);
+        }
     }
 
     /**
@@ -140,18 +177,22 @@ public abstract class AbstractEntity extends AbstractActor {
      *
      * @return true if an item was picked up, false otherwise
      */
-    public boolean pickup() {
+    public boolean pickupOnTile() {
         AbstractItem item = actorTable.getItemInEntity(this);
         if (item == null) {
             System.out.println("No item to pick up");
             return false;
         }
-        if (getHeldItem() != null && !(item instanceof Coin)) {
+        pickup(item);
+        return true;
+    }
+
+    public void pickup(AbstractItem item) {
+        if (getHeldItem() != null && item.canBeHeld) {
             drop();
         }
+        addItem(item, inventoryIndex);
         System.out.println("Picked up " + item);
-        addItem(item, itemIndex);
-        return true;
     }
 
     /**
@@ -163,12 +204,11 @@ public abstract class AbstractEntity extends AbstractActor {
      */
     public boolean drop() {
         try {
-            AbstractItem droppedItem = inventory.remove(itemIndex);
+            AbstractItem droppedItem = inventory.remove(inventoryIndex);
             Integer x;
             Integer y;
-            System.out.println(getX() + " " + getY());
-            System.out.println(getOriginX() + " " + getOriginY());
-            Pair<Integer, Integer> emptyTile = droppedItem.findEmptyTile(getOriginX(), getOriginY());
+            System.out.println(getCenter());
+            Pair<Integer, Integer> emptyTile = droppedItem.findEmptyTile(getCenter().x, getCenter().y);
             if (emptyTile == null) {
                 System.out.println("AbstractEntity.drop() - No empty tile found");
                 return false;
@@ -184,6 +224,12 @@ public abstract class AbstractEntity extends AbstractActor {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Called when E is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
+     */
+    public void fire() {
     }
 
     /**
@@ -207,7 +253,7 @@ public abstract class AbstractEntity extends AbstractActor {
     public void switchItem(int index) {
         if (index >= 0 && index < inventoryCapacity) {
             System.out.println("AbstractEntity.switchItem() - switched to item " + getHeldItem());
-            itemIndex = index;
+            inventoryIndex = index;
         } else {
             System.out.println("AbstractEntity.switchItem() - index out of bounds");
         }
@@ -215,19 +261,19 @@ public abstract class AbstractEntity extends AbstractActor {
 
     public void useItem() {
         AbstractItem item = getHeldItem();
-        if (item != null) {
+        if (item != null && item.canBeUsed) {
             item.use(actorTable.getCollidingEntities(this));
         } else {
-            System.out.println("No item to use");
+            System.out.println("No item/cannot be used");
         }
     }
 
     public void useItem(float x, float y) {
         AbstractItem item = getHeldItem();
-        if (item != null) {
+        if (item != null && item.canBeUsed) {
             item.use(x, y);
         } else {
-            System.out.println("No item to use");
+            System.out.println("No item/cannot be used");
         }
     }
 
@@ -242,6 +288,7 @@ public abstract class AbstractEntity extends AbstractActor {
         if (health <= 0) {
             die();
         }
+        System.out.println("AbstractEntity.damage() - " + this + " took " + damage + " damage");
     }
 
     /**
@@ -255,17 +302,7 @@ public abstract class AbstractEntity extends AbstractActor {
         if (health > maxHealth) health = maxHealth;
     }
 
-    /**
-     * Performs an action if supplied a valid key
-     * By default, does nothing
-     *
-     * @param key the key to check
-     * @return true if the key was valid, false otherwise
-     */
-    public boolean open(Key key) {
-        System.out.println("Cannot be opened");
-        return false;
+    public Float getDamage() {
+        return 0f;
     }
-
-
 }

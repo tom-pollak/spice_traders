@@ -1,5 +1,5 @@
 buildscript {
-    
+
 
     repositories {
         mavenLocal()
@@ -15,6 +15,7 @@ buildscript {
 
 allprojects {
     apply plugin: "eclipse"
+    apply plugin: "idea"
 
     version = '1.0'
 
@@ -34,7 +35,6 @@ allprojects {
 //         lwjgl3Version = "3.3.0-SNAPSHOT"
         lwjgl3Version = "3.3.0"
         lwjgl3awtVersion = "0.1.8"
-        lwjglNatives = "natives-macos-arm64"
         sourceCompatibility = "1.8"
     }
 

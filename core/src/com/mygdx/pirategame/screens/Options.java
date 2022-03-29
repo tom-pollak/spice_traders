@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -22,7 +20,7 @@ public class Options implements Screen {
 
     private final com.mygdx.pirategame.PirateGame PirateGame;
     private final Screen parent;
-    private final Stage stage;
+    private Stage stage;
 
     /**
      * Instantiates a new Options screen
@@ -33,7 +31,6 @@ public class Options implements Screen {
     public Options(PirateGame pirateGame, Screen parent) {
         this.PirateGame = pirateGame;
         this.parent = parent;
-        stage = new Stage(new ScreenViewport());
     }
 
     /**
@@ -41,9 +38,9 @@ public class Options implements Screen {
      */
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
-        stage.clear();
         // Create the main table
         Table table = new Table();
         table.setFillParent(true);
@@ -58,14 +55,11 @@ public class Options implements Screen {
         //Set value to current option
         volumeMusicSlider.setValue(PirateGame.getPreferences().getMusicVolume());
 
-        volumeMusicSlider.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                PirateGame.getPreferences().setMusicVolume(volumeMusicSlider.getValue());  //Change music value in options to slider
-                PirateGame.song.setVolume(PirateGame.getPreferences().getMusicVolume()); //Change the volume
+        volumeMusicSlider.addListener(event -> {
+            PirateGame.getPreferences().setMusicVolume(volumeMusicSlider.getValue());  //Change music value in options to slider
+            PirateGame.song.setVolume(PirateGame.getPreferences().getMusicVolume()); //Change the volume
 
-                return false;
-            }
+            return false;
         });
 
         final CheckBox musicCheckbox = new CheckBox(null, skin);
@@ -73,42 +67,33 @@ public class Options implements Screen {
         //Check if it should be checked or unchecked by default
         musicCheckbox.setChecked(PirateGame.getPreferences().isMusicEnabled());
 
-        musicCheckbox.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean enabled = musicCheckbox.isChecked(); //Get checked value
-                PirateGame.getPreferences().setMusicEnabled(enabled); //Set
+        musicCheckbox.addListener(event -> {
+            boolean enabled = musicCheckbox.isChecked(); //Get checked value
+            PirateGame.getPreferences().setMusicEnabled(enabled); //Set
 
-                if (PirateGame.getPreferences().isMusicEnabled()) { //Play or don't
-                    PirateGame.song.play();
-                } else {
-                    PirateGame.song.pause();
-                }
-
-                return false;
+            if (PirateGame.getPreferences().isMusicEnabled()) { //Play or don't
+                PirateGame.song.play();
+            } else {
+                PirateGame.song.pause();
             }
+
+            return false;
         });
 
         //EFFECTS
         final Slider volumeEffectSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeEffectSlider.setValue(PirateGame.getPreferences().getEffectsVolume()); //Set value to current option
-        volumeEffectSlider.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                PirateGame.getPreferences().setEffectsVolume(volumeEffectSlider.getValue()); //Change effect value in options to slider
-                return false;
-            }
+        volumeEffectSlider.addListener(event -> {
+            PirateGame.getPreferences().setEffectsVolume(volumeEffectSlider.getValue()); //Change effect value in options to slider
+            return false;
         });
 
         final CheckBox effectCheckbox = new CheckBox(null, skin);
         effectCheckbox.setChecked(PirateGame.getPreferences().isEffectsEnabled());
-        effectCheckbox.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean enabled = effectCheckbox.isChecked(); //Get checked value
-                PirateGame.getPreferences().setEffectsEnabled(enabled); //Set
-                return false;
-            }
+        effectCheckbox.addListener(event -> {
+            boolean enabled = effectCheckbox.isChecked(); //Get checked value
+            PirateGame.getPreferences().setEffectsEnabled(enabled); //Set
+            return false;
         });
 
         // return to main screen button

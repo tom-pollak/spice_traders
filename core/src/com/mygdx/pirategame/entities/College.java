@@ -3,7 +3,6 @@ package com.mygdx.pirategame.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pirategame.gui.Hud;
-import com.mygdx.pirategame.logic.ActorTable;
 import com.mygdx.pirategame.logic.Alliance;
 import com.mygdx.pirategame.logic.BackgroundTiledMap;
 import com.mygdx.pirategame.screens.GameScreen;
@@ -25,15 +24,14 @@ public class College extends AbstractEntity {
     public Random rand = new Random();
     public ArrayList<Ship> fleet = new ArrayList<>();
     public Vector2 spawn;
-    public boolean destroyed = false;
 
-    public College(GameScreen screen, String name, ActorTable actorTable, Vector2 tileCoord, String texturePath, String shipTexture) {
-        super(screen, actorTable, texturePath);
+    public College(GameScreen screen, String name, Vector2 tileCoord, String texturePath, String shipTexture) {
+        super(screen, texturePath);
         setAlliance(new Alliance(name, this, new Texture(shipTexture)));
         Vector2 worldCoords = BackgroundTiledMap.tileToWorldCoords((int) tileCoord.x, (int) tileCoord.y);
         setPosition(worldCoords.x, worldCoords.y);
+        setMaxHealth(100);
         setHealth(100);
-        actorTable.addActor(this);
     }
 
 
@@ -48,7 +46,6 @@ public class College extends AbstractEntity {
             Hud.changePoints(100);
             Hud.addCoins(rand.nextInt(10));
         }
-        destroyed = true;
     }
 
     /**
@@ -71,11 +68,11 @@ public class College extends AbstractEntity {
         //Update cannon balls
     }
 
+
     /**
      * Fires cannonballs
      */
     public void fire() {
-        //        cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
         // TODO: Fire a cannonball
     }
 

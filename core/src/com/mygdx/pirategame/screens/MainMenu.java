@@ -31,6 +31,7 @@ public class MainMenu extends AbstractScreen {
      */
     @Override
     public void show() {
+        super.show();
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
         // Create a table for the buttons

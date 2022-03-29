@@ -14,7 +14,7 @@ import com.mygdx.pirategame.PirateGame;
 public abstract class AbstractScreen implements Screen {
 
     public final PirateGame parent;
-    protected final Stage stage;
+    protected Stage stage;
 
     /**
      * Creates a new screen
@@ -23,11 +23,12 @@ public abstract class AbstractScreen implements Screen {
      */
     public AbstractScreen(PirateGame pirateGame) {
         parent = pirateGame;
-        stage = new Stage(new ScreenViewport());
     }
 
     @Override
-    public abstract void show();
+    public void show() {
+        stage = new Stage(new ScreenViewport());
+    }
 
     /**
      * Renders visual data with delta time

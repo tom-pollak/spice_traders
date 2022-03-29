@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 public class BackgroundTiledMap extends Actor {
 
-    private static final String mapPath = "map.tmx";
+    private static final String mapPath = "maps/world.tmx";
     private static final TiledMap map = new TmxMapLoader().load(mapPath);
     private static final MapProperties mapProperties = map.getProperties();
     private final OrthogonalTiledMapRenderer renderer;
