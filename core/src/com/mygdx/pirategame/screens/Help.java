@@ -48,7 +48,7 @@ public class Help extends AbstractScreen {
         stage.addActor(Other);
 
         //The skin for the actors
-        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         //Text
         Label Controls1 = new Label("WASD to move", new Label.LabelStyle(new BitmapFont(), Color.WHITE));

@@ -47,7 +47,7 @@ public class Options implements Screen {
         stage.addActor(table);
 
         //The skin for the actors
-        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
 
         //Music Sliders and Check boxes
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);

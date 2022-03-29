@@ -3,7 +3,6 @@ package com.mygdx.pirategame.logic;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
@@ -17,43 +16,40 @@ public class MapBodyBuilder {
         ppt = screen.ppt;
         World world = screen.getWorld();
         MapObjects objects = map.getLayers().get("collisionBoxes").getObjects();
+        System.out.println(objects.getCount());
 
 
         for (MapObject object : objects) {
-            PolygonShape shape;
-            if (object instanceof TextureMapObject) {
-                continue;
-            } else if (object instanceof PolygonMapObject) {
-                shape = getPolygon((PolygonMapObject) object);
+            if (object instanceof PolygonMapObject) {
+                PolygonShape shape = new PolygonShape();
+                shape.set(((PolygonMapObject) object).getPolygon().getTransformedVertices());
+                BodyDef bDef = new BodyDef();
+                bDef.type = BodyDef.BodyType.StaticBody;
+                Body body = world.createBody(bDef);
+
+                FixtureDef fDef = new FixtureDef();
+                fDef.filter.categoryBits = PirateGame.DEFAULT_BIT;
+                fDef.shape = shape;
+                body.createFixture(fDef);
+                shape.dispose();
+                //                shape = getPolygon((PolygonMapObject) object);
             } else {
                 System.out.println("Tile is not a polygon map object");
-                continue;
             }
-
-            BodyDef bDef = new BodyDef();
-            bDef.type = BodyDef.BodyType.StaticBody;
-            Body body = world.createBody(bDef);
-
-            FixtureDef fDef = new FixtureDef();
-            fDef.filter.categoryBits = PirateGame.DEFAULT_BIT;
-            fDef.shape = shape;
-            body.createFixture(fDef);
-
-            shape.dispose();
         }
+        System.out.println("Tiles built");
     }
 
     private static PolygonShape getPolygon(PolygonMapObject polygonObject) {
         PolygonShape polygon = new PolygonShape();
         float[] vertices = polygonObject.getPolygon().getTransformedVertices();
-        float[] worldVertices = new float[vertices.length];
+        //        float[] worldVertices = new float[vertices.length];
+        //
+        //        for (int i = 0; i < vertices.length; ++i) {
+        //            worldVertices[i] = vertices[i] / ppt;
+        //        }
 
-        for (int i = 0; i < vertices.length; ++i) {
-            System.out.println(vertices[i]);
-            worldVertices[i] = vertices[i] / ppt;
-        }
-
-        polygon.set(worldVertices);
+        polygon.set(vertices);
         return polygon;
     }
 }
