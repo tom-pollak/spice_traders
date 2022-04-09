@@ -2,16 +2,15 @@ package com.mygdx.pirategame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.pirategame.screens.*;
 
-
 /**
  * The start of the program. Sets up the main back bone of the parent.
  * This includes most constants used throught for collision and changing screens
- * Provides access for screens to interact with eachother and the options interface
+ * Provides access for screens to interact with eachother and the options
+ * interface
  *
  * @author Sam Pearson
  * @version 1.0
@@ -19,7 +18,7 @@ import com.mygdx.pirategame.screens.*;
 public class PirateGame extends Game {
     public static final float PPM = 100;
 
-    //Bits used in collisions
+    // Bits used in collisions
     public static final short DEFAULT_BIT = 1;
     public static final short PLAYER_BIT = 2;
     public static final short ENTITY_BIT = 4;
@@ -29,16 +28,16 @@ public class PirateGame extends Game {
 
     public SpriteBatch batch;
     public Music song;
-    public Screen MENU = new MainMenu(this);
-    public Screen GAME = new GameScreen(this);
-    public Screen DEATH = new DeathScreen(this);
-    public Screen HELP = new Help(this);
-    public Screen VICTORY = new VictoryScreen(this);
-    public Screen OPTIONS = new Options(this, this.getScreen());
-    public Screen SKILL = new SkillTree(this);
+    public MainMenu MENU;
+    public GameScreen GAME;
+    public DeathScreen DEATH;
+    public Help HELP;
+    public VictoryScreen VICTORY;
+    public Options OPTIONS;
+    public SkillTree SKILL;
     private AudioControls options;
 
-    //Constant for swapping between screens
+    // Constant for swapping between screens
 
     /**
      * Creates the main body of the parent.
@@ -48,21 +47,28 @@ public class PirateGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        //Set starting screen
-        MainMenu mainMenu = new MainMenu(this);
-        setScreen(mainMenu);
-        //Create options
+        batch.begin();
+        // Set starting screen
+        MENU = new MainMenu(this);
+        GAME = new GameScreen(this);
+        DEATH = new DeathScreen(this);
+        HELP = new Help(this);
+        VICTORY = new VictoryScreen(this);
+        OPTIONS = new Options(this);
+        SKILL = new SkillTree(this);
+        batch.end();
+        setScreen(MENU);
+        // Create options
         options = new AudioControls();
 
-        //Set background music and play if valid
-        song = Gdx.audio.newMusic(Gdx.files.internal("pirate-music.mp3"));
+        // Set background music and play if valid
+        song = Gdx.audio.newMusic(Gdx.files.internal("audio/pirate-music.mp3"));
         song.setLooping(true);
         if (getPreferences().isMusicEnabled()) {
             song.play();
         }
         song.setVolume(getPreferences().getMusicVolume());
     }
-
 
     /**
      * Allows the user to interact with the audio options
@@ -72,7 +78,6 @@ public class PirateGame extends Game {
     public AudioControls getPreferences() {
         return this.options;
     }
-
 
     /**
      * Disposes parent data

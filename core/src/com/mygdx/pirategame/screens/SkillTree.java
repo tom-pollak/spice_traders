@@ -1,7 +1,6 @@
 package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,7 +23,7 @@ import java.util.List;
  * @author Sam Pearson
  * @version 1.0
  */
-public class SkillTree implements Screen {
+public class SkillTree extends AbstractScreen {
 
     //To store whether buttons are enabled or disabled
     private static final List<Integer> states = new ArrayList<>();
@@ -42,6 +41,7 @@ public class SkillTree implements Screen {
      */
     //In the constructor, the parent and stage are set. Also the states list is set
     public SkillTree(PirateGame pirateGame) {
+        super(pirateGame);
         parent = pirateGame;
     }
 
@@ -50,6 +50,7 @@ public class SkillTree implements Screen {
      */
     @Override
     public void show() {
+        super.show();
         stage = new Stage(new ScreenViewport());
 
         //0 = enabled, 1 = disabled
@@ -190,7 +191,9 @@ public class SkillTree implements Screen {
      */
     @Override
     public void dispose() {
-        stage.dispose();
+        if (stage != null) {
+            stage.dispose();
+        }
     }
 }
 

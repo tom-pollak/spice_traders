@@ -1,14 +1,15 @@
 package com.mygdx.pirategame.logic;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.items.AbstractItem;
 import com.mygdx.pirategame.screens.GameScreen;
 
-public class MyInputProcessor implements InputProcessor {
+public class MyInputProcessor extends InputListener {
 
     private final GameScreen screen;
     private final Player player;
@@ -19,46 +20,66 @@ public class MyInputProcessor implements InputProcessor {
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        Vector2 thrust;
-        switch (keycode) {
-            case Input.Keys.W:
-                thrust = new Vector2(0, player.accel);
-                break;
-            case Input.Keys.S:
-                thrust = new Vector2(0, -player.accel);
-                break;
-            case Input.Keys.A:
-                thrust = new Vector2(-player.accel, 0);
-                break;
-            case Input.Keys.D:
-                thrust = new Vector2(player.accel, 0);
-                break;
-            case Input.Keys.ESCAPE:
-                if (screen.gameState == GameScreen.GameState.PAUSE) {
-                    screen.resume();
-                    screen.table.setVisible(true);
-                    screen.pauseTable.setVisible(false);
-                } else {
-                    screen.table.setVisible(false);
-                    screen.pauseTable.setVisible(true);
-                    screen.pause();
-                }
-            default:
-                return false;
+    public boolean keyUp(InputEvent event, int keycode) {
+        if (screen.gameState == GameScreen.GameState.PLAY) {
+            switch (keycode) {
+                case Input.Keys.W:
+                    player.input.y -= 1;
+                    break;
+                case Input.Keys.S:
+                    player.input.y += 1;
+                    break;
+                case Input.Keys.A:
+                    player.input.x += 1;
+                    break;
+                case Input.Keys.D:
+                    player.input.x -= 1;
+                    break;
+                default:
+                    return false;
+            }
+            return true;
         }
-        player.body.applyLinearImpulse(thrust, player.body.getWorldCenter(), true);
-        return true;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
         return false;
     }
 
+    @Override
+    public boolean keyDown(InputEvent event, int keycode) {
+        if (screen.gameState == GameScreen.GameState.PLAY) {
+            Vector2 thrust = null;
+            switch (keycode) {
+                case Input.Keys.W:
+                    player.input.y += 1;
+                    break;
+                case Input.Keys.S:
+                    player.input.y -= 1;
+                    break;
+                case Input.Keys.A:
+                    player.input.x -= 1;
+                    break;
+                case Input.Keys.D:
+                    player.input.x += 1;
+                    break;
+                case Input.Keys.ESCAPE:
+                    screen.pause();
+                    screen.parent.setScreen(screen.parent.MENU);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        } else if (screen.gameState == GameScreen.GameState.PAUSE) {
+            if (keycode == Input.Keys.ESCAPE) {
+                screen.parent.setScreen(screen.parent.GAME);
+                screen.resume();
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
-    public boolean keyTyped(char character) {
+    public boolean keyTyped(InputEvent event, char character) {
         switch (character) {
             case 'e' -> player.pickupOnTile();
             case 'f' -> player.drop();
@@ -83,29 +104,8 @@ public class MyInputProcessor implements InputProcessor {
 
     }
 
-
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         Vector3 v = new Vector3(x, y, 0);
         Vector3 position = screen.getStage().getCamera().unproject(v);
         if (button == Input.Buttons.LEFT) {

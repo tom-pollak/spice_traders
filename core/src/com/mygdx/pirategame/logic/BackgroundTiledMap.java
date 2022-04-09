@@ -1,7 +1,6 @@
 package com.mygdx.pirategame.logic;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObjects;
@@ -115,9 +114,8 @@ public class BackgroundTiledMap extends Actor {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
+    public void act(float delta) {
         render();
-        super.draw(batch, parentAlpha);
     }
 
     public void render() {

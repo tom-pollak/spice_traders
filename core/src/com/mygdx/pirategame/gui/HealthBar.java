@@ -29,7 +29,7 @@ public class HealthBar extends Sprite {
      */
     public HealthBar(AbstractEntity owner) {
         this.owner = owner;
-        Texture image = new Texture("HealthBar.png");
+        Texture image = new Texture("img/HealthBar.png");
         healthBar = new Sprite(image);
         //Sets size of the health bar
         healthBar.setScale(0.0155f);

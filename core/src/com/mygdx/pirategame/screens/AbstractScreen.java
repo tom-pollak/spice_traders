@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.pirategame.PirateGame;
 
 /**
- * Created by Tom Pollak on 21/02/2021
+ * Created by Tom Pollak on 21/03/2022
  * Base abstract class for all screens in the game.
  */
 public abstract class AbstractScreen implements Screen {
@@ -23,11 +23,10 @@ public abstract class AbstractScreen implements Screen {
      */
     public AbstractScreen(PirateGame pirateGame) {
         parent = pirateGame;
+        stage = new Stage(new ScreenViewport());
     }
 
-    @Override
     public void show() {
-        stage = new Stage(new ScreenViewport());
     }
 
     /**
@@ -35,13 +34,11 @@ public abstract class AbstractScreen implements Screen {
      *
      * @param dt Delta time (elapsed time since last parent tick)
      */
-    @Override
     public void render(float dt) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // tell our stage to do actions and draw itself
-        // stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.act();
         stage.draw();
     }
@@ -87,6 +84,6 @@ public abstract class AbstractScreen implements Screen {
      */
     @Override
     public void dispose() {
-        stage.dispose();
+        if (stage != null) stage.dispose();
     }
 }

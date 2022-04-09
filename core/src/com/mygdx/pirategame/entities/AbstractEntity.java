@@ -21,15 +21,17 @@ import java.util.HashSet;
  * @author Tom Pollak
  */
 public abstract class AbstractEntity extends AbstractActor {
-    protected final float friction = 0.2f;
+    protected final float friction = 0.0f;
     private final ArrayList<AbstractItem> inventory = new ArrayList<>();
     private final Integer movementRange = 0;
     private final int inventoryCapacity = 3;
     public float maxHealth = 0;
     public float health = maxHealth;
-    public float accel = 0.5f;
+    public float accel = 10f;
+    public Vector2 input = new Vector2();
     protected HealthBar healthBar = new HealthBar(this);
     private int inventoryIndex = 0;
+
 
     public AbstractEntity(GameScreen screen, String texturePath) {
         super(screen, texturePath);
@@ -99,10 +101,19 @@ public abstract class AbstractEntity extends AbstractActor {
     public void act(float delta) {
         super.act(delta);
         Vector2 position = body.getPosition();
-        float a = body.getAngle() * MathUtils.radiansToDegrees;
+
+        //        float a = body.getAngle() * MathUtils.radiansToDegrees;
+
+        float angle = (float) Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x);
+        this.body.setTransform(body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
+        this.setRotation(body.getAngle() * MathUtils.radiansToDegrees); // TODO: Fix rotation
+
 
         setCenter(position);
-        setRotation(a);
+        //        System.out.println(this + " is at " + position.x + ", " + position.y);
+        //        setRotation(a);
+        //        System.out.println("Setting rotation of " + this + " to " + a);
+
         healthBar.setHealth(health);
         healthBar.update();
     }
@@ -188,6 +199,7 @@ public abstract class AbstractEntity extends AbstractActor {
     }
 
     public void pickup(AbstractItem item) {
+        System.out.println("Picking up coin");
         if (getHeldItem() != null && item.canBeHeld) {
             drop();
         }
@@ -304,5 +316,10 @@ public abstract class AbstractEntity extends AbstractActor {
 
     public Float getDamage() {
         return 0f;
+    }
+
+    public void handleInput() {
+        Vector2 thrust = new Vector2(this.input.x * this.accel, this.input.y * this.accel);
+        this.body.applyLinearImpulse(thrust, this.body.getWorldCenter(), true);
     }
 }

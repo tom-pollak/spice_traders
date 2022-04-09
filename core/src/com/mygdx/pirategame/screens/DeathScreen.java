@@ -35,7 +35,7 @@ public class DeathScreen extends AbstractScreen {
     @Override
     public void show() {
         super.show();
-        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
         // Create tables for the text and button

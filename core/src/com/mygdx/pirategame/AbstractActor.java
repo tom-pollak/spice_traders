@@ -33,7 +33,9 @@ public abstract class AbstractActor extends Actor {
     public AbstractActor(GameScreen screen) {
         this.screen = screen;
         this.actorTable = screen.getActorTable();
-        this.actorTable.addActor(this);
+        //        this.actorTable.addActor(this);
+        screen.getStage().addActor(this);
+        System.out.println(screen.getStage().getActors());
         this.world = screen.getWorld();
     }
 
@@ -56,7 +58,6 @@ public abstract class AbstractActor extends Actor {
         this.setWidth(texture.getWidth());
         this.setHeight(texture.getHeight());
         this.setBounds(getX(), getY(), getWidth(), getHeight());
-        this.setCenter(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     @Override
@@ -79,7 +80,7 @@ public abstract class AbstractActor extends Actor {
     @Override
     public void setPosition(float x, float y) {
         super.setPosition(x, y);
-        this.setCenter(getX() + getWidth() / 2, getY() + getHeight() / 2);
+        //        this.setCenter(getX() + getWidth() / 2, getY() + getHeight() / 2);
 
     }
 
@@ -107,13 +108,15 @@ public abstract class AbstractActor extends Actor {
     }
 
     public void dispose() {
-        screen.dispose();
         texture.dispose();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        //        Vector2 localCoords = screenToLocalCoordinates(getCenter());
+        Vector2 localCoords = getCenter();
+        //        System.out.println("Drawing " + this + "at " + localCoords);
+        batch.draw(texture, localCoords.x, localCoords.y);
         super.draw(batch, parentAlpha);
     }
 

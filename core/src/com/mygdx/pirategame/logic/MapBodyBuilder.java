@@ -1,10 +1,9 @@
 package com.mygdx.pirategame.logic;
 
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.pirategame.PirateGame;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.pirategame.screens.GameScreen;
 
 public class MapBodyBuilder {
@@ -19,24 +18,24 @@ public class MapBodyBuilder {
         System.out.println(objects.getCount());
 
 
-        for (MapObject object : objects) {
-            if (object instanceof PolygonMapObject) {
-                PolygonShape shape = new PolygonShape();
-                shape.set(((PolygonMapObject) object).getPolygon().getTransformedVertices());
-                BodyDef bDef = new BodyDef();
-                bDef.type = BodyDef.BodyType.StaticBody;
-                Body body = world.createBody(bDef);
-
-                FixtureDef fDef = new FixtureDef();
-                fDef.filter.categoryBits = PirateGame.DEFAULT_BIT;
-                fDef.shape = shape;
-                body.createFixture(fDef);
-                shape.dispose();
-                //                shape = getPolygon((PolygonMapObject) object);
-            } else {
-                System.out.println("Tile is not a polygon map object");
-            }
-        }
+        //        for (MapObject object : objects) {
+        //            if (object instanceof PolygonMapObject) {
+        //                PolygonShape shape = new PolygonShape();
+        //                shape.set(((PolygonMapObject) object).getPolygon().getTransformedVertices());
+        //                BodyDef bDef = new BodyDef();
+        //                bDef.type = BodyDef.BodyType.StaticBody;
+        //                Body body = world.createBody(bDef);
+        //
+        //                FixtureDef fDef = new FixtureDef();
+        //                fDef.filter.categoryBits = PirateGame.DEFAULT_BIT;
+        //                fDef.shape = shape;
+        //                body.createFixture(fDef);
+        //                shape.dispose();
+        //                //                shape = getPolygon((PolygonMapObject) object);
+        //            } else {
+        //                System.out.println("Tile is not a polygon map object");
+        //            }
+        //        }
         System.out.println("Tiles built");
     }
 

@@ -24,11 +24,17 @@ public class Player extends Ship {
         // Retrieves world data and creates ship texture
 
         // Defines a player, and the players position on screen and world
-        super(screen, "player.png");
+        super(screen, "img/player_ship.png");
         setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
 
         // Sound effect for damage
-        breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
+        breakSound = Gdx.audio.newSound(Gdx.files.internal("audio/wood-bump.mp3"));
+    }
+
+    @Override
+    public void act(float delta) {
+        handleInput();
+        super.act(delta);
     }
 
     @Override

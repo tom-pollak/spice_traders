@@ -16,7 +16,7 @@ import com.mygdx.pirategame.screens.GameScreen;
  */
 public class Coin extends AbstractItem {
     public final Integer value = 1;
-    private final Sound coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
+    private final Sound coinPickup = Gdx.audio.newSound(Gdx.files.internal("audio/coin-pickup.mp3"));
 
     /**
      * Coin
@@ -27,9 +27,10 @@ public class Coin extends AbstractItem {
      * @param screen - Game screen
      */
     public Coin(GameScreen screen, float x, float y) {
-        super(screen, "coin.png");
+        super(screen, "img/coin.png");
         setPosition(x, y);
         canBeHeld = false;
+        setTexture(getScaledTexture("img/coin.png", 20, 20));
     }
 
     @Override

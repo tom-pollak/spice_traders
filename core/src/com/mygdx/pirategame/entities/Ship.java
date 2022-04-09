@@ -7,11 +7,11 @@ import com.mygdx.pirategame.gui.Hud;
 import com.mygdx.pirategame.screens.GameScreen;
 
 public class Ship extends AbstractEntity {
-    private static final Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
-    private final Sound destroySound = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
+    private static final Sound hitSound = Gdx.audio.newSound(Gdx.files.internal("audio/ship-hit.wav"));
+    private final Sound destroySound = Gdx.audio.newSound(Gdx.files.internal("audio/ship-explosion-2.wav"));
 
     public Ship(GameScreen screen) {
-        super(screen, "unaligned_ship.png");
+        super(screen, "img/unaligned_ship.png");
         setMaxHealth(100);
         setHealth(100);
     }
@@ -42,6 +42,7 @@ public class Ship extends AbstractEntity {
 
     @Override
     public void act(float delta) {
+        super.act(delta);
         healthBar.update();
         if (health <= 0) die();
     }
