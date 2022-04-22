@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.items.Key;
 import com.mygdx.pirategame.screens.GameScreen;
 
 /**
@@ -29,6 +30,8 @@ public class Player extends Ship {
 
         // Sound effect for damage
         breakSound = Gdx.audio.newSound(Gdx.files.internal("audio/wood-bump.mp3"));
+        addItem(new Key(screen, "key", "the best key for testing inventory"), 0);
+        addItem(new Key(screen, "key", "the best key for testing inventory"), 0);
     }
 
     @Override

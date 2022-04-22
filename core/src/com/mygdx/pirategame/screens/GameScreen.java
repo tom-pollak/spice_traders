@@ -9,6 +9,7 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.gui.Hud;
+import com.mygdx.pirategame.gui.Inventory;
 import com.mygdx.pirategame.items.Coin;
 import com.mygdx.pirategame.logic.*;
 
@@ -23,6 +24,7 @@ import com.mygdx.pirategame.logic.*;
  */
 public class GameScreen extends AbstractScreen {
     private final Hud hud;
+    private final Inventory inventory_hud;
     private final BackgroundTiledMap map;
     private final Player player;
     private final World world;
@@ -58,6 +60,8 @@ public class GameScreen extends AbstractScreen {
         player.addListener(new MyInputProcessor(this));
         stage.setKeyboardFocus(player);
 
+        inventory_hud = new Inventory(player);
+
 
         //        College alcuin = new College(this, "Alcuin", new Vector2(1900, 2100), "colleges/alcuin_flag.png", "colleges/alcuin_ship.png");
         College alcuin = new College(this, "Alcuin", new Vector2(1000, 0), "colleges/alcuin_flag.png", "colleges/alcuin_ship.png");
@@ -73,6 +77,7 @@ public class GameScreen extends AbstractScreen {
         //Random ships
         //        new EnemyShip(this, alcuin.getAlliance());
         new Coin(this, x, y);
+
     }
 
     /**
@@ -103,6 +108,9 @@ public class GameScreen extends AbstractScreen {
 
         Hud.stage.act();
         Hud.stage.draw();
+        Inventory.stage.act();
+        Inventory.stage.draw();
+
 
         // Centre camera on player boat
         //        stage.getCamera().position.set(stage.getCamera().viewportWidth / 2, stage.getCamera().viewportHeight / 2, 0);
