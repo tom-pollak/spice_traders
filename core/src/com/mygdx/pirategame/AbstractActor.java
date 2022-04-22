@@ -60,6 +60,10 @@ public abstract class AbstractActor extends Actor {
         this.setBounds(getX(), getY(), getWidth(), getHeight());
     }
 
+    public Texture getTexture() {
+        return this.texture;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
