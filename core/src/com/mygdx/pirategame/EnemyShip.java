@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  */
 public class EnemyShip extends Enemy{
     private Texture enemyShip;
+    public String texturePath;
     public String college;
     private Sound destroy;
     private Sound hit;
@@ -34,6 +35,7 @@ public class EnemyShip extends Enemy{
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
+        texturePath = path;
         //Assign college
         college = assignment;
         //Set audios

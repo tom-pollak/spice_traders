@@ -18,7 +18,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.pirategame.logic.Inventory;
+import com.mygdx.pirategame.logic.SaveGame;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Random;
 
@@ -50,9 +58,9 @@ public class GameScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
 
-    private final Player player;
+    public static Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
-    private static ArrayList<EnemyShip> ships = new ArrayList<>();
+    public static ArrayList<EnemyShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private final AvailableSpawn invalidSpawn = new AvailableSpawn();
     private final Hud hud;
@@ -168,6 +176,8 @@ public class GameScreen implements Screen {
         //PAUSE MENU BUTTONS
         final TextButton start = new TextButton("Resume", skin);
         final TextButton options = new TextButton("Options", skin);
+        final TextButton save = new TextButton("Save", skin);
+        final TextButton load = new TextButton("Load", skin);
         TextButton exit = new TextButton("Exit", skin);
 
 
@@ -201,6 +211,10 @@ public class GameScreen implements Screen {
         pauseTable.add(skill).fillX().uniformX();
         pauseTable.row().pad(20, 0, 10, 0);
         pauseTable.add(options).fillX().uniformX();
+        pauseTable.row().pad(20, 0, 10, 0);
+        pauseTable.add(save).fillX().uniformX();
+        pauseTable.row().pad(20, 0, 10, 0);
+        pauseTable.add(load).fillX().uniformX();
         pauseTable.row().pad(20, 0, 10, 0);
         pauseTable.add(exit).fillX().uniformX();
         pauseTable.center();
@@ -238,15 +252,34 @@ public class GameScreen implements Screen {
             }
         }
         );
+        save.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                pauseTable.setVisible(false);
+                SaveGame.save(player, ships, Coins, hud, "save.json");
+            }
+        }
+
+        );
+        load.addListener(new ChangeListener() {
+             @Override
+             public void changed(ChangeEvent event, Actor actor) {
+                 pauseTable.setVisible(false);
+                 try {
+                     load("save.json");
+                 } catch (FileNotFoundException e) {
+                     throw new RuntimeException(e);
+                 }
+             }
+         }
+        );
+
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
             }
         });
-
-        inventoryHud.stage.act();
-        inventoryHud.stage.draw();
 
     }
 
@@ -406,6 +439,8 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
         Hud.stage.draw();
+        Inventory.stage.act();
+        Inventory.stage.draw();
         stage.act();
         stage.draw();
         //Checks game over conditions
@@ -565,5 +600,60 @@ public class GameScreen implements Screen {
         b2dr.dispose();
         hud.dispose();
         stage.dispose();
+    }
+
+    public static void setPlayerPos(Float x, Float y){
+        player.setX(x);
+        player.setY(y);
+    }
+
+    public void load(String filename) throws FileNotFoundException {
+        JSONParser jsonParser = new JSONParser();
+
+        try(FileReader reader = new FileReader(filename)){
+            Object obj = jsonParser.parse(reader);
+            JSONObject list = (JSONObject) obj;
+            loadPlayer(list);
+            loadEnemyShips(list);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    private static void loadPlayer(JSONObject json){
+        JSONArray playerData = (JSONArray) json.get("player");
+        JSONArray playerPos = (JSONArray) playerData.get(0);
+        float playerDirection = ((Double)playerData.get(1)).floatValue();
+        //JSON reader insisted on a value being read being a double, so it must be a double converted to float
+        GameScreen.player.b2body.setTransform(((Double) playerPos.get(0)).floatValue(), ((Double) playerPos.get(1)).floatValue(), playerDirection);
+        GameScreen.player.b2body.setLinearVelocity(0,0);
+    }
+    public void loadEnemyShips(JSONObject json) {
+        JSONArray allShips = (JSONArray) json.get("enemyShips");
+        GameScreen.ships.clear();
+        for(int i = 0; i < allShips.size(); i++){
+            JSONArray shipData = (JSONArray) allShips.get(i);
+            JSONArray shipPos = (JSONArray) shipData.get(0);
+            EnemyShip restoredShip = new EnemyShip(
+                    this,
+                    0,
+                    0,
+                    shipData.get(6).toString(),
+                    shipData.get(5).toString()
+
+            );
+            restoredShip.health = ((Long) shipData.get(3)).intValue();
+            restoredShip.damage = ((Long) shipData.get(4)).intValue();
+            JSONArray shipVelocity = (JSONArray) shipData.get(2);
+            float shipAngle = ((Double)shipData.get(1)).floatValue();
+            restoredShip.b2body.setTransform(((Double)shipPos.get(0)).floatValue(), ((Double)shipPos.get(1)).floatValue(), shipAngle);
+            restoredShip.b2body.setLinearVelocity(((Double) shipVelocity.get(0)).floatValue(), ((Double) shipVelocity.get(1)).floatValue());
+            GameScreen.ships.add(restoredShip);
+        }
     }
 }

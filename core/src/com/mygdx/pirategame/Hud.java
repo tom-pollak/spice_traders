@@ -188,6 +188,7 @@ public class Hud implements Disposable {
     public static Integer getCoins(){
         return coins;
     }
+    public static Integer getScore(){return score;}
 
     /**
      * Disposes game data
@@ -195,6 +196,10 @@ public class Hud implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public Integer getCoinMulti() {
+        return coinMulti;
     }
 }
 
