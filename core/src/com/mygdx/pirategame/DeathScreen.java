@@ -41,7 +41,7 @@ public class DeathScreen implements Screen {
      */
     @Override
     public void show() {
-        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         Gdx.input.setInputProcessor(stage);
 
         // Create tables for the text and button

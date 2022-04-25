@@ -23,7 +23,7 @@ public class College extends Enemy{
     private Texture enemyCollege;
     public Random rand = new Random();
     private String currentCollege;
-    private Array<CollegeFire> cannonBalls;
+    private Array<FireCannonBall> cannonBalls;
     private AvailableSpawn noSpawn;
     public ArrayList<EnemyShip> fleet = new ArrayList<>();
 
@@ -122,7 +122,7 @@ public class College extends Enemy{
             setToDestroy = true;
         }
         //Update cannon balls
-        for(CollegeFire ball : cannonBalls) {
+        for(FireCannonBall ball : cannonBalls) {
             ball.update(dt);
             if(ball.isDestroyed())
                 cannonBalls.removeValue(ball, true);
@@ -138,7 +138,7 @@ public class College extends Enemy{
             //Render health bar
             bar.render(batch);
             //Render balls
-            for(CollegeFire ball : cannonBalls)
+            for(FireCannonBall ball : cannonBalls)
                 ball.draw(batch);
         }
     }
@@ -182,7 +182,7 @@ public class College extends Enemy{
      * Fires cannonballs
      */
     public void fire() {
-        cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
+        cannonBalls.add(new FireCannonBall(screen, b2body.getPosition().x, b2body.getPosition().y));
     }
 }
 

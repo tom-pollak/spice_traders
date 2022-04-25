@@ -4,16 +4,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+
 /**
  * College Fire
  * Defines college attack method
  * Defines college cannonball projectiles
  *
- *@author Ethan Alabaster
- *@version 1.0
+ * @author Ethan Alabaster
+ * @version 1.0
  */
 
-public class CollegeFire extends Sprite {
+public class FireCannonBall extends Sprite {
     private World world;
     private Texture cannonBall;
     private float stateTime;
@@ -27,10 +28,10 @@ public class CollegeFire extends Sprite {
      * Defines cannonballs
      *
      * @param screen Visual data
-     * @param x x position of player
-     * @param y y position of player
+     * @param x      x position of player
+     * @param y      y position of player
      */
-    public CollegeFire(GameScreen screen, float x, float y) {
+    public FireCannonBall(GameScreen screen, float x, float y) {
         this.world = screen.getWorld();
         playerPos = screen.getPlayerPos();
         cannonBall = new Texture("cannonBall.png");
@@ -75,16 +76,16 @@ public class CollegeFire extends Sprite {
      *
      * @param dt Delta time (elapsed time since last game tick)
      */
-    public void update(float dt){
+    public void update(float dt) {
         stateTime += dt;
         //If college is set to destroy and isnt, destroy it
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        if((setToDestroy) && !destroyed) {
+        if ((setToDestroy) && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
         }
         // determines cannonball range
-        if(stateTime > 2f) {
+        if (stateTime > 2f) {
             setToDestroy();
         }
     }
@@ -92,14 +93,14 @@ public class CollegeFire extends Sprite {
     /**
      * Changes destruction state
      */
-    public void setToDestroy(){
+    public void setToDestroy() {
         setToDestroy = true;
     }
 
     /**
      * Returns destruction status
      */
-    public boolean isDestroyed(){
+    public boolean isDestroyed() {
         return destroyed;
     }
 }
