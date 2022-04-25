@@ -19,6 +19,7 @@ public class Player extends Sprite {
     public Body b2body;
     private final Sound breakSound;
     private final Array<CannonFire> cannonBalls;
+    public final Array<Entity> inventory;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -42,6 +43,7 @@ public class Player extends Sprite {
 
         // Sets cannonball array
         cannonBalls = new Array<>();
+        inventory.add(new Coin());
     }
 
     /**
