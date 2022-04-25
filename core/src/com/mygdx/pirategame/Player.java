@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.pirategame.logic.Item;
+import com.mygdx.pirategame.logic.SpeedOrb;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
@@ -19,7 +21,7 @@ public class Player extends Sprite {
     public Body b2body;
     private final Sound breakSound;
     private final Array<CannonFire> cannonBalls;
-    public final Array<Entity> inventory;
+    public final Array<Item> inventory;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -43,7 +45,9 @@ public class Player extends Sprite {
 
         // Sets cannonball array
         cannonBalls = new Array<>();
-        inventory.add(new Coin());
+        inventory = new Array<>();
+        inventory.add(new SpeedOrb(this));
+        inventory.add(new SpeedOrb(this));
     }
 
     /**
@@ -128,5 +132,9 @@ public class Player extends Sprite {
         super.draw(batch);
         for(CannonFire ball : cannonBalls)
             ball.draw(batch);
+    }
+
+    public Array<Item> getInventory() {
+        return this.inventory;
     }
 }

@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
+import com.mygdx.pirategame.logic.Inventory;
 
 import java.util.Objects;
 import java.util.Random;
@@ -64,6 +65,8 @@ public class GameScreen implements Screen {
     private Table table;
 
     public Random rand = new Random();
+
+    private Inventory inventoryGui;
 
     /**
      * Initialises the Game Screen,
@@ -145,6 +148,7 @@ public class GameScreen implements Screen {
 
         //Setting stage
         stage = new Stage(new ScreenViewport());
+        inventoryGui = new Inventory(player);
     }
 
     /**
@@ -240,6 +244,8 @@ public class GameScreen implements Screen {
                 Gdx.app.exit();
             }
         });
+
+        inventoryGui.
     }
 
     /**
