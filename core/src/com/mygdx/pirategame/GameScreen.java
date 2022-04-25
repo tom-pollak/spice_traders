@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
 
     public Random rand = new Random();
 
-    private Inventory inventoryGui;
+    private Inventory inventoryHud;
 
     /**
      * Initialises the Game Screen,
@@ -148,7 +148,7 @@ public class GameScreen implements Screen {
 
         //Setting stage
         stage = new Stage(new ScreenViewport());
-        inventoryGui = new Inventory(player);
+        inventoryHud = new Inventory(player);
     }
 
     /**
@@ -245,7 +245,9 @@ public class GameScreen implements Screen {
             }
         });
 
-        inventoryGui.
+        inventoryHud.stage.act();
+        inventoryHud.stage.draw();
+
     }
 
     /**

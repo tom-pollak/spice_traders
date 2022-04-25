@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.pirategame.Player;
 
 public class Inventory implements Disposable {
-    public static Stage stage;
+    public Stage stage;
     private static Array<Item> inventory;
     public Inventory(Player player){//the entity of which the inventory is going to be shown
         inventory = player.getInventory();
@@ -20,12 +20,12 @@ public class Inventory implements Disposable {
         table1.bottom().left();
         table1.setFillParent(true);
 
-        //show inventory
+        //setup inventory in tables
         for (Item item : inventory) {
             Image image = new Image(item.getTexture());
             table1.add(image).width(64).height(64).padBottom(16).padLeft(16);
-            stage.addActor(table1);
         }
+        stage.addActor(table1);
 
     }
 
