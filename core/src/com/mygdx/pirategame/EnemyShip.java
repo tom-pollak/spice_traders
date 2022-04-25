@@ -25,10 +25,10 @@ import static com.mygdx.pirategame.GameScreen.maxSpeed;
 public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
-    private Sound destroy;
-    private Sound hit;
+    private final Sound destroy;
+    private final Sound hit;
     private final Pathfinding pathfinding = new Pathfinding();
-    private Array<FireCannonBall> cannonBalls;
+    private final Array<FireCannonBall> cannonBalls;
     private float stateTime = 0;
 
     /**
@@ -150,6 +150,8 @@ public class EnemyShip extends Enemy {
             super.draw(batch);
             //Render health bar
             bar.render(batch);
+            for (FireCannonBall ball : cannonBalls)
+                ball.draw(batch);
         }
     }
 
@@ -188,8 +190,8 @@ public class EnemyShip extends Enemy {
     public void onContact() {
         Gdx.app.log("enemy", "collision");
         //Play collision sound
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-            hit.play(screen.game.getPreferences().getEffectsVolume());
+        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
+            hit.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
         //Deal with the damage
         health -= damage;
