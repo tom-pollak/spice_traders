@@ -1,9 +1,14 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.tiles;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.screens.Hud;
 
 /**
  * Sets up the class for all the Islands. Deals with what happens on collision and its properties
+ *
  * @author Ethan Alabaster
  * @version 1.0
  */

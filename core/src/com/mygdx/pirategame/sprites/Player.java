@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
+ *
  * @author Ethan Alabaster, Edward Poulter
  * @version 1.0
  */
@@ -18,7 +21,7 @@ public class Player extends Sprite {
     public World world;
     public Body b2body;
     private final Sound breakSound;
-    private final Array<CannonFire> cannonBalls;
+    private final Array<PlayerFire> cannonBalls;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -33,9 +36,9 @@ public class Player extends Sprite {
 
         // Defines a player, and the players position on screen and world
         definePlayer();
-        setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
+        setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(ship);
-        setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
+        setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
 
         // Sound effect for damage
         breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
@@ -53,14 +56,13 @@ public class Player extends Sprite {
         // Updates position and orientation of player
         setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
-        b2body.setTransform(b2body.getWorldCenter(), angle - ((float)Math.PI) / 2.0f);
+        b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
         setRotation((float) (b2body.getAngle() * 180 / Math.PI));
 
         // Updates cannonball data
-        for(CannonFire ball : cannonBalls) {
+        for (PlayerFire ball : cannonBalls) {
             ball.update(dt);
-            if(ball.isDestroyed())
-                cannonBalls.removeValue(ball, true);
+            if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
         }
     }
 
@@ -80,7 +82,7 @@ public class Player extends Sprite {
     private void definePlayer() {
         // Defines a players position
         BodyDef bdef = new BodyDef();
-        bdef.position.set(1200  / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
+        bdef.position.set(1200 / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -103,14 +105,14 @@ public class Player extends Sprite {
      */
     public void fire() {
         // Fires cannons
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
+        cannonBalls.add(new PlayerFire(screen, b2body, 5));
+        cannonBalls.add(new PlayerFire(screen, b2body, -5));
 
         // Cone fire below
-        /*cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), -5, b2body.getLinearVelocity()));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
+        /*cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
+        cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
+        cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), -5, b2body.getLinearVelocity()));
+        cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
         }
          */
     }
@@ -121,10 +123,10 @@ public class Player extends Sprite {
      *
      * @param batch The batch of the program
      */
-    public void draw(Batch batch){
+    public void draw(Batch batch) {
         // Draws player and cannonballs
         super.draw(batch);
-        for(CannonFire ball : cannonBalls)
+        for (PlayerFire ball : cannonBalls)
             ball.draw(batch);
     }
 }

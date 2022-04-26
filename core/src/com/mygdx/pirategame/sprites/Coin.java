@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -7,25 +7,28 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.screens.Hud;
 
 /**
  * Coin
  * Creates an object for each coin
  * Extends the entity class to define coin as an entity
  *
- *@author Joe Dickinson
- *@version 1.0
+ * @author Joe Dickinson
+ * @version 1.0
  */
 public class Coin extends Entity {
-    private Texture coin;
+    private final Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
-    private Sound coinPickup;
+    private final Sound coinPickup;
 
     /**
      * Instantiates a new Coin.
      *
-     * @param screen the screen its going onto
+     * @param screen the screen it's going onto
      * @param x      the x value to be placed at
      * @param y      the y value to be placed at
      */
@@ -34,11 +37,11 @@ public class Coin extends Entity {
         //Set coin image
         coin = new Texture("coin.png");
         //Set the position and size of the coin
-        setBounds(0,0,48 / PirateGame.PPM, 48 / PirateGame.PPM);
+        setBounds(0, 0, 48 / PirateGame.PPM, 48 / PirateGame.PPM);
         //Set the texture
         setRegion(coin);
         //Sets origin of the coin
-        setOrigin(24 / PirateGame.PPM,24 / PirateGame.PPM);
+        setOrigin(24 / PirateGame.PPM, 24 / PirateGame.PPM);
         coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
     }
 
@@ -46,19 +49,19 @@ public class Coin extends Entity {
      * Updates the coins state. If needed, deletes the coin if picked up.
      */
     public void update() {
-        //If coin is set to destroy and isnt, destroy it
-        if(setToDestroyed && !destroyed) {
+        //If coin is set to destroy and isn't, destroy it
+        if (setToDestroyed && !destroyed) {
             world.destroyBody(b2body);
             destroyed = true;
         }
         //Update position of coin
-        else if(!destroyed) {
+        else if (!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         }
     }
 
     /**
-     * Defines all the parts of the coins physical model. Sets it up for collisons
+     * Defines all the parts of the coins physical model. Sets it up for collisions
      */
     @Override
     protected void defineEntity() {
@@ -92,8 +95,8 @@ public class Coin extends Entity {
         setToDestroyed = true;
         Gdx.app.log("coin", "collision");
         //Play pickup sound
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-            coinPickup.play(screen.game.getPreferences().getEffectsVolume());
+        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
+            coinPickup.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
 
     }
@@ -104,7 +107,7 @@ public class Coin extends Entity {
      * @param batch The batch of the program
      */
     public void draw(Batch batch) {
-        if(!destroyed) {
+        if (!destroyed) {
             super.draw(batch);
         }
     }

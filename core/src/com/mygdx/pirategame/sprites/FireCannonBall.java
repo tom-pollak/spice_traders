@@ -1,9 +1,11 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * College Fire
@@ -15,13 +17,14 @@ import com.badlogic.gdx.physics.box2d.*;
  */
 
 public class FireCannonBall extends Sprite {
-    private World world;
-    private Texture cannonBall;
+    private final World world;
+    private final Texture cannonBall;
     private float stateTime;
     private boolean destroyed;
     private boolean setToDestroy;
     private Body b2body;
-    private Vector2 playerPos;
+    private final Vector2 playerPos;
+    private Float speed = 5f;
 
     /**
      * Defines player position
@@ -35,6 +38,18 @@ public class FireCannonBall extends Sprite {
         this.world = screen.getWorld();
         playerPos = screen.getPlayerPos();
         cannonBall = new Texture("cannonBall.png");
+        //Set the position and size of the ball
+        setRegion(cannonBall);
+        setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
+        defineCannonBall();
+    }
+
+    public FireCannonBall(GameScreen screen, float x, float y, Float speed, String texturePath) {
+        this.world = screen.getWorld();
+        playerPos = screen.getPlayerPos();
+        cannonBall = new Texture(texturePath);
+        this.speed = speed;
+
         //Set the position and size of the ball
         setRegion(cannonBall);
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
@@ -66,7 +81,6 @@ public class FireCannonBall extends Sprite {
         // Math for firing the cannonball at the player
         playerPos.sub(b2body.getPosition());
         playerPos.nor();
-        float speed = 5f;
         b2body.setLinearVelocity(playerPos.scl(speed));
     }
 

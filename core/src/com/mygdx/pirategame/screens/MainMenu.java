@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,11 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.pirategame.PirateGame;
 
 /**
  * Main menu is the first screen the player sees. Allows them to navigate where they want to go to
+ *
  * @author Sam Pearson
  * @version 1.0
  */
@@ -26,14 +28,13 @@ public class MainMenu implements Screen {
      *
      * @param PirateGame the main starting body of the game. Where screen swapping is carried out.
      */
-    public MainMenu(PirateGame PirateGame){
+    public MainMenu(PirateGame PirateGame) {
         parent = PirateGame;
         stage = new Stage(new ScreenViewport());
     }
 
     /**
      * What should be displayed on the options screen
-     *
      */
     @Override
     public void show() {
@@ -67,14 +68,14 @@ public class MainMenu implements Screen {
         //Start a game
         newGame.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
+            public void changed(ChangeEvent event, Actor actor) {
                 parent.changeScreen(PirateGame.GAME);
             }
         });
         //Help Screen
         help.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
+            public void changed(ChangeEvent event, Actor actor) {
                 parent.changeScreen(PirateGame.HELP);
             }
         });
@@ -82,8 +83,8 @@ public class MainMenu implements Screen {
         //Go to edit options
         options.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
-                parent.setScreen(new Options(parent,parent.getScreen()));
+            public void changed(ChangeEvent event, Actor actor) {
+                parent.setScreen(new Options(parent, parent.getScreen()));
             }
         });
 
@@ -99,6 +100,7 @@ public class MainMenu implements Screen {
 
     /**
      * Renders the visual data for all objects
+     *
      * @param delta Delta Time
      */
     @Override
@@ -112,7 +114,7 @@ public class MainMenu implements Screen {
     /**
      * Changes the camera size, Scales the hud to match the camera
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
     @Override

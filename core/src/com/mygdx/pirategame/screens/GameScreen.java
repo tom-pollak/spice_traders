@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -19,7 +19,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.logic.AvailableSpawn;
 import com.mygdx.pirategame.logic.BackgroundTiledMap;
+import com.mygdx.pirategame.logic.WorldContactListener;
+import com.mygdx.pirategame.sprites.Coin;
+import com.mygdx.pirategame.sprites.College;
+import com.mygdx.pirategame.sprites.EnemyShip;
+import com.mygdx.pirategame.sprites.Player;
+import com.mygdx.pirategame.tiles.WorldCreator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +48,7 @@ public class GameScreen implements Screen {
     public static float accel = 0.05f;
     private float stateTime;
 
-    protected static PirateGame game;
+    public static PirateGame game;
     private final OrthographicCamera camera;
     private final Viewport viewport;
     private final Stage stage;
@@ -112,6 +120,7 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
+
 
         //Random ships
         boolean validLoc;

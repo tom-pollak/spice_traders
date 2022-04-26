@@ -1,15 +1,17 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.tiles;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Interactive Tile Object
  * Generates the world with interactive tiles
  *
- *@author Ethan Alabaster
- *@version 1.0
+ * @author Ethan Alabaster
+ * @version 1.0
  */
 public abstract class InteractiveTileObject {
     protected World world;

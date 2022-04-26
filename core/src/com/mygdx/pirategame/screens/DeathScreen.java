@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,13 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.pirategame.PirateGame;
 
 /**
  * Death Screen
  * Produces a death screen on player death
  *
- *@author Sam Pearson
- *@version 1.0
+ * @author Sam Pearson
+ * @version 1.0
  */
 public class DeathScreen implements Screen {
 
@@ -31,7 +32,7 @@ public class DeathScreen implements Screen {
      *
      * @param pirateGame Game data
      */
-    public DeathScreen(PirateGame pirateGame){
+    public DeathScreen(PirateGame pirateGame) {
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
     }
@@ -88,7 +89,7 @@ public class DeathScreen implements Screen {
      * (Not Used)
      * Updates the state of each object
      */
-    public void update(){
+    public void update() {
     }
 
     /**
@@ -106,7 +107,7 @@ public class DeathScreen implements Screen {
     /**
      * Changes the camera size
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
     @Override

@@ -1,4 +1,5 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.logic;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
@@ -9,7 +10,7 @@ import com.badlogic.gdx.Preferences;
  * @author Sam Pearson
  * @version 1.0
  */
-public class audioControls {
+public class AudioControls {
 
     //Set keys that are stored in the file
     private static final String MUSIC_VOLUME = "volume";
@@ -19,7 +20,7 @@ public class audioControls {
     private static final String PAGE = "audio";
 
     /**
-     *  Interface to access the file
+     * Interface to access the file
      *
      * @return the preferences of that page
      */

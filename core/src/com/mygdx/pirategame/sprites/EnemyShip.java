@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
@@ -9,10 +9,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.pirategame.logic.Pathfinding;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.screens.Hud;
 
-import static com.mygdx.pirategame.GameScreen.accel;
-import static com.mygdx.pirategame.GameScreen.maxSpeed;
+import static com.mygdx.pirategame.screens.GameScreen.accel;
+import static com.mygdx.pirategame.screens.GameScreen.maxSpeed;
 
 /**
  * Enemy Ship
@@ -27,7 +29,6 @@ public class EnemyShip extends Enemy {
     public String college;
     private final Sound destroy;
     private final Sound hit;
-    private final Pathfinding pathfinding = new Pathfinding();
     private final Array<FireCannonBall> cannonBalls;
     private float stateTime = 0;
 
@@ -64,37 +65,7 @@ public class EnemyShip extends Enemy {
      * @param dt Delta time (elapsed time since last game tick)
      */
     public void update(float dt) {
-        stateTime += dt;
-        System.out.println("State time: " + stateTime);
-        //        Vector2 cur_coord = screen.backgroundTiledMap.getTileCoords(getX(), getY());
-        Vector2 cur_coord = new Vector2(getX(), getY());
-        //        Vector2 player_coord = screen.backgroundTiledMap.getTileCoords(screen.player.getX(), screen.player.getY());
-        Vector2 player_coord = new Vector2(screen.player.getX(), screen.player.getY());
-        //        List<GridCell> searchPath = pathfinding.findPath((int) cur_coord.x, (int) cur_coord.y, (int) player_coord.x, (int) player_coord.y);
-        // Navigate towards first tile in search path
-        try {
-            //                GridCell firstNode = searchPath.get(0);
-            //            Vector2 target = screen.backgroundTiledMap.getTileCoords(firstNode.x, firstNode.y);
-            Vector2 target = new Vector2(player_coord.x - cur_coord.x, player_coord.y - cur_coord.y);
-            //            System.out.println("Target: " + target);
-            target.limit2(1).scl(0.05f);
-            //            System.out.println("Target: " + target);
-            // Checking if player at max velocity, and keeping them below max
-            if (b2body.getLinearVelocity().x >= maxSpeed) {
-                b2body.applyLinearImpulse(new Vector2(-accel, 0), b2body.getWorldCenter(), true);
-            }
-            if (b2body.getLinearVelocity().x <= -maxSpeed) {
-                b2body.applyLinearImpulse(new Vector2(accel, 0), b2body.getWorldCenter(), true);
-            }
-            if (b2body.getLinearVelocity().y >= maxSpeed) {
-                b2body.applyLinearImpulse(new Vector2(0, -accel), b2body.getWorldCenter(), true);
-            }
-            if (b2body.getLinearVelocity().y <= -maxSpeed) {
-                b2body.applyLinearImpulse(new Vector2(0, accel), b2body.getWorldCenter(), true);
-            }
-            b2body.applyLinearImpulse(target, b2body.getWorldCenter(), true); // Player uses linear impulse
-        } catch (IndexOutOfBoundsException ignored) {
-        }
+        updateEnemy(dt);
 
         //If ship is set to destroy and isnt, destroy it
         if (setToDestroy && !destroyed) {
@@ -138,6 +109,40 @@ public class EnemyShip extends Enemy {
         //target.nor();
         //float speed = 1.5f;
         //b2body.setLinearVelocity(target.scl(speed));
+    }
+
+    private void updateEnemy(float dt) {
+        stateTime += dt;
+        System.out.println("State time: " + stateTime);
+        //        Vector2 cur_coord = screen.backgroundTiledMap.getTileCoords(getX(), getY());
+        Vector2 cur_coord = new Vector2(getX(), getY());
+        //        Vector2 player_coord = screen.backgroundTiledMap.getTileCoords(screen.player.getX(), screen.player.getY());
+        Vector2 player_coord = new Vector2(screen.player.getX(), screen.player.getY());
+        //        List<GridCell> searchPath = pathfinding.findPath((int) cur_coord.x, (int) cur_coord.y, (int) player_coord.x, (int) player_coord.y);
+        // Navigate towards first tile in search path
+        try {
+            //                GridCell firstNode = searchPath.get(0);
+            //            Vector2 target = screen.backgroundTiledMap.getTileCoords(firstNode.x, firstNode.y);
+            Vector2 target = new Vector2(player_coord.x - cur_coord.x, player_coord.y - cur_coord.y);
+            //            System.out.println("Target: " + target);
+            target.limit2(1).scl(0.05f);
+            //            System.out.println("Target: " + target);
+            // Checking if player at max velocity, and keeping them below max
+            if (b2body.getLinearVelocity().x >= maxSpeed) {
+                b2body.applyLinearImpulse(new Vector2(-accel, 0), b2body.getWorldCenter(), true);
+            }
+            if (b2body.getLinearVelocity().x <= -maxSpeed) {
+                b2body.applyLinearImpulse(new Vector2(accel, 0), b2body.getWorldCenter(), true);
+            }
+            if (b2body.getLinearVelocity().y >= maxSpeed) {
+                b2body.applyLinearImpulse(new Vector2(0, -accel), b2body.getWorldCenter(), true);
+            }
+            if (b2body.getLinearVelocity().y <= -maxSpeed) {
+                b2body.applyLinearImpulse(new Vector2(0, accel), b2body.getWorldCenter(), true);
+            }
+            b2body.applyLinearImpulse(target, b2body.getWorldCenter(), true); // Player uses linear impulse
+        } catch (IndexOutOfBoundsException ignored) {
+        }
     }
 
     /**

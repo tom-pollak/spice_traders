@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.pirategame.PirateGame;
 
 /**
  * The type for the victory screen
@@ -35,57 +36,57 @@ public class VictoryScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
     }
+
     /**
      * What should be displayed on the victory screen
-     *
      */
     @Override
     public void show() {
-            //Creates the skin for the buttons and labels to use
-            Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
-            //Sets stage to be the input processor
-            Gdx.input.setInputProcessor(stage);
+        //Creates the skin for the buttons and labels to use
+        Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
+        //Sets stage to be the input processor
+        Gdx.input.setInputProcessor(stage);
 
-            //Creates 2 tables for actors to go into, one for text and one for the return button
-            Table table = new Table();
-            table.center();
-            table.setFillParent(true);
+        //Creates 2 tables for actors to go into, one for text and one for the return button
+        Table table = new Table();
+        table.center();
+        table.setFillParent(true);
 
-            Table table2 = new Table();
-            table2.center();
-            table2.setFillParent(true);
+        Table table2 = new Table();
+        table2.center();
+        table2.setFillParent(true);
 
-            //Set the message and add to table
-            Label victoryMsg = new Label("YOU WON", new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
-            victoryMsg.setFontScale(3f);
-            Label victoryMsg2 = new Label("CONGRATULATIONS PIRATE", new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
-            victoryMsg2.setFontScale(3f);
-            table.add(victoryMsg).center();
-            table.row();
-            table.add(victoryMsg2).center().padTop(20);
-            stage.addActor(table);
+        //Set the message and add to table
+        Label victoryMsg = new Label("YOU WON", new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
+        victoryMsg.setFontScale(3f);
+        Label victoryMsg2 = new Label("CONGRATULATIONS PIRATE", new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
+        victoryMsg2.setFontScale(3f);
+        table.add(victoryMsg).center();
+        table.row();
+        table.add(victoryMsg2).center().padTop(20);
+        stage.addActor(table);
 
-            //Create return button
-            TextButton backButton = new TextButton("Return To Menu", skin);
+        //Create return button
+        TextButton backButton = new TextButton("Return To Menu", skin);
 
-            //Set the click response
-            backButton.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
+        //Set the click response
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
 
-                    //Return to main screen
-                    parent.changeScreen(PirateGame.MENU);
-                    parent.killEndScreen();
-                }
-            });
+                //Return to main screen
+                parent.changeScreen(PirateGame.MENU);
+                parent.killEndScreen();
+            }
+        });
 
-            //add to table
-            table2.add(backButton).fillX().uniformX();
-            table2.bottom();
+        //add to table
+        table2.add(backButton).fillX().uniformX();
+        table2.bottom();
 
-            stage.addActor(table2);
+        stage.addActor(table2);
 
-        }
+    }
 
 
     /**
@@ -94,12 +95,13 @@ public class VictoryScreen implements Screen {
      *
      * @param dt Delta Time
      */
-    public void update(float dt){
+    public void update(float dt) {
 
     }
 
     /**
      * Renders the visual data for all objects
+     *
      * @param dt Delta Time
      */
 
@@ -115,7 +117,7 @@ public class VictoryScreen implements Screen {
     /**
      * Changes the camera size, Scales the hud to match the camera
      *
-     * @param width the width of the viewable area
+     * @param width  the width of the viewable area
      * @param height the height of the viewable area
      */
     @Override
@@ -133,6 +135,7 @@ public class VictoryScreen implements Screen {
     public void pause() {
 
     }
+
     /**
      * (Not Used)
      * Resumes game

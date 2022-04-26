@@ -1,4 +1,4 @@
-package com.mygdx.pirategame;
+package com.mygdx.pirategame.logic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.HashMap;
  * Class to determine invalid spawn areas
  * Instantiates invalid spawn map
  *
- *@author Edward Poulter
- *@version 1.0
+ * @author Edward Poulter
+ * @version 1.0
  */
 public class AvailableSpawn {
     public HashMap<Integer, ArrayList<Integer>> tileBlocked = new HashMap<>();
@@ -47,7 +47,7 @@ public class AvailableSpawn {
                         add(x, y);
                     } else if (x >= 12 && x <= 25 && y >= 70 && y <= 71) {
                         add(x, y);
-                    } else if (x >= 30 && x <= 32 && y >= 68 && y <= 69){
+                    } else if (x >= 30 && x <= 32 && y >= 68 && y <= 69) {
                         add(x, y);
                     }
                     //Anne Lister islands
@@ -78,7 +78,7 @@ public class AvailableSpawn {
      * @param x the x coord value
      * @param y the y coord value
      */
-    private void add(int x, int y){
+    private void add(int x, int y) {
         //Adds to hashmap, prevents duplication of values
         ArrayList<Integer> checkY;
         if (tileBlocked.containsKey(x)) {
@@ -86,7 +86,7 @@ public class AvailableSpawn {
             if (!checkY.contains(y)) {
                 checkY.add(y);
             }
-        }else{
+        } else {
             checkY = new ArrayList<>();
             checkY.add(y);
         }
