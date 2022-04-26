@@ -25,13 +25,13 @@ import java.util.Random;
  * @version 1.0
  */
 
-public class College extends Enemy {
+public class College extends Entity {
     private final Texture enemyCollege;
     public Random rand = new Random();
     private final String currentCollege;
     private final Array<FireCannonBall> cannonBalls;
     private final AvailableSpawn noSpawn;
-    public ArrayList<EnemyShip> fleet = new ArrayList<>();
+    public ArrayList<AiShip> fleet = new ArrayList<>();
 
     /**
      * @param screen       Visual data
@@ -69,7 +69,7 @@ public class College extends Enemy {
                 ranY = (int) Math.floor(y + (ranY / PirateGame.PPM));
                 spawnIsValid = getCoord(ranX, ranY);
             }
-            fleet.add(new EnemyShip(screen, ranX, ranY, ship, college));
+            fleet.add(new AiShip(screen, ranX, ranY, ship, college));
         }
     }
 
@@ -149,7 +149,7 @@ public class College extends Enemy {
      * Sets the data to define a college as an enemy
      */
     @Override
-    protected void defineEnemy() {
+    protected void defineBody() {
         //sets the body definitions
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());

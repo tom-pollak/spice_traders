@@ -7,8 +7,8 @@ import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Entity
- * Defines an entity
- * Instantiates an entity
+ * Class to generate enemies
+ * Instantiates enemies
  *
  * @author Ethan Alabaster
  * @version 1.0
@@ -17,10 +17,14 @@ public abstract class Entity extends Sprite {
     protected World world;
     protected GameScreen screen;
     public Body b2body;
+    public boolean setToDestroy;
+    public boolean destroyed;
+    public int health;
+    public int damage;
+    protected HealthBar bar;
 
     /**
-     * Instantiates an entity
-     * Sets position in world
+     * Instantiates an enemy
      *
      * @param screen Visual data
      * @param x      x position of entity
@@ -30,16 +34,33 @@ public abstract class Entity extends Sprite {
         this.world = screen.getWorld();
         this.screen = screen;
         setPosition(x, y);
-        defineEntity();
+        this.setToDestroy = false;
+        this.destroyed = false;
+        this.health = 100;
+
+        defineBody();
+        bar = new HealthBar(this);
     }
 
     /**
-     * Defines an entity
+     * Defines enemy
      */
-    protected abstract void defineEntity();
+    protected abstract void defineBody();
 
     /**
      * Defines contact
      */
-    public abstract void entityContact();
+    public abstract void onContact();
+
+    public abstract void update(float dt);
+
+    /**
+     * Checks recieved damage
+     * Increments total damage by damage received
+     *
+     * @param value Damage received
+     */
+    public void changeDamageReceived(int value) {
+        damage += value;
+    }
 }

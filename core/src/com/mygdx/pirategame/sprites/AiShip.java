@@ -17,14 +17,14 @@ import static com.mygdx.pirategame.screens.GameScreen.accel;
 import static com.mygdx.pirategame.screens.GameScreen.maxSpeed;
 
 /**
- * Enemy Ship
+ * Entity AiShip
  * Generates enemy ship data
  * Instantiates an enemy ship
  *
  * @author Ethan Alabaster, Sam Pearson, Edward Poulter
  * @version 1.0
  */
-public class EnemyShip extends Enemy {
+public class AiShip extends Entity {
     private Texture enemyShip;
     public String college;
     private final Sound destroy;
@@ -41,7 +41,7 @@ public class EnemyShip extends Enemy {
      * @param path       path of texture file
      * @param assignment College ship is assigned to
      */
-    public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
+    public AiShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
         //Assign college
@@ -165,7 +165,7 @@ public class EnemyShip extends Enemy {
      * Sets data to act as an enemy
      */
     @Override
-    protected void defineEnemy() {
+    protected void defineBody() {
         //sets the body definitions
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());

@@ -23,9 +23,9 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.logic.AvailableSpawn;
 import com.mygdx.pirategame.logic.BackgroundTiledMap;
 import com.mygdx.pirategame.logic.WorldContactListener;
+import com.mygdx.pirategame.sprites.AiShip;
 import com.mygdx.pirategame.sprites.Coin;
 import com.mygdx.pirategame.sprites.College;
-import com.mygdx.pirategame.sprites.EnemyShip;
 import com.mygdx.pirategame.sprites.Player;
 import com.mygdx.pirategame.tiles.WorldCreator;
 
@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
 
     public final Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
-    private static ArrayList<EnemyShip> ships = new ArrayList<>();
+    private static ArrayList<AiShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private final AvailableSpawn invalidSpawn = new AvailableSpawn();
     private final Hud hud;
@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
                 validLoc = checkGenPos(a, b);
             }
             //Add a ship at the random coords
-            ships.add(new EnemyShip(this, a, b, "unaligned_ship.png", "Unaligned"));
+            ships.add(new AiShip(this, a, b, "unaligned_ship.png", "Unaligned"));
         }
 
         //Random coins
@@ -308,6 +308,22 @@ public class GameScreen implements Screen {
     }
 
     /**
+     * Changes the amount of damage done by each hit. Accessed by skill tree
+     *
+     * @param value damage dealt
+     */
+    public static void changeDamage(int value) {
+
+        for (AiShip ship : ships) {
+            ship.changeDamageReceived(value);
+        }
+        colleges.get("Anne Lister").changeDamageReceived(value);
+        colleges.get("Constantine").changeDamageReceived(value);
+        colleges.get("Goodricke").changeDamageReceived(value);
+
+    }
+
+    /**
      * Updates the state of each object with delta time
      *
      * @param dt Delta time (elapsed time since last game tick)
@@ -326,7 +342,7 @@ public class GameScreen implements Screen {
         colleges.get("Goodricke").update(dt);
 
         //Update ships
-        for (EnemyShip ship : ships) {
+        for (AiShip ship : ships) {
             ship.update(dt);
         }
 
@@ -355,61 +371,6 @@ public class GameScreen implements Screen {
         camera.position.y = player.b2body.getPosition().y;
         camera.update();
         renderer.setView(camera);
-    }
-
-    /**
-     * Renders the visual data for all objects
-     * Changes and renders new visual data for ships
-     *
-     * @param dt Delta time (elapsed time since last game tick)
-     */
-    @Override
-    public void render(float dt) {
-        if (gameStatus == GAME_RUNNING) {
-            update(dt);
-        } else {
-            handleInput(dt);
-        }
-
-        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderer.render();
-        // b2dr is the hitbox shapes, can be commented out to hide
-        //b2dr.render(world, camera.combined);
-
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        // Order determines layering
-
-        //Renders coins
-        for (Coin coin : Coins) {
-            coin.draw(game.batch);
-        }
-
-        //Renders colleges
-        player.draw(game.batch);
-        colleges.get("Alcuin").draw(game.batch);
-        colleges.get("Anne Lister").draw(game.batch);
-        colleges.get("Constantine").draw(game.batch);
-        colleges.get("Goodricke").draw(game.batch);
-
-        //Updates all ships
-        for (EnemyShip ship : ships) {
-            if (!Objects.equals(ship.college, "Unaligned")) {
-                //Flips a colleges allegence if their college is destroyed
-                if (colleges.get(ship.college).destroyed) {
-
-                    ship.updateTexture("Alcuin", "alcuin_ship.png");
-                }
-            }
-            ship.draw(game.batch);
-        }
-        game.batch.end();
-        Hud.stage.draw();
-        stage.act();
-        stage.draw();
-        //Checks game over conditions
-        gameOverCheck();
     }
 
     /**
@@ -500,19 +461,58 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Changes the amount of damage done by each hit. Accessed by skill tree
+     * Renders the visual data for all objects
+     * Changes and renders new visual data for ships
      *
-     * @param value damage dealt
+     * @param dt Delta time (elapsed time since last game tick)
      */
-    public static void changeDamage(int value) {
-
-        for (EnemyShip ship : ships) {
-            ship.changeDamageReceived(value);
+    @Override
+    public void render(float dt) {
+        if (gameStatus == GAME_RUNNING) {
+            update(dt);
+        } else {
+            handleInput(dt);
         }
-        colleges.get("Anne Lister").changeDamageReceived(value);
-        colleges.get("Constantine").changeDamageReceived(value);
-        colleges.get("Goodricke").changeDamageReceived(value);
 
+        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        renderer.render();
+        // b2dr is the hitbox shapes, can be commented out to hide
+        //b2dr.render(world, camera.combined);
+
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        // Order determines layering
+
+        //Renders coins
+        for (Coin coin : Coins) {
+            coin.draw(game.batch);
+        }
+
+        //Renders colleges
+        player.draw(game.batch);
+        colleges.get("Alcuin").draw(game.batch);
+        colleges.get("Anne Lister").draw(game.batch);
+        colleges.get("Constantine").draw(game.batch);
+        colleges.get("Goodricke").draw(game.batch);
+
+        //Updates all ships
+        for (AiShip ship : ships) {
+            if (!Objects.equals(ship.college, "Unaligned")) {
+                //Flips a colleges allegence if their college is destroyed
+                if (colleges.get(ship.college).destroyed) {
+
+                    ship.updateTexture("Alcuin", "alcuin_ship.png");
+                }
+            }
+            ship.draw(game.batch);
+        }
+        game.batch.end();
+        Hud.stage.draw();
+        stage.act();
+        stage.draw();
+        //Checks game over conditions
+        gameOverCheck();
     }
 
     /**

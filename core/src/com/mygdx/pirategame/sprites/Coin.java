@@ -64,7 +64,7 @@ public class Coin extends Entity {
      * Defines all the parts of the coins physical model. Sets it up for collisions
      */
     @Override
-    protected void defineEntity() {
+    protected void defineBody() {
         //sets the body definitions
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
@@ -88,7 +88,7 @@ public class Coin extends Entity {
      * What happens when an entity collides with the coin. The only entity that is able to do so is the player ship
      */
     @Override
-    public void entityContact() {
+    public void onContact() {
         //Add a coin
         Hud.changeCoins(1);
         //Set to destroy
@@ -99,6 +99,10 @@ public class Coin extends Entity {
             coinPickup.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
 
+    }
+
+    @Override
+    public void update(float dt) {
     }
 
     /**

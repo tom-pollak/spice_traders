@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.Hud;
-import com.mygdx.pirategame.sprites.*;
+import com.mygdx.pirategame.sprites.Entity;
+import com.mygdx.pirategame.sprites.FireCannonBall;
+import com.mygdx.pirategame.sprites.Player;
+import com.mygdx.pirategame.sprites.PlayerFire;
 import com.mygdx.pirategame.tiles.InteractiveTileObject;
 
 /**
@@ -32,9 +35,9 @@ public class WorldContactListener implements ContactListener {
         switch (cDef) {
             case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.COIN_BIT) {
-                    ((Entity) fixA.getUserData()).entityContact();
+                    ((Entity) fixA.getUserData()).onContact();
                 } else {
-                    ((Entity) fixB.getUserData()).entityContact();
+                    ((Entity) fixB.getUserData()).onContact();
                 }
                 break;
             case PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT:
@@ -43,9 +46,9 @@ public class WorldContactListener implements ContactListener {
                 break;
             case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
-                    ((Enemy) fixA.getUserData()).onContact();
+                    ((Entity) fixA.getUserData()).onContact();
                 } else {
-                    ((Enemy) fixB.getUserData()).onContact();
+                    ((Entity) fixB.getUserData()).onContact();
                 }
                 break;
             case PirateGame.COLLEGE_BIT | PirateGame.CANNON_BIT:
@@ -63,10 +66,10 @@ public class WorldContactListener implements ContactListener {
                 break;
             case PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
-                    ((Enemy) fixA.getUserData()).onContact();
+                    ((Entity) fixA.getUserData()).onContact();
                     ((PlayerFire) fixB.getUserData()).setToDestroy();
                 } else {
-                    ((Enemy) fixB.getUserData()).onContact();
+                    ((Entity) fixB.getUserData()).onContact();
                     ((PlayerFire) fixA.getUserData()).setToDestroy();
                 }
                 break;
