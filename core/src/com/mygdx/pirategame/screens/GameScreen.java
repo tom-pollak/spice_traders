@@ -75,7 +75,7 @@ public class GameScreen implements Screen {
     private final World world;
     private final Box2DDebugRenderer b2dr;
 
-    public final Player player;
+    public static Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
     public static ArrayList<AiShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
@@ -139,6 +139,9 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Anne Lister").fleet);
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
+
+        //create player
+        player = new Player(this);
 
 
         //Random ships
@@ -473,7 +476,7 @@ public class GameScreen implements Screen {
         colleges.get("Goodricke").draw(game.batch);
 
         //Updates all ships
-        for (EnemyShip ship : ships) {
+        for (AiShip ship : ships) {
             if (!Objects.equals(ship.college, "Unaligned")) {
                 //Flips a colleges allegence if their college is destroyed
                 if (colleges.get(ship.college).destroyed) {
@@ -580,60 +583,6 @@ public class GameScreen implements Screen {
         maxSpeed = maxSpeed * (1 + (percentage / 100));
     }
 
-    /**
-     * Renders the visual data for all objects
-     * Changes and renders new visual data for ships
-     *
-     * @param dt Delta time (elapsed time since last game tick)
-     */
-    @Override
-    public void render(float dt) {
-        if (gameStatus == GAME_RUNNING) {
-            update(dt);
-        } else {
-            handleInput(dt);
-        }
-
-        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderer.render();
-        // b2dr is the hitbox shapes, can be commented out to hide
-        //b2dr.render(world, camera.combined);
-
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        // Order determines layering
-
-        //Renders coins
-        for (Coin coin : Coins) {
-            coin.draw(game.batch);
-        }
-
-        //Renders colleges
-        player.draw(game.batch);
-        colleges.get("Alcuin").draw(game.batch);
-        colleges.get("Anne Lister").draw(game.batch);
-        colleges.get("Constantine").draw(game.batch);
-        colleges.get("Goodricke").draw(game.batch);
-
-        //Updates all ships
-        for (AiShip ship : ships) {
-            if (!Objects.equals(ship.college, "Unaligned")) {
-                //Flips a colleges allegence if their college is destroyed
-                if (colleges.get(ship.college).destroyed) {
-
-                    ship.updateTexture("Alcuin", "alcuin_ship.png");
-                }
-            }
-            ship.draw(game.batch);
-        }
-        game.batch.end();
-        Hud.stage.draw();
-        stage.act();
-        stage.draw();
-        //Checks game over conditions
-        gameOverCheck();
-    }
 
     /**
      * Tests validity of randomly generated position
@@ -687,7 +636,7 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
-    public static void setPlayerPos(Float x, Float y){
+    public void setPlayerPos(Float x, Float y){
         player.setX(x);
         player.setY(y);
     }
@@ -744,7 +693,7 @@ public class GameScreen implements Screen {
         for (Object allShip : allShips) {
             JSONArray shipData = (JSONArray) allShip;
             JSONArray shipPos = (JSONArray) shipData.get(0);
-            EnemyShip restoredShip = new EnemyShip(
+            AiShip restoredShip = new AiShip(
                     this,
                     0,
                     0,

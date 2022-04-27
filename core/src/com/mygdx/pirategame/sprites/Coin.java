@@ -21,7 +21,7 @@ import com.mygdx.pirategame.screens.Hud;
  * @version 1.0
  */
 public class Coin extends Entity {
-    private final Texture coin;
+    private Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
     private final Sound coinPickup;

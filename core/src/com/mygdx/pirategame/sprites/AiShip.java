@@ -25,6 +25,7 @@ import static com.mygdx.pirategame.screens.GameScreen.maxSpeed;
  * @version 1.0
  */
 public class AiShip extends Entity {
+    public String texturePath;
     private Texture enemyShip;
     public String college;
     private final Sound destroy;
@@ -44,6 +45,7 @@ public class AiShip extends Entity {
     public AiShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
+        texturePath = path;
         //Assign college
         college = assignment;
         cannonBalls = new Array<>();

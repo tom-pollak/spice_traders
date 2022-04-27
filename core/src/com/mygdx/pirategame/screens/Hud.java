@@ -107,25 +107,6 @@ public class Hud implements Disposable {
     }
 
 
-    public void update(float dt) {
-        timeCount += dt;
-        if(timeCount >= 1) {
-            //Regen health every second
-            if(health != 100) {
-                health += 1;
-            }
-            //Gain point every second
-            score += 1;
-            timeCount = 0;
-
-            //Check if a points boundary is met
-            SkillTree.pointsCheck(score);
-
-        }
-        coinLabel.setText(String.format("%03d", coins));
-        scoreLabel.setText(String.format("%03d", score));
-        healthLabel.setText(String.format("%02d", health));
-    }
     /**
      * Changes health by value increase
      *
@@ -201,20 +182,22 @@ public class Hud implements Disposable {
      */
     public void update(float dt) {
         timeCount += dt;
-        if (timeCount >= 1) {
+        if(timeCount >= 1) {
             //Regen health every second
-            if (health != 100) {
+            if(health != 100) {
                 health += 1;
-                healthLabel.setText(String.format("%02d", health));
             }
             //Gain point every second
             score += 1;
-            scoreLabel.setText(String.format("%03d", score));
             timeCount = 0;
 
             //Check if a points boundary is met
             SkillTree.pointsCheck(score);
+
         }
+        coinLabel.setText(String.format("%03d", coins));
+        scoreLabel.setText(String.format("%03d", score));
+        healthLabel.setText(String.format("%02d", health));
     }
 
     /**

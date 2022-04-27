@@ -2,6 +2,11 @@ package com.mygdx.pirategame.logic;
 
 
 import com.mygdx.pirategame.*;
+import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.screens.Hud;
+import com.mygdx.pirategame.sprites.AiShip;
+import com.mygdx.pirategame.sprites.Coin;
+import com.mygdx.pirategame.sprites.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
@@ -18,7 +23,7 @@ public class SaveGame {//using JSON because it seems the easiest to write object
     /*          LOAD IS IN GAMESCREEN.JAVA          */
 
 
-    public static void save(Player player, ArrayList<EnemyShip> enemyShips, ArrayList<Coin> coins, Hud hud, String filename) {
+    public static void save(Player player, ArrayList<AiShip> enemyShips, ArrayList<Coin> coins, Hud hud, String filename) {
         JSONObject fullSave = new JSONObject();
 
         /*SAVE JSON FORMAT
@@ -91,7 +96,7 @@ public class SaveGame {//using JSON because it seems the easiest to write object
 
         //save all attributes of enemy ships
         JSONArray enemyShipList = new JSONArray();
-        for(EnemyShip ship : enemyShips){
+        for(AiShip ship : enemyShips){
             if(!ship.destroyed) {
                 JSONArray shipData = new JSONArray();
                 position = new ArrayList<Float>();
