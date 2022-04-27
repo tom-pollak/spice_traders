@@ -1,6 +1,7 @@
 package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.pirategame.screens.GameScreen;
@@ -16,7 +17,7 @@ import com.mygdx.pirategame.screens.GameScreen;
 public abstract class Entity extends Sprite {
     protected World world;
     protected GameScreen screen;
-    protected Body b2body;
+    public Body b2body;
     public boolean setToDestroy;
     public boolean destroyed;
     public int health;
@@ -61,5 +62,9 @@ public abstract class Entity extends Sprite {
      */
     public void changeDamageReceived(int value) {
         damage += value;
+    }
+
+    public Float getDistance(Entity e) {
+        return new Vector2(e.getX() - this.getX(), e.getY() - this.getY()).len();
     }
 }

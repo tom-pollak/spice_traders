@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.logic.Item;
 import com.mygdx.pirategame.logic.SpeedOrb;
@@ -18,10 +19,7 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @author Ethan Alabaster, Edward Poulter
  * @version 1.0
  */
-public class Player extends Sprite {
-    private final GameScreen screen;
-    public World world;
-    public Body b2body;
+public class Player extends Entity {
     private final Sound breakSound;
     private final Array<PlayerFire> cannonBalls;
     public final Array<Item> inventory;
@@ -31,15 +29,16 @@ public class Player extends Sprite {
      *
      * @param screen visual data
      */
-    public Player(GameScreen screen) {
+    public Player(GameScreen screen, Integer x, Integer y) {
+        super(screen, x, y);
         // Retrieves world data and creates ship texture
         this.screen = screen;
         Texture ship = new Texture("player_ship.png");
         this.world = screen.getWorld();
 
         // Defines a player, and the players position on screen and world
-        definePlayer();
-        setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
+        defineBody();
+        setBounds(x, y, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(ship);
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
 
@@ -85,7 +84,8 @@ public class Player extends Sprite {
     /**
      * Defines all the parts of the player's physical model. Sets it up for collisons
      */
-    private void definePlayer() {
+    @Override
+    public void defineBody() {
         // Defines a players position
         BodyDef bdef = new BodyDef();
         bdef.position.set(1200 / PirateGame.PPM, 2500 / PirateGame.PPM); // Default Pos: 1800,2500
@@ -104,6 +104,10 @@ public class Player extends Sprite {
         fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
+    }
+
+    @Override
+    public void onContact() {
     }
 
     /**

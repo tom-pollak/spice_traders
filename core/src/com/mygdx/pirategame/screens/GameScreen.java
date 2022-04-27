@@ -115,7 +115,7 @@ public class GameScreen implements Screen {
 
         // Initialising box2d physics
         b2dr = new Box2DDebugRenderer();
-        player = new Player(this);
+        player = new Player(this, 1000, 1000);
 
         // making the Tiled tmx file render as a map
         TmxMapLoader maploader = new TmxMapLoader();
@@ -139,26 +139,23 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
-        //create player
-        player = new Player(this);
-
 
         //Random ships
         boolean validLoc;
         int a = 0;
         int b = 0;
-        for (int i = 0; i < 0; i++) {
-            validLoc = false;
-            while (!validLoc) {
-                //Get random x and y coords
-                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
-                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
-                //Check if valid
-                validLoc = checkGenPos(a, b);
-            }
-            //Add a ship at the random coords
-            ships.add(new AiShip(this, a, b, "unaligned_ship.png", "Unaligned"));
-        }
+        //        for (int i = 0; i < 0; i++) {
+        //            validLoc = false;
+        //            while (!validLoc) {
+        //                //Get random x and y coords
+        //                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+        //                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+        //                //Check if valid
+        //                validLoc = checkGenPos(a, b);
+        //            }
+        //            //Add a ship at the random coords
+        //            ships.add(new AiShip(this, a, b, "unaligned_ship.png", College.NEUTRAL));
+        //        }
 
         //Random coins
         Coins = new ArrayList<>();
@@ -342,7 +339,7 @@ public class GameScreen implements Screen {
                 player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
             }
             // Cannon fire on 'E'
-            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 player.fire();
             }
             // Checking if player at max velocity, and keeping them below max
@@ -582,6 +579,60 @@ public class GameScreen implements Screen {
         maxSpeed = maxSpeed * (1 + (percentage / 100));
     }
 
+    /**
+     * Renders the visual data for all objects
+     * Changes and renders new visual data for ships
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
+    @Override
+    public void render(float dt) {
+        if (gameStatus == GAME_RUNNING) {
+            update(dt);
+        } else {
+            handleInput(dt);
+        }
+
+        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        renderer.render();
+        // b2dr is the hitbox shapes, can be commented out to hide
+        //b2dr.render(world, camera.combined);
+
+        game.batch.setProjectionMatrix(camera.combined);
+        game.batch.begin();
+        // Order determines layering
+
+        //Renders coins
+        for (Coin coin : Coins) {
+            coin.draw(game.batch);
+        }
+
+        //Renders colleges
+        player.draw(game.batch);
+        colleges.get("Alcuin").draw(game.batch);
+        colleges.get("Anne Lister").draw(game.batch);
+        colleges.get("Constantine").draw(game.batch);
+        colleges.get("Goodricke").draw(game.batch);
+
+        //Updates all ships
+        for (AiShip ship : ships) {
+            if (!Objects.equals(ship.college, "Unaligned")) {
+                //Flips a colleges allegence if their college is destroyed
+                if (colleges.get(ship.college).destroyed) {
+
+                    ship.updateTexture("Alcuin", "alcuin_ship.png");
+                }
+            }
+            ship.draw(game.batch);
+        }
+        game.batch.end();
+        Hud.stage.draw();
+        stage.act();
+        stage.draw();
+        //Checks game over conditions
+        gameOverCheck();
+    }
 
     /**
      * Tests validity of randomly generated position

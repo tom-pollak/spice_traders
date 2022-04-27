@@ -18,8 +18,8 @@ import com.mygdx.pirategame.screens.GameScreen;
  */
 
 public class Projectile extends Entity {
-    private boolean destroyed;
-    private boolean setToDestroy;
+    protected boolean destroyed;
+    protected boolean setToDestroy;
     protected final Vector2 target;
     private Float speed = 5f;
 

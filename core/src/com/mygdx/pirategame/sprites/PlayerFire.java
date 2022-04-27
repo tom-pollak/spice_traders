@@ -79,4 +79,40 @@ public class PlayerFire extends Projectile {
 
         b2body.applyLinearImpulse(new Vector2(velX, velY), b2body.getWorldCenter(), true);
     }
+
+    /**
+     * Updates state with delta time
+     * Defines range of cannon fire
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
+    public void update(float dt) {
+        stateTime += dt;
+        //Update position of ball
+        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+
+        //If ball is set to destroy and isnt, destroy it
+        if ((setToDestroy) && !destroyed) {
+            world.destroyBody(b2body);
+            destroyed = true;
+        }
+        // determines cannonball range
+        if (stateTime > 0.98f) {
+            setToDestroy();
+        }
+    }
+
+    /**
+     * Changes destruction state
+     */
+    public void setToDestroy() {
+        setToDestroy = true;
+    }
+
+    /**
+     * Returns destruction status
+     */
+    public boolean isDestroyed() {
+        return destroyed;
+    }
 }

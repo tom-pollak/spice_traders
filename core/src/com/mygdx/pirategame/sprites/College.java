@@ -27,6 +27,7 @@ import java.util.Random;
 
 public class College extends Entity {
     private final Texture enemyCollege;
+    private final String name;
     public Random rand = new Random();
     private final String currentCollege;
     private final Array<Projectile> cannonBalls;
@@ -35,7 +36,7 @@ public class College extends Entity {
 
     /**
      * @param screen       Visual data
-     * @param college      College name i.e. "Alcuin" used for fleet assignment
+     * @param name         College name i.e. "Alcuin" used for fleet assignment
      * @param x            College position on x-axis
      * @param y            College position on y-axis
      * @param flag         College flag sprite (image name)
@@ -43,14 +44,15 @@ public class College extends Entity {
      * @param ship_no      Number of college ships to produce
      * @param invalidSpawn Spawn data to check spawn validity when generating ships
      */
-    public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
+    public College(GameScreen screen, String name, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
         super(screen, x, y);
         this.screen = screen;
+        this.name = name;
         noSpawn = invalidSpawn;
         currentCollege = flag;
         enemyCollege = new Texture(flag);
         //Set the position and size of the college
-        setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
+        setBounds(x, y, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
         defineBody();
@@ -72,7 +74,7 @@ public class College extends Entity {
                 spawnIsValid = getCoord(ranX, ranY);
             }
             System.out.println(ranX + " " + ranY);
-            fleet.add(new AiShip(screen, ranX, ranY, ship, college));
+            fleet.add(new AiShip(screen, ranX, ranY, ship, this));
         }
     }
 
@@ -188,6 +190,10 @@ public class College extends Entity {
      */
     public void fire() {
         cannonBalls.add(new Projectile(screen, b2body.getPosition().x, b2body.getPosition().y, "cannonBall.png", screen.getPlayerPos()));
+    }
+
+    public String getName() {
+        return name;
     }
 }
 
