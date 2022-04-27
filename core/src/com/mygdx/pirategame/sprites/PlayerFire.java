@@ -26,6 +26,8 @@ public class PlayerFire extends Projectile {
     private final Vector2 bodyVel;
     private final Sound fireNoise;
 
+    private float damage;
+
     /**
      * Instantiates cannon fire
      * Determines general cannonball data
@@ -35,9 +37,10 @@ public class PlayerFire extends Projectile {
      * @param body     body of origin
      * @param velocity velocity of the cannonball
      */
-    public PlayerFire(GameScreen screen, Body body, float velocity) {
+    public PlayerFire(GameScreen screen, Body body, float velocity, float damage) {
         super(screen, body.getPosition().x, body.getPosition().y, "cannonBall.png", null);
         this.velocity = velocity;
+        this.damage = damage;
         //sets the angle and velocity
         bodyVel = body.getLinearVelocity();
         angle = body.getAngle();

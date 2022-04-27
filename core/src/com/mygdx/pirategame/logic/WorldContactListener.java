@@ -35,9 +35,9 @@ public class WorldContactListener implements ContactListener {
         switch (cDef) {
             case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.COIN_BIT) {
-                    ((Entity) fixA.getUserData()).onContact();
+                    ((Entity) fixA.getUserData()).onContact((Entity) fixB.getUserData());
                 } else {
-                    ((Entity) fixB.getUserData()).onContact();
+                    ((Entity) fixB.getUserData()).onContact((Entity) fixA.getUserData());
                 }
                 break;
             case PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT:
@@ -46,30 +46,30 @@ public class WorldContactListener implements ContactListener {
                 break;
             case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
-                    ((Entity) fixA.getUserData()).onContact();
+                    ((Entity) fixA.getUserData()).onContact((Entity) fixB.getUserData());
                 } else {
-                    ((Entity) fixB.getUserData()).onContact();
+                    ((Entity) fixB.getUserData()).onContact((Entity) fixA.getUserData());
                 }
                 break;
             case PirateGame.COLLEGE_BIT | PirateGame.CANNON_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.COLLEGE_BIT) {
                     if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
-                        ((InteractiveTileObject) fixA.getUserData()).onContact();
+                        ((InteractiveTileObject) fixA.getUserData()).onContact((Entity) fixB.getUserData());
                         ((PlayerFire) fixB.getUserData()).setToDestroy();
                     }
                 } else {
                     if (fixB.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixB.getUserData().getClass())) {
-                        ((InteractiveTileObject) fixB.getUserData()).onContact();
+                        ((InteractiveTileObject) fixB.getUserData()).onContact((Entity) fixA.getUserData());
                         ((PlayerFire) fixA.getUserData()).setToDestroy();
                     }
                 }
                 break;
             case PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT:
                 if (fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
-                    ((Entity) fixA.getUserData()).onContact();
+                    ((Entity) fixA.getUserData()).onContact((Entity) fixB.getUserData());
                     ((PlayerFire) fixB.getUserData()).setToDestroy();
                 } else {
-                    ((Entity) fixB.getUserData()).onContact();
+                    ((Entity) fixB.getUserData()).onContact((Entity) fixA.getUserData());
                     ((PlayerFire) fixA.getUserData()).setToDestroy();
                 }
                 break;
@@ -88,12 +88,12 @@ public class WorldContactListener implements ContactListener {
     private void wallCollide(Fixture fixA, Fixture fixB) {
         if (fixA.getFilterData().categoryBits == PirateGame.DEFAULT_BIT) {
             if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
-                ((InteractiveTileObject) fixA.getUserData()).onContact();
+                ((InteractiveTileObject) fixA.getUserData()).onContact((Entity) fixB.getUserData());
                 ((Player) fixB.getUserData()).playBreakSound();
             }
         } else {
             if (fixB.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixB.getUserData().getClass())) {
-                ((InteractiveTileObject) fixB.getUserData()).onContact();
+                ((InteractiveTileObject) fixB.getUserData()).onContact((Entity) fixA.getUserData());
             }
         }
     }

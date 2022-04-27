@@ -23,6 +23,9 @@ public class Player extends Entity {
     private final Sound breakSound;
     private final Array<PlayerFire> cannonBalls;
     public final Array<Item> inventory;
+    public int damageDeal;
+    public float damageBuff;
+    public float speedBuff;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -35,6 +38,7 @@ public class Player extends Entity {
         this.screen = screen;
         Texture ship = new Texture("player_ship.png");
         this.world = screen.getWorld();
+        this.damageDeal = 20;
 
         // Defines a player, and the players position on screen and world
         defineBody();
@@ -47,9 +51,14 @@ public class Player extends Entity {
 
         // Sets cannonball array
         cannonBalls = new Array<>();
+
+        //initialise inventory
         inventory = new Array<>();
         inventory.add(new SpeedOrb(this));
         inventory.add(new SpeedOrb(this));
+
+        //update at startup
+        update(0);
     }
 
     /**
@@ -68,6 +77,22 @@ public class Player extends Entity {
         for (PlayerFire ball : cannonBalls) {
             ball.update(dt);
             if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
+        }
+
+        //update how inventory items affect the player
+        damageBuff = 1;
+        speedBuff = 1;
+        for (Item item : inventory){
+            item.buffs.forEach((buff, multiplier) -> {
+                switch (buff) {
+                    case "speed":
+                        speedBuff *= multiplier;
+                        break;
+                    case "dmg":
+                        damageBuff *= multiplier;
+                        break;
+                }
+            });
         }
     }
 
@@ -107,7 +132,7 @@ public class Player extends Entity {
     }
 
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
     }
 
     /**
@@ -115,8 +140,8 @@ public class Player extends Entity {
      */
     public void fire() {
         // Fires cannons
-        cannonBalls.add(new PlayerFire(screen, b2body, 5));
-        cannonBalls.add(new PlayerFire(screen, b2body, -5));
+        cannonBalls.add(new PlayerFire(screen, b2body, 5, damageDeal*damageBuff));
+        cannonBalls.add(new PlayerFire(screen, b2body, -5, damageDeal*damageBuff));
 
         // Cone fire below
         /*cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));

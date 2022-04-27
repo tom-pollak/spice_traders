@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
+import com.mygdx.pirategame.sprites.Entity;
 
 /**
  * Sets up the class for all the Islands. Deals with what happens on collision and its properties
@@ -30,7 +31,7 @@ public class Islands extends InteractiveTileObject {
      * When contact occurs between the ship and island. deal damage to the ship
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
         Gdx.app.log("island", "collision");
         //Deal damage to the boat
         Hud.changeHealth(-10);

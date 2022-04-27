@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.sprites.Entity;
 
 /**
  * College Walls (Anne Lister)
@@ -33,10 +34,10 @@ public class CollegeWalls4 extends InteractiveTileObject {
      * Checks for contact with cannonball
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
         Gdx.app.log("wall", "collision");
         //Deal damage to the assigned college
-        screen.getCollege("Anne Lister").onContact();
+        screen.getCollege("Anne Lister").onContact(collider);
 
     }
 }

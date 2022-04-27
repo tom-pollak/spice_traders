@@ -24,6 +24,7 @@ public abstract class Entity extends Sprite {
     public int damage;
     protected HealthBar bar;
     protected float stateTime = (float) Math.random();
+    public int damageDeal;
 
     /**
      * Instantiates an enemy
@@ -50,7 +51,7 @@ public abstract class Entity extends Sprite {
     /**
      * Defines contact
      */
-    public abstract void onContact();
+    public abstract void onContact(Entity collider);
 
     public abstract void update(float dt);
 

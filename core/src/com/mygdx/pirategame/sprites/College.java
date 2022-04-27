@@ -186,7 +186,7 @@ public class College extends Entity {
      * Allows for the college to take damage
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
         //Damage the college and lower health bar
         Gdx.app.log("enemy", "collision");
         health -= damage;

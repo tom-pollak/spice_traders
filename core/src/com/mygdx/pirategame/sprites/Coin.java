@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mygdx.pirategame.logic.SpeedOrb;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
@@ -91,7 +90,7 @@ public class Coin extends Entity {
      * What happens when an entity collides with the coin. The only entity that is able to do so is the player ship
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
         //Add a coin
         Hud.changeCoins(1);
         //Set to destroy

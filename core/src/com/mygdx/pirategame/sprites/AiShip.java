@@ -216,15 +216,15 @@ public class AiShip extends Entity {
      * Changes health in accordance with contact and damage
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
         Gdx.app.log("enemy", "collision");
         //Play collision sound
         if (GameScreen.game.getPreferences().isEffectsEnabled()) {
             hit.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
         //Deal with the damage
-        health -= damage;
-        bar.changeHealth(damage);
+        health -= collider.damage;
+        bar.changeHealth(collider.damage);
         Hud.changePoints(5);
     }
 

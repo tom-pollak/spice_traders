@@ -79,7 +79,7 @@ public class Projectile extends Entity {
     }
 
     @Override
-    public void onContact() {
+    public void onContact(Entity collider) {
 
 
     }
