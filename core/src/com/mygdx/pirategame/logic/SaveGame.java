@@ -110,7 +110,7 @@ public class SaveGame {//using JSON because it seems the easiest to write object
                 shipData.add(velocity);
                 shipData.add(ship.health);
                 shipData.add(ship.damage);
-                shipData.add(ship.college);
+                shipData.add(ship.college.toString());
                 shipData.add(ship.texturePath);
                 enemyShipList.add(shipData);
             }

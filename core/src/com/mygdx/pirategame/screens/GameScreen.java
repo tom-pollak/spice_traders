@@ -676,7 +676,7 @@ public class GameScreen implements Screen {
         for (Object allShip : allShips) {
             JSONArray shipData = (JSONArray) allShip;
             JSONArray shipPos = (JSONArray) shipData.get(0);
-            AiShip restoredShip = new AiShip(this, 0, 0, shipData.get(6).toString(), (College) shipData.get(5));
+            AiShip restoredShip = new AiShip(this, 0, 0, shipData.get(6).toString(), colleges.get((String) shipData.get(5)));
             restoredShip.health = ((Long) shipData.get(3)).intValue();
             restoredShip.damage = ((Long) shipData.get(4)).intValue();
             JSONArray shipVelocity = (JSONArray) shipData.get(2);
