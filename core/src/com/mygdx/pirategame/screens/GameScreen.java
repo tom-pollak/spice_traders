@@ -19,10 +19,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.*;
-import com.mygdx.pirategame.logic.Inventory;
-import com.mygdx.pirategame.logic.Item;
-import com.mygdx.pirategame.logic.SaveGame;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.pirategame.PirateGame;
+import com.mygdx.pirategame.logic.*;
+import com.mygdx.pirategame.sprites.AiShip;
+import com.mygdx.pirategame.sprites.Coin;
+import com.mygdx.pirategame.sprites.College;
+import com.mygdx.pirategame.sprites.Player;
+import com.mygdx.pirategame.tiles.WorldCreator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,23 +36,10 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.pirategame.PirateGame;
-import com.mygdx.pirategame.logic.AvailableSpawn;
-import com.mygdx.pirategame.logic.BackgroundTiledMap;
-import com.mygdx.pirategame.logic.WorldContactListener;
-import com.mygdx.pirategame.sprites.AiShip;
-import com.mygdx.pirategame.sprites.Coin;
-import com.mygdx.pirategame.sprites.College;
-import com.mygdx.pirategame.sprites.Player;
-import com.mygdx.pirategame.tiles.WorldCreator;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Random;
+import java.util.Set;
 
 
 /**
@@ -180,6 +172,7 @@ public class GameScreen implements Screen {
     public Hud createHud(SpriteBatch batch) {
         return new Hud(batch);
     }
+
     public Hud createHud(SpriteBatch batch, int health, int coins, int score, int coinMulti) {
         Hud hud = new Hud(batch);
         hud.setHealth(health);
@@ -281,28 +274,27 @@ public class GameScreen implements Screen {
             }
         });
         save.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                pauseTable.setVisible(false);
-                SaveGame.save(player, ships, Coins, hud, "save.json");
-                resume();
-            }
-        }
+                             @Override
+                             public void changed(ChangeEvent event, Actor actor) {
+                                 pauseTable.setVisible(false);
+                                 SaveGame.save(player, ships, Coins, hud, "save.json");
+                                 resume();
+                             }
+                         }
 
         );
         load.addListener(new ChangeListener() {
-             @Override
-             public void changed(ChangeEvent event, Actor actor) {
-                 pauseTable.setVisible(false);
-                 try {
-                     load("save.json");
-                 } catch (FileNotFoundException e) {
-                     throw new RuntimeException(e);
-                 }
-                 resume();
-             }
-         }
-        );
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                pauseTable.setVisible(false);
+                try {
+                    load("save.json");
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                resume();
+            }
+        });
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -404,11 +396,6 @@ public class GameScreen implements Screen {
         colleges.get("Constantine").update(dt);
         colleges.get("Goodricke").update(dt);
 
-        //Update ships
-        for (AiShip ship : ships) {
-            ship.update(dt);
-        }
-
         //Updates coin
         for (Coin coin : Coins) {
             coin.update();
@@ -446,10 +433,11 @@ public class GameScreen implements Screen {
     public void render(float dt) {
         if (gameStatus == GAME_RUNNING) {
             update(dt);
+        } else {
+            handleInput(dt);
         }
-        else{handleInput(dt);}
 
-        Gdx.gl.glClearColor(46/255f, 204/255f, 113/255f, 1);
+        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
@@ -472,16 +460,16 @@ public class GameScreen implements Screen {
         colleges.get("Goodricke").draw(game.batch);
 
         //Updates all ships
-        for (AiShip ship : ships) {
-            if (!Objects.equals(ship.college, "Unaligned")) {
-                //Flips a colleges allegence if their college is destroyed
-                if (colleges.get(ship.college).destroyed) {
-
-                    ship.updateTexture("Alcuin", "alcuin_ship.png");
-                }
-            }
-            ship.draw(game.batch);
-        }
+        //        for (AiShip ship : ships) {
+        //            if (!Objects.equals(ship.college, "Unaligned")) {
+        //                //Flips a colleges allegence if their college is destroyed
+        //                if (colleges.get(ship.college).destroyed) {
+        //
+        //                    ship.updateTexture(ship.college, "alcuin_ship.png");
+        //                }
+        //            }
+        //            ship.draw(game.batch);
+        //        }
         game.batch.end();
         Hud.stage.draw();
         Inventory.stage.act();
@@ -579,60 +567,6 @@ public class GameScreen implements Screen {
         maxSpeed = maxSpeed * (1 + (percentage / 100));
     }
 
-    /**
-     * Renders the visual data for all objects
-     * Changes and renders new visual data for ships
-     *
-     * @param dt Delta time (elapsed time since last game tick)
-     */
-    @Override
-    public void render(float dt) {
-        if (gameStatus == GAME_RUNNING) {
-            update(dt);
-        } else {
-            handleInput(dt);
-        }
-
-        Gdx.gl.glClearColor(46 / 255f, 204 / 255f, 113 / 255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        renderer.render();
-        // b2dr is the hitbox shapes, can be commented out to hide
-        //b2dr.render(world, camera.combined);
-
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-        // Order determines layering
-
-        //Renders coins
-        for (Coin coin : Coins) {
-            coin.draw(game.batch);
-        }
-
-        //Renders colleges
-        player.draw(game.batch);
-        colleges.get("Alcuin").draw(game.batch);
-        colleges.get("Anne Lister").draw(game.batch);
-        colleges.get("Constantine").draw(game.batch);
-        colleges.get("Goodricke").draw(game.batch);
-
-        //Updates all ships
-        for (AiShip ship : ships) {
-            if (!Objects.equals(ship.college, "Unaligned")) {
-                //Flips a colleges allegence if their college is destroyed
-                if (colleges.get(ship.college).destroyed) {
-
-                    ship.updateTexture("Alcuin", "alcuin_ship.png");
-                }
-            }
-            ship.draw(game.batch);
-        }
-        game.batch.end();
-        Hud.stage.draw();
-        stage.act();
-        stage.draw();
-        //Checks game over conditions
-        gameOverCheck();
-    }
 
     /**
      * Tests validity of randomly generated position
@@ -686,7 +620,7 @@ public class GameScreen implements Screen {
         stage.dispose();
     }
 
-    public void setPlayerPos(Float x, Float y){
+    public void setPlayerPos(Float x, Float y) {
         player.setX(x);
         player.setY(y);
     }
@@ -694,7 +628,7 @@ public class GameScreen implements Screen {
     public void load(String filename) throws FileNotFoundException {
         JSONParser jsonParser = new JSONParser();
 
-        try(FileReader reader = new FileReader(filename)){
+        try (FileReader reader = new FileReader(filename)) {
             Object obj = jsonParser.parse(reader);
             JSONObject list = (JSONObject) obj;
             loadPlayer(list);
@@ -702,9 +636,7 @@ public class GameScreen implements Screen {
             loadHud(list);
             loadCoins((list));
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             throw new RuntimeException(e);
         }
         update(0);
@@ -712,16 +644,16 @@ public class GameScreen implements Screen {
 
     }
 
-    private void loadPlayer(JSONObject json){
+    private void loadPlayer(JSONObject json) {
         JSONArray playerData = (JSONArray) json.get("player");
         JSONArray playerPos = (JSONArray) playerData.get(0);
-        float playerDirection = ((Double)playerData.get(1)).floatValue();
+        float playerDirection = ((Double) playerData.get(1)).floatValue();
         //JSON reader insisted on a value being read being a double, so it must be a double converted to float
         GameScreen.player.b2body.setTransform(((Double) playerPos.get(0)).floatValue(), ((Double) playerPos.get(1)).floatValue(), playerDirection);
-        GameScreen.player.b2body.setLinearVelocity(0,0);
+        GameScreen.player.b2body.setLinearVelocity(0, 0);
         player.inventory.clear();
         JSONArray inventoryData = (JSONArray) playerData.get(2);
-        for (Object item : inventoryData){
+        for (Object item : inventoryData) {
             String type = ((JSONArray) item).get(0).toString();
             String texturePath = ((JSONArray) item).get(1).toString();
             Texture texture = new Texture(texturePath);
@@ -729,7 +661,7 @@ public class GameScreen implements Screen {
 
             JSONObject buffs = (JSONObject) ((JSONArray) item).get(2);
             Set keySet = buffs.keySet();
-            for(Object key : keySet){
+            for (Object key : keySet) {
                 String keyString = key.toString();
                 loadedItem.buffs.put(keyString, ((Double) buffs.get(keyString)).floatValue());
             }
@@ -737,20 +669,14 @@ public class GameScreen implements Screen {
         }
 
     }
+
     private void loadEnemyShips(JSONObject json) {
         JSONArray allShips = (JSONArray) json.get("enemyShips");
         GameScreen.ships.clear();
         for (Object allShip : allShips) {
             JSONArray shipData = (JSONArray) allShip;
             JSONArray shipPos = (JSONArray) shipData.get(0);
-            AiShip restoredShip = new AiShip(
-                    this,
-                    0,
-                    0,
-                    shipData.get(6).toString(),
-                    shipData.get(5).toString()
-
-            );
+            AiShip restoredShip = new AiShip(this, 0, 0, shipData.get(6).toString(), (College) shipData.get(5));
             restoredShip.health = ((Long) shipData.get(3)).intValue();
             restoredShip.damage = ((Long) shipData.get(4)).intValue();
             JSONArray shipVelocity = (JSONArray) shipData.get(2);
@@ -761,7 +687,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void loadHud(JSONObject json){
+    private void loadHud(JSONObject json) {
         JSONArray hudData = (JSONArray) json.get("hud");
         int health = ((Long) hudData.get(0)).intValue();
         int coins = ((Long) hudData.get(1)).intValue();
@@ -771,10 +697,10 @@ public class GameScreen implements Screen {
         //Time changed by 0 as the function updates parts of the HUD gui
     }
 
-    private void loadCoins(JSONObject json){
+    private void loadCoins(JSONObject json) {
         JSONArray coinsArray = (JSONArray) json.get("coins");
         Coins.clear();
-        for (Object coinData : coinsArray){
+        for (Object coinData : coinsArray) {
             JSONArray position = (JSONArray) coinData;
             float x = ((Double) position.get(0)).floatValue();
             float y = ((Double) position.get(1)).floatValue();

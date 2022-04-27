@@ -134,6 +134,10 @@ public class College extends Entity {
             ball.update(dt);
             if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
         }
+
+        for (AiShip ship : fleet) {
+            ship.update(dt);
+        }
     }
 
     /**
@@ -147,6 +151,10 @@ public class College extends Entity {
             //Render balls
             for (Projectile ball : cannonBalls)
                 ball.draw(batch);
+
+            for (AiShip ship : fleet) {
+                ship.draw(batch);
+            }
         }
     }
 

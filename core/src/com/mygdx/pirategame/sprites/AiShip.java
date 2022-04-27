@@ -25,7 +25,8 @@ import static com.mygdx.pirategame.screens.GameScreen.maxSpeed;
  * @version 1.0
  */
 public class AiShip extends Entity {
-    private Texture enemyShip;
+    public Texture shipTexture;
+    public String texturePath;
     public College college;
     private final Sound destroy;
     private final Sound hit;
@@ -42,17 +43,17 @@ public class AiShip extends Entity {
      */
     public AiShip(GameScreen screen, float x, float y, String path, College college) {
         super(screen, x, y);
-        enemyShip = new Texture(path);
+        shipTexture = new Texture(path);
+        this.texturePath = path;
         this.college = college;
         //Assign college
-        college = assignment;
         cannonBalls = new Array<>();
         //Set audios
         destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
         hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
         //Set the position and size of the college
         setBounds(x, y, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
-        setRegion(enemyShip);
+        setRegion(shipTexture);
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
         defineBody();
         bar = new HealthBar(this);
@@ -127,13 +128,13 @@ public class AiShip extends Entity {
         world.destroyBody(b2body);
         destroyed = true;
         //Change player coins and points
-        changePoints(20);
-        changeCoins(10);
+        Hud.changePoints(20);
+        Hud.changeCoins(10);
     }
 
     private void moveTowardsPlayer(float dt) {
         Vector2 cur_coord = new Vector2(getX(), getY());
-        Vector2 player_coord = new Vector2(screen.player.getX(), screen.player.getY());
+        Vector2 player_coord = new Vector2(GameScreen.player.getX(), GameScreen.player.getY());
         Vector2 college_coord = new Vector2(college.getX(), college.getY());
         Vector2 target = null;
         System.out.println(cur_coord.x + " " + cur_coord.y);
@@ -143,7 +144,7 @@ public class AiShip extends Entity {
         if (getDistance(college) > 50) {
             target = new Vector2(college_coord.x - cur_coord.x, college_coord.y - cur_coord.y);
             target.limit2(1).scl(0.05f);
-        } else if (getDistance(screen.player) < 10) {
+        } else if (getDistance(GameScreen.player) < 10) {
             target = new Vector2(player_coord.x - cur_coord.x, player_coord.y - cur_coord.y);
             target.limit2(1).scl(0.05f);
         }
@@ -235,7 +236,7 @@ public class AiShip extends Entity {
      */
     public void updateTexture(College college, String path) {
         this.college = college;
-        enemyShip = new Texture(path);
-        setRegion(enemyShip);
+        shipTexture = new Texture(path);
+        setRegion(shipTexture);
     }
 }
