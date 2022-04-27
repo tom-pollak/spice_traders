@@ -1,42 +1,91 @@
 package com.mygdx.pirategame.logic;
 
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pirategame.*;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.io.*;
-import java.sql.Savepoint;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
 
 public class SaveGame {//using JSON because it seems the easiest to write objects to and retrieve them
     public SaveGame(GameScreen gameScreen){
 
     }
 
+
+    /*          LOAD IS IN GAMESCREEN.JAVA          */
+
+
     public static void save(Player player, ArrayList<EnemyShip> enemyShips, ArrayList<Coin> coins, Hud hud, String filename) {
         JSONObject fullSave = new JSONObject();
 
+        /*SAVE JSON FORMAT
+        *   The JSON saves as an object containing the following keys:
+        *       player, enemyShips, coins, hud
+        *       accessible with "json.get("-key-")
+        *
+        *   Player Array:
+        *       Index 0: Array containing position
+        *       Index 1: Angle of player
+        *       Index 2: Inventory array containing each item's information in indexes:
+        *           Index 0: Type of item
+        *           Index 1: Texture (toString)
+        *           Index 2: Array of buffs in JSONObjects with buff type and value, formatted (key, value)
+        *
+        *   Hud Array:
+        *       Index 0: Health
+        *       Index 1: Coins
+        *       Index 2: Score
+        *       Index 3: Coin Multiplier
+        *
+        *   Enemy Ship Array:
+        *       Each index contains an array with the data for a single saved ship.
+        *       For example json,get(0) is the data for the first saved ship.
+        *
+        *       In each index, the array containing the data for a ship:
+        *           Index 0: Array containing position
+        *           Index 1: Angle of ship
+        *           Index 2: Array containing the linear velocity of the ship
+        *           Index 3: Health
+        *           Index 4: Damage
+        *           Index 5: College
+        *           Index 6: Path to texture of the ship (String)
+        *
+        *   Coin Array:
+        *       Each index is an array containing the position of a coin.
+        *
+        * */
+
+
         //save all player attributes
         JSONArray playerData = new JSONArray();
-        ArrayList position = new ArrayList<Float>();
+        ArrayList<Float> position = new ArrayList<Float>();
         position.add(player.b2body.getPosition().x);
         position.add(player.b2body.getPosition().y);
         playerData.add(position);
         playerData.add(player.b2body.getAngle());
+        JSONArray inventoryItems = new JSONArray();
+        for (Item item : player.inventory){
+            JSONArray itemData = new JSONArray();
+            itemData.add(item.getType());
+            itemData.add(item.getTexture().toString());
+            JSONObject buffs = new JSONObject();
+            for(Map.Entry<String, Float> singleBuff : item.buffs.entrySet()){
+                buffs.put(singleBuff.getKey(), singleBuff.getValue());
+            }
+            itemData.add(buffs);
+            inventoryItems.add(itemData);
+        }
+        playerData.add(inventoryItems);
         fullSave.put("player", playerData);
 
         //save all important attributes stored in hud
         JSONArray hudData = new JSONArray();
-        hudData.add(hud.getHealth());
-        hudData.add(hud.getCoins());
-        hudData.add(hud.getScore());
+        hudData.add(Hud.getHealth());
+        hudData.add(Hud.getCoins());
+        hudData.add(Hud.getScore());
         hudData.add(hud.getCoinMulti());
         fullSave.put("hud", hudData);
 

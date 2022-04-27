@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.mygdx.pirategame.logic.SpeedOrb;
 
 /**
  * Coin
@@ -17,10 +18,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  *@version 1.0
  */
 public class Coin extends Entity {
-    private Texture coin;
     private boolean setToDestroyed;
     private boolean destroyed;
-    private Sound coinPickup;
+    private final Sound coinPickup;
 
     /**
      * Instantiates a new Coin.
@@ -32,7 +32,7 @@ public class Coin extends Entity {
     public Coin(GameScreen screen, float x, float y) {
         super(screen, x, y);
         //Set coin image
-        coin = new Texture("coin.png");
+        Texture coin = new Texture("coin.png");
         //Set the position and size of the coin
         setBounds(0,0,48 / PirateGame.PPM, 48 / PirateGame.PPM);
         //Set the texture

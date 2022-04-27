@@ -52,9 +52,12 @@ public class MainMenu implements Screen {
         TextButton help = new TextButton("Help", skin);
         TextButton options = new TextButton("Options", skin);
         TextButton exit = new TextButton("Exit", skin);
+        TextButton load = new TextButton("Load", skin);
 
         //add buttons to table
         table.add(newGame).fillX().uniformX();
+        table.row();
+        table.add(load).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(help).fillX().uniformX();
         table.row();
@@ -87,6 +90,13 @@ public class MainMenu implements Screen {
             }
         });
 
+        load.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+                parent.changeScreen(PirateGame.GAME);
+                parent.load("save.json");
+            }
+        });
 
         //Quit game
         exit.addListener(new ChangeListener() {

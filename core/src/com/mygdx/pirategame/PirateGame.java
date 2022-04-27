@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.io.FileNotFoundException;
+
 
 /**
  * The start of the program. Sets up the main back bone of the game.
@@ -30,7 +32,7 @@ public class PirateGame extends Game {
 
 	//Variable for each screen
 	private MainMenu menuScreen;
-	public GameScreen gameScreen;
+	private GameScreen gameScreen;
 	private SkillTree skillTreeScreen;
 	private DeathScreen deathScreen;
 	private Help helpScreen;
@@ -150,5 +152,13 @@ public class PirateGame extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+
+	public void load (String filename) {
+		try {
+			gameScreen.load(filename);
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

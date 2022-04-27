@@ -105,16 +105,18 @@ public class Hud implements Disposable {
             //Regen health every second
             if(health != 100) {
                 health += 1;
-                healthLabel.setText(String.format("%02d", health));
             }
             //Gain point every second
             score += 1;
-            scoreLabel.setText(String.format("%03d", score));
             timeCount = 0;
 
             //Check if a points boundary is met
             SkillTree.pointsCheck(score);
+
         }
+        coinLabel.setText(String.format("%03d", coins));
+        scoreLabel.setText(String.format("%03d", score));
+        healthLabel.setText(String.format("%02d", health));
     }
 
     /**
@@ -178,6 +180,12 @@ public class Hud implements Disposable {
     public static Integer getHealth(){
         return health;
     }
+    public static Integer getScore(){
+        return score;
+    }
+    public static Integer getCoinMulti(){
+        return coinMulti;
+    }
 
     /**
      * (Not Used)
@@ -188,7 +196,6 @@ public class Hud implements Disposable {
     public static Integer getCoins(){
         return coins;
     }
-    public static Integer getScore(){return score;}
 
     /**
      * Disposes game data
@@ -198,8 +205,18 @@ public class Hud implements Disposable {
         stage.dispose();
     }
 
-    public Integer getCoinMulti() {
-        return coinMulti;
+    public void setHealth(int hp){
+        health = hp;
     }
+    public void setCoins(int amount){
+        coins = amount;
+    }
+    public void setScore(int amount){
+        score = amount;
+    }
+    public void setCoinMulti(int mulitplier){
+        coinMulti = mulitplier;
+    }
+
 }
 

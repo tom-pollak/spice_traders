@@ -10,13 +10,20 @@ import com.mygdx.pirategame.Player;
 
 public class Inventory implements Disposable {
     public static Stage stage;
-    private static Array<Item> inventory;
-    public Inventory(Player player){//the entity of which the inventory is going to be shown
-        inventory = player.getInventory();
+    private Table table1;
+    private final Player player;
+    public Inventory(Player parent){//the entity of which the inventory is going to be shown
         stage = new Stage(new ScreenViewport());
+        player = parent;
+        table1 = new Table();
+        update();
+    }
 
+    public void update(){
+        table1.reset();
+        Array<Item> inventory = player.getInventory();
         //create and setup tables
-        Table table1 = new Table();
+        table1 = new Table();
         table1.bottom().left();
         table1.setFillParent(true);
 
@@ -26,7 +33,6 @@ public class Inventory implements Disposable {
             table1.add(image).width(64).height(64).padBottom(16).padLeft(16);
         }
         stage.addActor(table1);
-
     }
 
     @Override

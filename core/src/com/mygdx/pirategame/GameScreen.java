@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -18,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.pirategame.logic.Inventory;
+import com.mygdx.pirategame.logic.Item;
 import com.mygdx.pirategame.logic.SaveGame;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,11 +30,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Random;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 
 /**
@@ -63,7 +62,7 @@ public class GameScreen implements Screen {
     public static ArrayList<EnemyShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private final AvailableSpawn invalidSpawn = new AvailableSpawn();
-    private final Hud hud;
+    private Hud hud;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -74,7 +73,9 @@ public class GameScreen implements Screen {
 
     public Random rand = new Random();
 
-    private Inventory inventoryHud;
+    private final Inventory inventoryHud;
+
+    public Boolean loadSaveData;
 
     /**
      * Initialises the Game Screen,
@@ -91,7 +92,7 @@ public class GameScreen implements Screen {
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
         // Initialize a hud
-        hud = new Hud(game.batch);
+        hud = createHud(game.batch);
 
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
@@ -157,6 +158,19 @@ public class GameScreen implements Screen {
         //Setting stage
         stage = new Stage(new ScreenViewport());
         inventoryHud = new Inventory(player);
+        loadSaveData = false;
+    }
+
+    public Hud createHud(SpriteBatch batch) {
+        return new Hud(batch);
+    }
+    public Hud createHud(SpriteBatch batch, int health, int coins, int score, int coinMulti) {
+        Hud hud = new Hud(batch);
+        hud.setHealth(health);
+        hud.setCoins(coins);
+        hud.setScore(score);
+        hud.setCoinMulti(coinMulti);
+        return hud;
     }
 
     /**
@@ -257,6 +271,7 @@ public class GameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 pauseTable.setVisible(false);
                 SaveGame.save(player, ships, Coins, hud, "save.json");
+                resume();
             }
         }
 
@@ -270,6 +285,7 @@ public class GameScreen implements Screen {
                  } catch (FileNotFoundException e) {
                      throw new RuntimeException(e);
                  }
+                 resume();
              }
          }
         );
@@ -354,6 +370,7 @@ public class GameScreen implements Screen {
 
         // Update all players and entities
         player.update(dt);
+        inventoryHud.update();
         colleges.get("Alcuin").update(dt);
         colleges.get("Anne Lister").update(dt);
         colleges.get("Constantine").update(dt);
@@ -615,29 +632,49 @@ public class GameScreen implements Screen {
             JSONObject list = (JSONObject) obj;
             loadPlayer(list);
             loadEnemyShips(list);
+            loadHud(list);
+            loadCoins((list));
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+        update(0);
 
 
     }
 
-    private static void loadPlayer(JSONObject json){
+    private void loadPlayer(JSONObject json){
         JSONArray playerData = (JSONArray) json.get("player");
         JSONArray playerPos = (JSONArray) playerData.get(0);
         float playerDirection = ((Double)playerData.get(1)).floatValue();
         //JSON reader insisted on a value being read being a double, so it must be a double converted to float
         GameScreen.player.b2body.setTransform(((Double) playerPos.get(0)).floatValue(), ((Double) playerPos.get(1)).floatValue(), playerDirection);
         GameScreen.player.b2body.setLinearVelocity(0,0);
+        player.inventory.clear();
+        JSONArray inventoryData = (JSONArray) playerData.get(2);
+        for (Object item : inventoryData){
+            String type = ((JSONArray) item).get(0).toString();
+            String texturePath = ((JSONArray) item).get(1).toString();
+            Texture texture = new Texture(texturePath);
+            Item loadedItem = new Item(type, player, texture);
+
+            JSONObject buffs = (JSONObject) ((JSONArray) item).get(2);
+            Set keySet = buffs.keySet();
+            for(Object key : keySet){
+                String keyString = key.toString();
+                loadedItem.buffs.put(keyString, ((Double) buffs.get(keyString)).floatValue());
+            }
+            player.inventory.add(loadedItem);
+        }
+
     }
-    public void loadEnemyShips(JSONObject json) {
+    private void loadEnemyShips(JSONObject json) {
         JSONArray allShips = (JSONArray) json.get("enemyShips");
         GameScreen.ships.clear();
-        for(int i = 0; i < allShips.size(); i++){
-            JSONArray shipData = (JSONArray) allShips.get(i);
+        for (Object allShip : allShips) {
+            JSONArray shipData = (JSONArray) allShip;
             JSONArray shipPos = (JSONArray) shipData.get(0);
             EnemyShip restoredShip = new EnemyShip(
                     this,
@@ -650,10 +687,31 @@ public class GameScreen implements Screen {
             restoredShip.health = ((Long) shipData.get(3)).intValue();
             restoredShip.damage = ((Long) shipData.get(4)).intValue();
             JSONArray shipVelocity = (JSONArray) shipData.get(2);
-            float shipAngle = ((Double)shipData.get(1)).floatValue();
-            restoredShip.b2body.setTransform(((Double)shipPos.get(0)).floatValue(), ((Double)shipPos.get(1)).floatValue(), shipAngle);
+            float shipAngle = ((Double) shipData.get(1)).floatValue();
+            restoredShip.b2body.setTransform(((Double) shipPos.get(0)).floatValue(), ((Double) shipPos.get(1)).floatValue(), shipAngle);
             restoredShip.b2body.setLinearVelocity(((Double) shipVelocity.get(0)).floatValue(), ((Double) shipVelocity.get(1)).floatValue());
             GameScreen.ships.add(restoredShip);
+        }
+    }
+
+    private void loadHud(JSONObject json){
+        JSONArray hudData = (JSONArray) json.get("hud");
+        int health = ((Long) hudData.get(0)).intValue();
+        int coins = ((Long) hudData.get(1)).intValue();
+        int score = ((Long) hudData.get(2)).intValue();
+        int coinMult = ((Long) hudData.get(3)).intValue();
+        hud = createHud(game.batch, health, coins, score, coinMult);
+        //Time changed by 0 as the function updates parts of the HUD gui
+    }
+
+    private void loadCoins(JSONObject json){
+        JSONArray coinsArray = (JSONArray) json.get("coins");
+        Coins.clear();
+        for (Object coinData : coinsArray){
+            JSONArray position = (JSONArray) coinData;
+            float x = ((Double) position.get(0)).floatValue();
+            float y = ((Double) position.get(1)).floatValue();
+            Coins.add(new Coin(this, x, y));
         }
     }
 }
