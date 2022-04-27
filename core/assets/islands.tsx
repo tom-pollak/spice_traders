@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.2" name="islands" tilewidth="64" tileheight="64" tilecount="101" columns="0">
+<tileset version="1.8" tiledversion="1.8.2" name="islands" tilewidth="64" tileheight="64" tilecount="101" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <properties>
   <property name="Invalidates Spawning" type="bool" value="true"/>
@@ -23,6 +23,9 @@
   <image width="64" height="64" source="tile_22.png"/>
  </tile>
  <tile id="70">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
   <image width="64" height="64" source="tile_23.png"/>
  </tile>
  <tile id="71">
