@@ -16,12 +16,13 @@ import com.mygdx.pirategame.screens.GameScreen;
 public abstract class Entity extends Sprite {
     protected World world;
     protected GameScreen screen;
-    public Body b2body;
+    protected Body b2body;
     public boolean setToDestroy;
     public boolean destroyed;
     public int health;
     public int damage;
     protected HealthBar bar;
+    protected float stateTime = (float) Math.random();
 
     /**
      * Instantiates an enemy
@@ -38,8 +39,6 @@ public abstract class Entity extends Sprite {
         this.destroyed = false;
         this.health = 100;
 
-        defineBody();
-        bar = new HealthBar(this);
     }
 
     /**
@@ -55,7 +54,7 @@ public abstract class Entity extends Sprite {
     public abstract void update(float dt);
 
     /**
-     * Checks recieved damage
+     * Checks received damage
      * Increments total damage by damage received
      *
      * @param value Damage received

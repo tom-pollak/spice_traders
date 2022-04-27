@@ -29,7 +29,7 @@ public class College extends Entity {
     private final Texture enemyCollege;
     public Random rand = new Random();
     private final String currentCollege;
-    private final Array<FireCannonBall> cannonBalls;
+    private final Array<Projectile> cannonBalls;
     private final AvailableSpawn noSpawn;
     public ArrayList<AiShip> fleet = new ArrayList<>();
 
@@ -53,6 +53,8 @@ public class College extends Entity {
         setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
+        defineBody();
+        bar = new HealthBar(this);
         damage = 10;
         cannonBalls = new Array<>();
         int ranX = 0;
@@ -69,6 +71,7 @@ public class College extends Entity {
                 ranY = (int) Math.floor(y + (ranY / PirateGame.PPM));
                 spawnIsValid = getCoord(ranX, ranY);
             }
+            System.out.println(ranX + " " + ranY);
             fleet.add(new AiShip(screen, ranX, ranY, ship, college));
         }
     }
@@ -125,7 +128,7 @@ public class College extends Entity {
             setToDestroy = true;
         }
         //Update cannon balls
-        for (FireCannonBall ball : cannonBalls) {
+        for (Projectile ball : cannonBalls) {
             ball.update(dt);
             if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
         }
@@ -140,7 +143,7 @@ public class College extends Entity {
             //Render health bar
             bar.render(batch);
             //Render balls
-            for (FireCannonBall ball : cannonBalls)
+            for (Projectile ball : cannonBalls)
                 ball.draw(batch);
         }
     }
@@ -184,7 +187,7 @@ public class College extends Entity {
      * Fires cannonballs
      */
     public void fire() {
-        cannonBalls.add(new FireCannonBall(screen, b2body.getPosition().x, b2body.getPosition().y));
+        cannonBalls.add(new Projectile(screen, b2body.getPosition().x, b2body.getPosition().y, "cannonBall.png", screen.getPlayerPos()));
     }
 }
 

@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
     private final TiledMap map;
     private final OrthogonalTiledMapRenderer renderer;
 
-    private final World world;
+    private final World world = new World(new Vector2(0, 0), true);
     private final Box2DDebugRenderer b2dr;
 
     public static Player player;
@@ -114,7 +114,6 @@ public class GameScreen implements Screen {
         hud = createHud(game.batch);
 
         // Initialising box2d physics
-        world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
         player = new Player(this);
 

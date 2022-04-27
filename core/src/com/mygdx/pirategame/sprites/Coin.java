@@ -44,6 +44,8 @@ public class Coin extends Entity {
         //Sets origin of the coin
         setOrigin(24 / PirateGame.PPM, 24 / PirateGame.PPM);
         coinPickup = Gdx.audio.newSound(Gdx.files.internal("coin-pickup.mp3"));
+        defineBody();
+        bar = new HealthBar(this);
     }
 
     /**

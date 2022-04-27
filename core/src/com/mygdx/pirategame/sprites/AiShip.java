@@ -30,8 +30,7 @@ public class AiShip extends Entity {
     public String college;
     private final Sound destroy;
     private final Sound hit;
-    private final Array<FireCannonBall> cannonBalls;
-    private float stateTime = 0;
+    private final Array<Projectile> cannonBalls;
 
     /**
      * Instantiates enemy ship
@@ -56,6 +55,8 @@ public class AiShip extends Entity {
         setBounds(0, 0, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
+        defineBody();
+        bar = new HealthBar(this);
 
         damage = 20;
     }
@@ -67,7 +68,7 @@ public class AiShip extends Entity {
      * @param dt Delta time (elapsed time since last game tick)
      */
     public void update(float dt) {
-        updateEnemy(dt);
+        moveTowardsPlayer(dt);
 
         //If ship is set to destroy and isnt, destroy it
         if (setToDestroy && !destroyed) {
@@ -89,12 +90,15 @@ public class AiShip extends Entity {
             //Update health bar
             bar.update();
             if (stateTime > 1) {
-                cannonBalls.add(new FireCannonBall(screen, b2body.getPosition().x, b2body.getPosition().y));
+                if (screen.getPlayerPos() != null) {
+                    System.out.println(screen.getPlayerPos().x + " " + screen.getPlayerPos().y);
+                    cannonBalls.add(new Projectile(screen, b2body.getPosition().x, b2body.getPosition().y, "cannonBall.png", screen.getPlayerPos()));
+                }
                 stateTime = 0;
             }
 
             //Update cannon balls
-            for (FireCannonBall ball : cannonBalls) {
+            for (Projectile ball : cannonBalls) {
                 System.out.println("Updating cannon ball");
                 ball.update(dt);
                 if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
@@ -113,23 +117,14 @@ public class AiShip extends Entity {
         //b2body.setLinearVelocity(target.scl(speed));
     }
 
-    private void updateEnemy(float dt) {
+    private void moveTowardsPlayer(float dt) {
         stateTime += dt;
-        System.out.println("State time: " + stateTime);
-        //        Vector2 cur_coord = screen.backgroundTiledMap.getTileCoords(getX(), getY());
         Vector2 cur_coord = new Vector2(getX(), getY());
-        //        Vector2 player_coord = screen.backgroundTiledMap.getTileCoords(screen.player.getX(), screen.player.getY());
         Vector2 player_coord = new Vector2(screen.player.getX(), screen.player.getY());
-        //        List<GridCell> searchPath = pathfinding.findPath((int) cur_coord.x, (int) cur_coord.y, (int) player_coord.x, (int) player_coord.y);
-        // Navigate towards first tile in search path
+        Vector2 target = new Vector2(player_coord.x - cur_coord.x, player_coord.y - cur_coord.y);
+        target.limit2(1).scl(0.05f);
+
         try {
-            //                GridCell firstNode = searchPath.get(0);
-            //            Vector2 target = screen.backgroundTiledMap.getTileCoords(firstNode.x, firstNode.y);
-            Vector2 target = new Vector2(player_coord.x - cur_coord.x, player_coord.y - cur_coord.y);
-            //            System.out.println("Target: " + target);
-            target.limit2(1).scl(0.05f);
-            //            System.out.println("Target: " + target);
-            // Checking if player at max velocity, and keeping them below max
             if (b2body.getLinearVelocity().x >= maxSpeed) {
                 b2body.applyLinearImpulse(new Vector2(-accel, 0), b2body.getWorldCenter(), true);
             }
@@ -157,7 +152,7 @@ public class AiShip extends Entity {
             super.draw(batch);
             //Render health bar
             bar.render(batch);
-            for (FireCannonBall ball : cannonBalls)
+            for (Projectile ball : cannonBalls)
                 ball.draw(batch);
         }
     }

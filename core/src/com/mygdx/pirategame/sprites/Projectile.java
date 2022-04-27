@@ -1,9 +1,10 @@
 package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 
@@ -16,51 +17,44 @@ import com.mygdx.pirategame.screens.GameScreen;
  * @version 1.0
  */
 
-public class FireCannonBall extends Sprite {
-    private final World world;
-    private final Texture cannonBall;
-    private float stateTime;
+public class Projectile extends Entity {
     private boolean destroyed;
     private boolean setToDestroy;
-    private Body b2body;
-    private final Vector2 playerPos;
+    protected final Vector2 target;
     private Float speed = 5f;
 
     /**
      * Defines player position
      * Defines cannonballs
      *
-     * @param screen Visual data
-     * @param x      x position of player
-     * @param y      y position of player
+     * @param screen      Visual data
+     * @param x           x position of player
+     * @param y           y position of player
+     * @param texturePath
+     * @param target
      */
-    public FireCannonBall(GameScreen screen, float x, float y) {
-        this.world = screen.getWorld();
-        playerPos = screen.getPlayerPos();
-        cannonBall = new Texture("cannonBall.png");
+    public Projectile(GameScreen screen, float x, float y, String texturePath, Vector2 target) {
+        super(screen, x, y);
+        this.target = target;
+        System.out.println("target: " + target);
         //Set the position and size of the ball
-        setRegion(cannonBall);
+        setRegion(new Texture(texturePath));
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
-        defineCannonBall();
+        if (!(this instanceof PlayerFire)) defineBody();
     }
 
-    public FireCannonBall(GameScreen screen, float x, float y, Float speed, String texturePath) {
-        this.world = screen.getWorld();
-        playerPos = screen.getPlayerPos();
-        cannonBall = new Texture(texturePath);
-        this.speed = speed;
+    public Projectile(GameScreen screen, float x, float y, Float velocity, String texturePath, Vector2 target) {
+        this(screen, x, y, texturePath, target);
+        this.speed = velocity;
 
-        //Set the position and size of the ball
-        setRegion(cannonBall);
-        setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
-        defineCannonBall();
     }
 
     /**
      * Defines cannonball data
      * Defines cannonball shape
      */
-    public void defineCannonBall() {
+    @Override
+    public void defineBody() {
         //sets the body definitions
         BodyDef bDef = new BodyDef();
         bDef.position.set(getX(), getY());
@@ -79,9 +73,15 @@ public class FireCannonBall extends Sprite {
         b2body.createFixture(fDef).setUserData(this);
 
         // Math for firing the cannonball at the player
-        playerPos.sub(b2body.getPosition());
-        playerPos.nor();
-        b2body.setLinearVelocity(playerPos.scl(speed));
+        target.sub(b2body.getPosition());
+        target.nor();
+        b2body.setLinearVelocity(target.scl(speed));
+    }
+
+    @Override
+    public void onContact() {
+
+
     }
 
     /**
