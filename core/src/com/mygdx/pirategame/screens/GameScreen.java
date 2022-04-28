@@ -23,10 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.logic.*;
-import com.mygdx.pirategame.sprites.AiShip;
-import com.mygdx.pirategame.sprites.Coin;
-import com.mygdx.pirategame.sprites.College;
-import com.mygdx.pirategame.sprites.Player;
+import com.mygdx.pirategame.sprites.*;
 import com.mygdx.pirategame.tiles.WorldCreator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -86,6 +83,7 @@ public class GameScreen implements Screen {
     private final Inventory inventoryHud;
 
     public Boolean loadSaveData;
+    private final ArrayList<SeaMonster> monsters = new ArrayList<>();
 
     /**
      * Initialises the Game Screen,
@@ -130,7 +128,9 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
+        monsters.add(new SeaMonster(this, 11, 11));
         player = new Player(this, 10, 10, colleges.get("Alcuin"));
+
 
         //Random ships
         boolean validLoc;
@@ -391,14 +391,17 @@ public class GameScreen implements Screen {
         // Update all players and entities
         player.update(dt);
         inventoryHud.update();
-        colleges.get("Alcuin").update(dt);
-        colleges.get("Anne Lister").update(dt);
-        colleges.get("Constantine").update(dt);
-        colleges.get("Goodricke").update(dt);
+        for (College college : colleges.values()) {
+            college.update(dt);
+        }
 
         //Updates coin
         for (Coin coin : Coins) {
             coin.update();
+        }
+
+        for (SeaMonster monster : monsters) {
+            monster.update(dt);
         }
         //After a delay check if a college is destroyed. If not, if can fire
         if (stateTime > 1) {
@@ -450,6 +453,9 @@ public class GameScreen implements Screen {
         //Renders coins
         for (Coin coin : Coins) {
             coin.draw(game.batch);
+        }
+        for (SeaMonster monster : monsters) {
+            monster.draw(game.batch);
         }
 
         //Renders colleges

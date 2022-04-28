@@ -59,10 +59,13 @@ public class AiShip extends Ship {
     private void moveTowardsPlayer(float dt) {
         Vector2 cur_coord = new Vector2(getX(), getY());
         Vector2 player_coord = new Vector2(GameScreen.player.getX(), GameScreen.player.getY());
-        Vector2 college_coord = new Vector2(college.getX(), college.getY());
+        Vector2 college_coord = null;
+        if (college != null) {
+            college_coord = new Vector2(college.getX(), college.getY());
+        }
         Vector2 target = null;
 
-        if (getDistance(college) > 50) {
+        if (college != null && getDistance(college) > 50) {
             target = new Vector2(college_coord.x - cur_coord.x, college_coord.y - cur_coord.y);
             target.limit2(1).scl(0.05f);
         } else if (getDistance(GameScreen.player) < 10) {
