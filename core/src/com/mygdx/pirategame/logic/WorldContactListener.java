@@ -3,10 +3,8 @@ package com.mygdx.pirategame.logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.pirategame.PirateGame;
-import com.mygdx.pirategame.screens.Hud;
 import com.mygdx.pirategame.sprites.Entity;
 import com.mygdx.pirategame.sprites.Player;
-import com.mygdx.pirategame.sprites.PlayerFire;
 import com.mygdx.pirategame.sprites.Projectile;
 import com.mygdx.pirategame.tiles.InteractiveTileObject;
 
@@ -34,52 +32,23 @@ public class WorldContactListener implements ContactListener {
         // Fixes contact to an entity
         switch (cDef) {
             case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
-                if (fixA.getFilterData().categoryBits == PirateGame.COIN_BIT) {
-                    ((Entity) fixA.getUserData()).onContact();
-                } else {
-                    ((Entity) fixB.getUserData()).onContact();
-                }
+            case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
+                ((Entity) fixA.getUserData()).onContact();
+                ((Entity) fixB.getUserData()).onContact();
                 break;
             case PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT:
             case PirateGame.DEFAULT_BIT | PirateGame.ENEMY_BIT:
                 wallCollide(fixA, fixB);
                 break;
-            case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
-                if (fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
-                    ((Entity) fixA.getUserData()).onContact();
-                } else {
-                    ((Entity) fixB.getUserData()).onContact();
-                }
-                break;
             case PirateGame.COLLEGE_BIT | PirateGame.CANNON_BIT:
-                if (fixA.getFilterData().categoryBits == PirateGame.COLLEGE_BIT) {
-                    if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
-                        ((InteractiveTileObject) fixA.getUserData()).onContact();
-                        ((PlayerFire) fixB.getUserData()).setToDestroy();
-                    }
-                } else {
-                    if (fixB.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixB.getUserData().getClass())) {
-                        ((InteractiveTileObject) fixB.getUserData()).onContact();
-                        ((PlayerFire) fixA.getUserData()).setToDestroy();
-                    }
-                }
-                break;
+            case PirateGame.PLAYER_BIT | PirateGame.CANNON_BIT:
             case PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT:
-                if (fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
-                    ((Entity) fixA.getUserData()).onContact();
-                    ((PlayerFire) fixB.getUserData()).setToDestroy();
-                } else {
-                    ((Entity) fixB.getUserData()).onContact();
-                    ((PlayerFire) fixA.getUserData()).setToDestroy();
-                }
-                break;
-            case PirateGame.COLLEGEFIRE_BIT | PirateGame.PLAYER_BIT:
-                if (fixA.getFilterData().categoryBits == PirateGame.COLLEGEFIRE_BIT) {
-                    Hud.changeHealth(-15);
+                if (fixA.getFilterData().categoryBits == PirateGame.CANNON_BIT) {
                     ((Projectile) fixA.getUserData()).setToDestroy();
+                    ((Entity) fixB.getUserData()).onContact();
                 } else {
-                    Hud.changeHealth(-15);
                     ((Projectile) fixB.getUserData()).setToDestroy();
+                    ((Entity) fixB.getUserData()).onContact();
                 }
                 break;
         }
