@@ -36,7 +36,6 @@ public class Projectile extends Entity {
     public Projectile(GameScreen screen, float x, float y, String texturePath, Vector2 target) {
         super(screen, x, y);
         this.target = target;
-        System.out.println("target: " + target);
         //Set the position and size of the ball
         setRegion(new Texture(texturePath));
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
@@ -65,7 +64,7 @@ public class Projectile extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
         // setting BIT identifier
-        fDef.filter.categoryBits = PirateGame.COLLEGEFIRE_BIT;
+        fDef.filter.categoryBits = PirateGame.CANNON_BIT;
         // determining what this BIT can collide with
         fDef.filter.maskBits = PirateGame.PLAYER_BIT;
 
@@ -80,8 +79,6 @@ public class Projectile extends Entity {
 
     @Override
     public void onContact() {
-
-
     }
 
     /**

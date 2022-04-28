@@ -173,7 +173,7 @@ public class College extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(55 / PirateGame.PPM);
         // setting BIT identifier
-        fdef.filter.categoryBits = PirateGame.COLLEGESENSOR_BIT;
+        fdef.filter.categoryBits = PirateGame.COLLEGE_BIT;
         // determining what this BIT can collide with
         fdef.filter.maskBits = PirateGame.PLAYER_BIT;
         fdef.shape = shape;

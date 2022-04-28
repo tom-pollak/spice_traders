@@ -107,7 +107,6 @@ public class GameScreen implements Screen {
 
         // Initialising box2d physics
         b2dr = new Box2DDebugRenderer();
-        player = new Player(this, 1000, 1000);
 
         // making the Tiled tmx file render as a map
         TmxMapLoader maploader = new TmxMapLoader();
@@ -131,6 +130,7 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
+        player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
         //Random ships
         boolean validLoc;
@@ -688,7 +688,7 @@ public class GameScreen implements Screen {
             restoredShip.b2body.setTransform(((Double) shipPos.get(0)).floatValue(), ((Double) shipPos.get(1)).floatValue(), shipAngle);
             restoredShip.b2body.setLinearVelocity(((Double) shipVelocity.get(0)).floatValue(), ((Double) shipVelocity.get(1)).floatValue());
             GameScreen.ships.add(restoredShip);
-            if(GameScreen.colleges.containsKey(college)) {
+            if (GameScreen.colleges.containsKey(college)) {
                 GameScreen.colleges.get(college).fleet.add(restoredShip);
             }
         }

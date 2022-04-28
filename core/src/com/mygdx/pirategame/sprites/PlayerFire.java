@@ -68,7 +68,7 @@ public class PlayerFire extends Projectile {
         // setting BIT identifier
         fDef.filter.categoryBits = PirateGame.CANNON_BIT;
         // determining what this BIT can collide with
-        fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT | PirateGame.COLLEGE_BIT;
+        fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT;
         fDef.shape = shape;
         fDef.isSensor = true;
         b2body.createFixture(fDef).setUserData(this);
