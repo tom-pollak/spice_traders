@@ -33,6 +33,11 @@ task dist(type: Jar) {
     with jar
 }
 
+dependencies {
+    implementation 'com.badlogicgames.gdx:gdx-backend-headless:1.10.0'
+    implementation 'com.badlogicgames.gdx:gdx-backend-lwjgl3:1.10.0'
+}
+
 
 dist.dependsOn classes
 
