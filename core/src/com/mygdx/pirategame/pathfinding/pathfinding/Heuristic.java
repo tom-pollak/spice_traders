@@ -7,5 +7,5 @@ package com.mygdx.pirategame.pathfinding.pathfinding;
  */
 public interface Heuristic {
 
-    float calculate(NavigationNode from, NavigationNode to);
+  float calculate(NavigationNode from, NavigationNode to);
 }

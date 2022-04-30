@@ -2,55 +2,52 @@ package com.mygdx.pirategame.pathfinding.pathfinding;
 
 public interface NavigationNode extends BHeapNode {
 
-    NavigationNode getParent();
+  NavigationNode getParent();
 
-    /**
-     * The Node from which this node is reachable
-     */
-    void setParent(NavigationNode parent);
+  /** The Node from which this node is reachable */
+  void setParent(NavigationNode parent);
 
-    int getClosedOnJob();
+  int getClosedOnJob();
 
-    void setClosedOnJob(int job);
+  void setClosedOnJob(int job);
 
-    int getOpenedOnJob();
+  int getOpenedOnJob();
 
-    void setOpenedOnJob(int job);
+  void setOpenedOnJob(int job);
 
-    int getClosedOnJob(Class<? extends PathFinder> clazz);
+  int getClosedOnJob(Class<? extends PathFinder> clazz);
 
-    void setClosedOnJob(int job, Class<? extends PathFinder> clazz);
+  void setClosedOnJob(int job, Class<? extends PathFinder> clazz);
 
-    int getOpenedOnJob(Class<? extends PathFinder> clazz);
+  int getOpenedOnJob(Class<? extends PathFinder> clazz);
 
-    void setOpenedOnJob(int job, Class<? extends PathFinder> clazz);
+  void setOpenedOnJob(int job, Class<? extends PathFinder> clazz);
 
-    //f
-    float getF();
+  // f
+  float getF();
 
-    void setF(float f);
+  void setF(float f);
 
-    //g
-    float getG();
+  // g
+  float getG();
 
-    void setG(float g);
+  void setG(float g);
 
+  // h
 
-    //h
+  /**
+   * Gets the computed value of the heuristic used to get from this point to the goal node. The
+   * heuristic is determined {@link PathFinderOptions#heuristic} used to navigate the grid
+   */
+  float getH();
 
-    /**
-     * Gets the computed value of the heuristic used to get from this point to the goal node. The
-     * heuristic is determined {@link PathFinderOptions#heuristic} used to navigate the grid
-     */
-    float getH();
+  /**
+   * Sets the computed value of the heuristic used to get from this point to the goal node. The
+   * heuristic is determined {@link PathFinderOptions#heuristic} used to navigate the grid
+   */
+  void setH(float h);
 
-    /**
-     * Sets the computed value of the heuristic used to get from this point to the goal node. The
-     * heuristic is determined {@link PathFinderOptions#heuristic} used to navigate the grid
-     */
-    void setH(float h);
+  boolean isWalkable();
 
-    boolean isWalkable();
-
-    void setWalkable(boolean walkable);
+  void setWalkable(boolean walkable);
 }
