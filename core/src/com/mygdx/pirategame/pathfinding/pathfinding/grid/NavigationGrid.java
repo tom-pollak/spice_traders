@@ -4,7 +4,6 @@ import com.mygdx.pirategame.pathfinding.pathfinding.NavigationGraph;
 import com.mygdx.pirategame.pathfinding.pathfinding.NavigationNode;
 import com.mygdx.pirategame.pathfinding.pathfinding.PathFinderOptions;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.finders.GridFinderOptions;
-
 import java.util.ArrayList;
 import java.util.List;
 

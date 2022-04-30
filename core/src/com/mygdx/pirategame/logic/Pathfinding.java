@@ -7,7 +7,6 @@ import com.mygdx.pirategame.pathfinding.pathfinding.PathFindingException;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.GridCell;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.finders.GridFinderOptions;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.finders.ThetaStarGridFinder;
-
 import java.util.List;
 
 /** Theta* search on a tiled map. */

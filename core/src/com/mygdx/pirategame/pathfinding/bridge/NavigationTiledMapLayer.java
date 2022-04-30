@@ -6,7 +6,6 @@ import com.mygdx.pirategame.pathfinding.pathfinding.PathFinderOptions;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.GridCell;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.NavigationGrid;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.NavigationGridGraph;
-
 import java.util.List;
 
 public class NavigationTiledMapLayer extends MapLayer implements NavigationGridGraph<GridCell> {

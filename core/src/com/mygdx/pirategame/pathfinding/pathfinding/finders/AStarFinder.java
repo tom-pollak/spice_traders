@@ -1,7 +1,6 @@
 package com.mygdx.pirategame.pathfinding.pathfinding.finders;
 
 import com.mygdx.pirategame.pathfinding.pathfinding.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

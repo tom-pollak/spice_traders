@@ -4,7 +4,6 @@ import com.mygdx.pirategame.pathfinding.pathfinding.NavigationGraph;
 import com.mygdx.pirategame.pathfinding.pathfinding.NavigationNode;
 import com.mygdx.pirategame.pathfinding.pathfinding.PathFinder;
 import com.mygdx.pirategame.pathfinding.pathfinding.util.ObjectIntMap;
-
 import java.util.List;
 
 public class GridCell implements NavigationGridGraphNode {

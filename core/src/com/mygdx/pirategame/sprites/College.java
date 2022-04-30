@@ -11,7 +11,6 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.logic.AvailableSpawn;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
-
 import java.util.ArrayList;
 import java.util.Random;
 

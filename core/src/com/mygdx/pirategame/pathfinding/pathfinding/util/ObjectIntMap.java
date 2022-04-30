@@ -297,9 +297,7 @@ public class ObjectIntMap<K> implements Iterable<ObjectIntMap.Entry<K>> {
     size++;
   }
 
-  /**
-   * @param defaultValue Returned if the key was not associated with a value.
-   */
+  /** @param defaultValue Returned if the key was not associated with a value. */
   public int get(K key, int defaultValue) {
     int hashCode = key.hashCode();
     int index = hashCode & mask;

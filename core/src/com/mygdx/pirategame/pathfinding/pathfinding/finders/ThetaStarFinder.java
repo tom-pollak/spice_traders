@@ -3,7 +3,6 @@ package com.mygdx.pirategame.pathfinding.pathfinding.finders;
 import com.mygdx.pirategame.pathfinding.pathfinding.*;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.GridCell;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.NavigationGridGraph;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;

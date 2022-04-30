@@ -6,12 +6,11 @@ import com.mygdx.pirategame.screens.Hud;
 import com.mygdx.pirategame.sprites.AiShip;
 import com.mygdx.pirategame.sprites.Coin;
 import com.mygdx.pirategame.sprites.Player;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public
 class SaveGame { // using JSON because it seems the easiest to write objects to and retrieve them

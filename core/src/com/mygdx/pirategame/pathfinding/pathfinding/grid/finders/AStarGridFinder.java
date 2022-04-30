@@ -3,7 +3,6 @@ package com.mygdx.pirategame.pathfinding.pathfinding.grid.finders;
 import com.mygdx.pirategame.pathfinding.pathfinding.finders.AStarFinder;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.NavigationGridGraph;
 import com.mygdx.pirategame.pathfinding.pathfinding.grid.NavigationGridGraphNode;
-
 import java.util.List;
 
 /**
