@@ -48,7 +48,7 @@ public class Player extends Ship {
     inventory.add(new SpeedOrb(this));
     inventory.add(new SpeedOrb(this));
     health = 200;
-    damage = 20;
+    damage = 30;
   }
 
   /** Plays the break sound when a boat takes damage */

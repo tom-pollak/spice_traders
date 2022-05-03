@@ -87,6 +87,6 @@ public abstract class Entity extends Sprite {
   }
 
   protected int getDamage() {
-    return 0;
+    return damage;
   }
 }

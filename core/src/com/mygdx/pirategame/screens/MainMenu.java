@@ -22,6 +22,7 @@ public class MainMenu implements Screen {
 
   private final PirateGame parent;
   private final Stage stage;
+  private int difficultyLevel;
 
   /**
    * Instantiates a new Main menu.
@@ -31,6 +32,7 @@ public class MainMenu implements Screen {
   public MainMenu(PirateGame PirateGame) {
     parent = PirateGame;
     stage = new Stage(new ScreenViewport());
+    difficultyLevel = 1;
   }
 
   /** What should be displayed on the options screen */
@@ -52,12 +54,15 @@ public class MainMenu implements Screen {
     TextButton options = new TextButton("Options", skin);
     TextButton exit = new TextButton("Exit", skin);
     TextButton load = new TextButton("Load", skin);
+    TextButton difficulty = new TextButton("Normal Difficulty", skin);
 
     // add buttons to table
     table.add(newGame).fillX().uniformX();
     table.row();
     table.add(load).fillX().uniformX();
     table.row().pad(10, 0, 10, 0);
+    table.add(difficulty).fillX().uniformX();
+    table.row();
     table.add(help).fillX().uniformX();
     table.row();
     table.add(options).fillX().uniformX();
@@ -72,6 +77,8 @@ public class MainMenu implements Screen {
           @Override
           public void changed(ChangeEvent event, Actor actor) {
             parent.changeScreen(PirateGame.GAME);
+            GameScreen.difficulty = difficultyLevel;
+
           }
         });
     // Help Screen
@@ -97,6 +104,7 @@ public class MainMenu implements Screen {
           @Override
           public void changed(ChangeEvent event, Actor actor) {
             parent.changeScreen(PirateGame.GAME);
+            GameScreen.difficulty = difficultyLevel;
             parent.load("save.json");
           }
         });
@@ -109,6 +117,23 @@ public class MainMenu implements Screen {
             Gdx.app.exit();
           }
         });
+
+    difficulty.addListener(
+          new ChangeListener() {
+              @Override
+              public void changed(ChangeEvent event, Actor actor) {
+                  difficultyLevel++;
+                  if(difficultyLevel > 3){difficultyLevel = 1;}
+                  if(difficultyLevel == 1){
+                      difficulty.setText("Easy Difficulty");
+                  } else if (difficultyLevel == 2){
+                      difficulty.setText("Normal Difficulty");
+                  } else if (difficultyLevel == 3){
+                      difficulty.setText("Hard Difficulty");
+                  }
+                  stage.draw();
+              }
+          });
   }
 
   /**

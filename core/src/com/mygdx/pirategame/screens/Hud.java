@@ -1,5 +1,6 @@
 package com.mygdx.pirategame.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -77,7 +78,7 @@ public class Hud implements Disposable {
         new Label(
             String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
     healthLabel =
-        new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
+        new Label(String.format("%03d", GameScreen.player.health), new Label.LabelStyle(new BitmapFont(), Color.RED));
     coinLabel =
         new Label(
             String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
@@ -115,8 +116,8 @@ public class Hud implements Disposable {
    * @param value Increase to health
    */
   public static void changeHealth(int value) {
-    health += value;
-    healthLabel.setText(String.format("%02d", health));
+    GameScreen.player.health += value;
+    healthLabel.setText(String.format("%02d", GameScreen.player.health));
   }
 
   /**
@@ -158,7 +159,7 @@ public class Hud implements Disposable {
    * @return health : returns health value
    */
   public static Integer getHealth() {
-    return health;
+    return GameScreen.player.health;
   }
 
   public static Integer getScore() {
@@ -187,7 +188,7 @@ public class Hud implements Disposable {
   }
 
   public static void setHealth(int hp) {
-    health = hp;
+    GameScreen.player.health = hp;
   }
 
   /** Disposes game data */
@@ -205,8 +206,8 @@ public class Hud implements Disposable {
     timeCount += dt;
     if (timeCount >= 1) {
       // Regen health every second
-      if (health != 100) {
-        health += 1;
+      if (GameScreen.player.health != 150) {
+        GameScreen.player.health += 1;
       }
       // Gain point every second
       score += 1;
@@ -217,7 +218,7 @@ public class Hud implements Disposable {
     }
     coinLabel.setText(String.format("%03d", coins));
     scoreLabel.setText(String.format("%03d", score));
-    healthLabel.setText(String.format("%02d", health));
+    healthLabel.setText(String.format("%02d", GameScreen.player.health));
   }
 
   public void setCoins(int amount) {

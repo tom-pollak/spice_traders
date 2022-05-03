@@ -72,6 +72,7 @@ public class GameScreen implements Screen {
   private Hud hud;
   private Table pauseTable;
   private Table table;
+  public static int difficulty;
 
   /**
    * Initialises the Game Screen, generates the world data and data for entities that exist upon it,
@@ -86,6 +87,7 @@ public class GameScreen implements Screen {
     camera.zoom = 0.0155f;
     viewport = new ScreenViewport(camera);
     camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+    player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
     // Initialize a hud
     hud = createHud(game.batch);
@@ -154,13 +156,12 @@ public class GameScreen implements Screen {
     ships.addAll(colleges.get("Constantine").fleet);
     ships.addAll(colleges.get("Goodricke").fleet);
 
-    monsters.add(new SeaMonster(this, 20, 20));
+    monsters.add(new SeaMonster(this, 150, 20));
     Weather cloud = new Weather(this, 10f, 10f, 10, 10, "cloud.png");
     cloud.setDamageOnTurn(10);
     cloud.setMovement(new Vector2(1, 2), 2f);
     weathers.add(cloud);
 
-    player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
     new WorldCreator(this);
     // Random ships
@@ -528,8 +529,10 @@ public class GameScreen implements Screen {
   /** Checks if the game is over i.e. goal reached (all colleges bar "Alcuin" are destroyed) */
   public void gameOverCheck() {
     // Lose game if ship on 0 health or Alcuin is destroyed
-    if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
+    if (player.health <= 0 || colleges.get("Alcuin").destroyed) {
       game.changeScreen(PirateGame.DEATH);
+      System.out.println("Player dead: " + (player.health <= 0));
+      System.out.println("Player College Dead: " + (colleges.get("Alcuin").destroyed));
       game.killGame();
     }
     // Win game if all colleges destroyed
@@ -596,10 +599,14 @@ public class GameScreen implements Screen {
     player.setY(y);
   }
 
+  /**
+   * Takes a file path to a JSON containing data of a saved game from the save function in SaveGame.class
+   */
   public void load(String filename) throws FileNotFoundException {
     JSONParser jsonParser = new JSONParser();
 
     try (FileReader reader = new FileReader(filename)) {
+      //Read the JSON which contains one object with other objects and arrays with all game data required
       Object obj = jsonParser.parse(reader);
       JSONObject list = (JSONObject) obj;
       loadPlayer(list);
@@ -613,18 +620,33 @@ public class GameScreen implements Screen {
     update(0);
   }
 
+  /**
+   * Takes a loaded JSON object containing all save data and extracts the player data and loads it into the game.
+   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the player.
+   */
   private void loadPlayer(JSONObject json) {
+
+    /*
+     * All methods that load a save file contain many type conversions. This is because many strings were read as objects,
+     * and many integers and floats were read as doubles and required conversion.
+     * */
+
     JSONArray playerData = (JSONArray) json.get("player");
+    //position 0 of the player array contains an array of the position
     JSONArray playerPos = (JSONArray) playerData.get(0);
+    //position 1 of the player array contains an array of the direction being faced at the time of saving.
     float playerDirection = ((Double) playerData.get(1)).floatValue();
     // JSON reader insisted on a value being read being a double, so it must be a double converted
     // to float
     GameScreen.player.b2body.setTransform(
+            //0 and 1 are the positions of the array containing x, y
         ((Double) playerPos.get(0)).floatValue(),
         ((Double) playerPos.get(1)).floatValue(),
         playerDirection);
     GameScreen.player.b2body.setLinearVelocity(0, 0);
+    //clear current inventory to load the saved inventory
     player.inventory.clear();
+    //position 2 of the player data array contains an array of items that were contained in the inventory
     JSONArray inventoryData = (JSONArray) playerData.get(2);
     for (Object item : inventoryData) {
       String type = ((JSONArray) item).get(0).toString();
@@ -642,8 +664,13 @@ public class GameScreen implements Screen {
     }
   }
 
+  /**
+   * Takes a loaded JSON object containing all save data and extracts the data for the non-player ships and loads them into the game
+   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the enemy ships.
+   */
   private void loadEnemyShips(JSONObject json) {
     JSONArray allShips = (JSONArray) json.get("enemyShips");
+    //Clear al ships and references to ships currently loaded, to load in the set of ships that were saved
     GameScreen.ships.clear();
     GameScreen.colleges.forEach((key, college) -> college.fleet.clear());
     for (Object allShip : allShips) {
@@ -652,6 +679,7 @@ public class GameScreen implements Screen {
       String college = (shipData.get(5)).toString();
       AiShip restoredShip =
           new AiShip(this, 0, 0, shipData.get(6).toString(), colleges.get(college));
+      //give attributes to the ship from it's saved data
       restoredShip.health = ((Long) shipData.get(3)).intValue();
       restoredShip.damage = ((Long) shipData.get(4)).intValue();
       JSONArray shipVelocity = (JSONArray) shipData.get(2);
@@ -669,6 +697,10 @@ public class GameScreen implements Screen {
     }
   }
 
+  /**
+   * Takes a loaded JSON object containing all save data and extracts the data for the HUD and loads it into the game
+   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the HUD and the elements it holds (XP, coins).
+   */
   private void loadHud(JSONObject json) {
     JSONArray hudData = (JSONArray) json.get("hud");
     int health = ((Long) hudData.get(0)).intValue();
@@ -679,6 +711,10 @@ public class GameScreen implements Screen {
     // Time changed by 0 as the function updates parts of the HUD gui
   }
 
+  /**
+   * Takes a loaded JSON object containing all save data and extracts the data for the coin locations across the map and loads them into the game
+   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the coins on the map.
+   */
   private void loadCoins(JSONObject json) {
     JSONArray coinsArray = (JSONArray) json.get("coins");
     Coins.clear();
