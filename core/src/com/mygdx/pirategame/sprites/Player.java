@@ -19,105 +19,106 @@ import com.mygdx.pirategame.screens.Hud;
  * @version 1.0
  */
 public class Player extends Ship {
-    private final Sound breakSound;
-    public final Array<Item> inventory;
+  private final Sound breakSound;
+  public final Array<Item> inventory;
 
-    /**
-     * Creates the player, singleton class
-     *
-     * @param screen  The game screen
-     * @param x       Spawn x position
-     * @param y       Spawn y position
-     * @param college The college the player is in
+  /**
+   * Creates the player, singleton class
+   *
+   * @param screen The game screen
+   * @param x Spawn x position
+   * @param y Spawn y position
+   * @param college The college the player is in
+   */
+  public Player(GameScreen screen, Integer x, Integer y, College college) {
+    super(screen, x, y, "player_ship.png", college);
+
+    // Sound effect for damage
+    breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
+
+    // Sets cannonball array
+    inventory = new Array<>();
+    inventory.add(new SpeedOrb(this));
+    inventory.add(new SpeedOrb(this));
+    health = 200;
+  }
+
+  /** Plays the break sound when a boat takes damage */
+  public void playBreakSound() {
+    // Plays damage sound effect
+    if (GameScreen.game.getPreferences().isEffectsEnabled()) {
+      breakSound.play(GameScreen.game.getPreferences().getEffectsVolume());
+    }
+  }
+
+  /** Defines all the parts of the player's physical model. Sets it up for collisons */
+  @Override
+  public void defineBody() {
+    createBody();
+
+    // Defines a player's shape and contact borders
+    FixtureDef fdef = new FixtureDef();
+    CircleShape shape = new CircleShape();
+    shape.setRadius(55 / PirateGame.PPM);
+
+    // setting BIT identifier
+    fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+
+    // determining what this BIT can collide with
+    fdef.filter.maskBits =
+        PirateGame.DEFAULT_BIT
+            | PirateGame.COIN_BIT
+            | PirateGame.ENEMY_BIT
+            | PirateGame.COLLEGE_BIT
+            | PirateGame.PROJECTILE_BIT
+            | PirateGame.COLLEGE_SENSOR_BIT
+            | PirateGame.WEATHER_BIT;
+    fdef.shape = shape;
+    b2body.createFixture(fdef).setUserData(this);
+  }
+
+  @Override
+  public void onContact(Entity collidingEntity) {
+    System.out.println("Player contact");
+    super.onContact(collidingEntity);
+  }
+
+  /**
+   * Called when Space is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their
+   * relative velocity
+   */
+  public void fire() {
+    // Fires cannons
+    cannonBalls.add(new PlayerFire(screen, b2body, 5));
+    cannonBalls.add(new PlayerFire(screen, b2body, -5));
+
+    // Cone fire below
+    /*cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
+    cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
+    cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), -5, b2body.getLinearVelocity()));
+    cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
+    }
      */
-    public Player(GameScreen screen, Integer x, Integer y, College college) {
-        super(screen, x, y, "player_ship.png", college);
+  }
 
-        // Sound effect for damage
-        breakSound = Gdx.audio.newSound(Gdx.files.internal("wood-bump.mp3"));
+  /**
+   * Draws the player using batch Draws cannonballs using batch
+   *
+   * @param batch The batch of the program
+   */
+  public void draw(Batch batch) {
+    // Draws player and cannonballs
+    super.draw(batch);
+    for (Projectile ball : cannonBalls) ball.draw(batch);
+  }
 
-        // Sets cannonball array
-        inventory = new Array<>();
-        inventory.add(new SpeedOrb(this));
-        inventory.add(new SpeedOrb(this));
-        health = 200;
-    }
+  @Override
+  public void update(float dt) {
+    super.update(dt);
+    Hud.setHealth(health);
+  }
 
-    /**
-     * Plays the break sound when a boat takes damage
-     */
-    public void playBreakSound() {
-        // Plays damage sound effect
-        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
-            breakSound.play(GameScreen.game.getPreferences().getEffectsVolume());
-        }
-    }
-
-
-    /**
-     * Defines all the parts of the player's physical model. Sets it up for collisons
-     */
-    @Override
-    public void defineBody() {
-        createBody();
-
-        // Defines a player's shape and contact borders
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(55 / PirateGame.PPM);
-
-        // setting BIT identifier
-        fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
-
-        // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.PROJECTILE_BIT | PirateGame.COLLEGE_SENSOR_BIT | PirateGame.WEATHER_BIT;
-        fdef.shape = shape;
-        b2body.createFixture(fdef).setUserData(this);
-    }
-
-    @Override
-    public void onContact(Entity collidingEntity) {
-        System.out.println("Player contact");
-        super.onContact(collidingEntity);
-    }
-
-    /**
-     * Called when Space is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
-     */
-    public void fire() {
-        // Fires cannons
-        cannonBalls.add(new PlayerFire(screen, b2body, 5));
-        cannonBalls.add(new PlayerFire(screen, b2body, -5));
-
-        // Cone fire below
-        /*cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
-        cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), 5, b2body.getLinearVelocity()));
-        cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), -5, b2body.getLinearVelocity()));
-        cannonBalls.add(new PlayerFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
-        }
-         */
-    }
-
-    /**
-     * Draws the player using batch
-     * Draws cannonballs using batch
-     *
-     * @param batch The batch of the program
-     */
-    public void draw(Batch batch) {
-        // Draws player and cannonballs
-        super.draw(batch);
-        for (Projectile ball : cannonBalls)
-            ball.draw(batch);
-    }
-
-    @Override
-    public void update(float dt) {
-        super.update(dt);
-        Hud.setHealth(health);
-    }
-
-    public Array<Item> getInventory() {
-        return this.inventory;
-    }
+  public Array<Item> getInventory() {
+    return this.inventory;
+  }
 }
