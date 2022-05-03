@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.sprites.Entity;
 
 /**
  * Interactive Tile Object
@@ -50,7 +51,7 @@ public abstract class InteractiveTileObject {
     /**
      * Check contact
      */
-    public abstract void onContact();
+    public abstract void onContact(Entity collidingEntity);
 
     /**
      * Set filter

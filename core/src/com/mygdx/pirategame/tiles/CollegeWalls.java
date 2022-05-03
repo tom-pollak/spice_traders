@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
+import com.mygdx.pirategame.sprites.Entity;
 
 /**
  * College Walls (Alcuin)
@@ -26,16 +27,16 @@ public class CollegeWalls extends InteractiveTileObject {
         this.screen = screen;
         fixture.setUserData(this);
         //Set the category bit
-        setCategoryFilter(PirateGame.COLLEGE_BIT);
+        setCategoryFilter(PirateGame.COLLEGE_SENSOR_BIT);
     }
 
     /**
      * Checks for contact with cannonball
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
         Gdx.app.log("wall", "collision");
         //Deal damage to the assigned college
-        screen.getCollege("Alcuin").onContact();
+        screen.getCollege("Alcuin").onContact(collidingEntity);
     }
 }

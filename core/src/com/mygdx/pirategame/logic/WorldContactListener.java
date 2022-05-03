@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.sprites.Entity;
 import com.mygdx.pirategame.sprites.Player;
-import com.mygdx.pirategame.sprites.Projectile;
 import com.mygdx.pirategame.tiles.InteractiveTileObject;
 
 /**
@@ -33,37 +32,37 @@ public class WorldContactListener implements ContactListener {
         switch (cDef) {
             case PirateGame.COIN_BIT | PirateGame.PLAYER_BIT:
             case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
-                ((Entity) fixA.getUserData()).onContact();
-                ((Entity) fixB.getUserData()).onContact();
+            case PirateGame.COLLEGE_BIT | PirateGame.PROJECTILE_BIT:
+            case PirateGame.PLAYER_BIT | PirateGame.PROJECTILE_BIT:
+            case PirateGame.ENEMY_BIT | PirateGame.PROJECTILE_BIT:
+            case PirateGame.PLAYER_BIT | PirateGame.WEATHER_BIT:
+            case PirateGame.ENEMY_BIT | PirateGame.WEATHER_BIT:
+            case PirateGame.COLLEGE_BIT | PirateGame.WEATHER_BIT:
+                Entity entityA = (Entity) fixA.getUserData();
+                Entity entityB = (Entity) fixB.getUserData();
+                entityA.onContact(entityB);
+                entityB.onContact(entityA);
                 break;
+            case PirateGame.PLAYER_BIT | PirateGame.COLLEGE_SENSOR_BIT:
+            case PirateGame.ENEMY_BIT | PirateGame.COLLEGE_SENSOR_BIT:
+            case PirateGame.PROJECTILE_BIT | PirateGame.COLLEGE_SENSOR_BIT:
             case PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT:
             case PirateGame.DEFAULT_BIT | PirateGame.ENEMY_BIT:
-                wallCollide(fixA, fixB);
-                break;
-            case PirateGame.COLLEGE_BIT | PirateGame.CANNON_BIT:
-            case PirateGame.PLAYER_BIT | PirateGame.CANNON_BIT:
-            case PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT:
-                if (fixA.getFilterData().categoryBits == PirateGame.CANNON_BIT) {
-                    ((Projectile) fixA.getUserData()).setToDestroy();
-                    ((Entity) fixB.getUserData()).onContact();
+                if ((fixA.getFilterData().categoryBits == PirateGame.DEFAULT_BIT) || (fixA.getFilterData().categoryBits == PirateGame.COLLEGE_SENSOR_BIT)) {
+                    entityB = (Entity) fixB.getUserData();
+                    ((InteractiveTileObject) fixA.getUserData()).onContact(entityB);
+                    if (entityB.getClass().equals(Player.class)) {
+                        ((Player) entityB).playBreakSound();
+                    }
                 } else {
-                    ((Projectile) fixB.getUserData()).setToDestroy();
-                    ((Entity) fixB.getUserData()).onContact();
+                    entityA = (Entity) fixA.getUserData();
+                    ((InteractiveTileObject) fixB.getUserData()).onContact(entityA);
+                    if (entityA.getClass().equals(Player.class)) {
+                        ((Player) entityA).playBreakSound();
+                    }
+
                 }
                 break;
-        }
-    }
-
-    private void wallCollide(Fixture fixA, Fixture fixB) {
-        if (fixA.getFilterData().categoryBits == PirateGame.DEFAULT_BIT) {
-            if (fixA.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixA.getUserData().getClass())) {
-                ((InteractiveTileObject) fixA.getUserData()).onContact();
-                ((Player) fixB.getUserData()).playBreakSound();
-            }
-        } else {
-            if (fixB.getUserData() != null && InteractiveTileObject.class.isAssignableFrom(fixB.getUserData().getClass())) {
-                ((InteractiveTileObject) fixB.getUserData()).onContact();
-            }
         }
     }
 
@@ -74,13 +73,34 @@ public class WorldContactListener implements ContactListener {
      */
     @Override
     public void endContact(Contact contact) {
-        // Displays contact message
+        Fixture fixA = contact.getFixtureA();
+        Fixture fixB = contact.getFixtureB();
+
+        int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
+
+        switch (cDef) {
+            case PirateGame.PLAYER_BIT | PirateGame.WEATHER_BIT:
+            case PirateGame.ENEMY_BIT | PirateGame.WEATHER_BIT:
+            case PirateGame.COLLEGE_BIT | PirateGame.WEATHER_BIT:
+                Weather weather;
+                Entity entity;
+                if (fixA.getFilterData().categoryBits == PirateGame.WEATHER_BIT) {
+                    weather = (Weather) fixA.getUserData();
+                    entity = (Entity) fixB.getUserData();
+                } else {
+                    weather = (Weather) fixB.getUserData();
+                    entity = (Entity) fixA.getUserData();
+                }
+                weather.removeContact(entity);
+                break;
+        }
+
         Gdx.app.log("End Contact", "");
     }
 
     /**
      * (Not Used)
-     * Can be called before beginContact to pre emptively solve it
+     * Can be called before beginContact to pre-emptively solve it
      *
      * @param contact     The object that contains information about the collision
      * @param oldManifold Predicted impulse based on old data

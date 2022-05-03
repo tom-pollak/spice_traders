@@ -66,7 +66,7 @@ public class PlayerFire extends Projectile {
         shape.setRadius(5 / PirateGame.PPM);
 
         // setting BIT identifier
-        fDef.filter.categoryBits = PirateGame.CANNON_BIT;
+        fDef.filter.categoryBits = PirateGame.PROJECTILE_BIT;
         // determining what this BIT can collide with
         fDef.filter.maskBits = PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT;
         fDef.shape = shape;

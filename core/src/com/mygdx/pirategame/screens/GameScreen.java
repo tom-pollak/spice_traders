@@ -84,6 +84,7 @@ public class GameScreen implements Screen {
 
     public Boolean loadSaveData;
     private final ArrayList<SeaMonster> monsters = new ArrayList<>();
+    private final ArrayList<Weather> weathers = new ArrayList<>();
 
     /**
      * Initialises the Game Screen,
@@ -118,7 +119,7 @@ public class GameScreen implements Screen {
 
         // Spawning enemy ship and coin. x and y is spawn location
         colleges = new HashMap<>();
-        colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM, "alcuin_flag.png", "alcuin_ship.png", 1, invalidSpawn));
+        colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM, "alcuin_flag.png", "alcuin_ship.png", 0, invalidSpawn));
         colleges.put("Anne Lister", new College(this, "Anne Lister", 6304 / PirateGame.PPM, 1199 / PirateGame.PPM, "anne_lister_flag.png", "anne_lister_ship.png", 2, invalidSpawn));
         colleges.put("Constantine", new College(this, "Constantine", 6240 / PirateGame.PPM, 6703 / PirateGame.PPM, "constantine_flag.png", "constantine_ship.png", 1, invalidSpawn));
         colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6767 / PirateGame.PPM, "goodricke_flag.png", "goodricke_ship.png", 1, invalidSpawn));
@@ -128,7 +129,11 @@ public class GameScreen implements Screen {
         ships.addAll(colleges.get("Constantine").fleet);
         ships.addAll(colleges.get("Goodricke").fleet);
 
-        monsters.add(new SeaMonster(this, 11, 11));
+        monsters.add(new SeaMonster(this, 20, 20));
+        Weather cloud = new Weather(this, 0f, 0f, 10, 10, "cloud.png");
+        cloud.setDamageOnTurn(10);
+        weathers.add(cloud);
+
         player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
 
@@ -175,7 +180,7 @@ public class GameScreen implements Screen {
 
     public Hud createHud(SpriteBatch batch, int health, int coins, int score, int coinMulti) {
         Hud hud = new Hud(batch);
-        hud.setHealth(health);
+        Hud.setHealth(health);
         hud.setCoins(coins);
         hud.setScore(score);
         hud.setCoinMulti(coinMulti);
@@ -403,6 +408,9 @@ public class GameScreen implements Screen {
         for (SeaMonster monster : monsters) {
             monster.update(dt);
         }
+        for (Weather weather : weathers) {
+            weather.update(dt);
+        }
         //After a delay check if a college is destroyed. If not, if can fire
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
@@ -444,7 +452,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();
         // b2dr is the hitbox shapes, can be commented out to hide
-        //b2dr.render(world, camera.combined);
+        b2dr.render(world, camera.combined);
 
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
@@ -456,6 +464,9 @@ public class GameScreen implements Screen {
         }
         for (SeaMonster monster : monsters) {
             monster.draw(game.batch);
+        }
+        for (Weather weather : weathers) {
+            weather.draw(game.batch);
         }
 
         //Renders colleges

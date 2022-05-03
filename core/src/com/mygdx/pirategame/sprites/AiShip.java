@@ -97,7 +97,7 @@ public class AiShip extends Ship {
      * Changes health in accordance with contact and damage
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
         Gdx.app.log("enemy", "collision");
         //Play collision sound
         if (GameScreen.game.getPreferences().isEffectsEnabled()) {

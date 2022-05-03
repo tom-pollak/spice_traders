@@ -1,5 +1,8 @@
 package com.mygdx.pirategame.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -18,10 +21,10 @@ public abstract class Entity extends Sprite {
     protected World world;
     protected GameScreen screen;
     public Body b2body;
-    public boolean setToDestroy;
-    public boolean destroyed;
-    public int health;
-    public int damage;
+    public boolean setToDestroy = false;
+    public boolean destroyed = false;
+    public int health = 100;
+    public int damage = 0;
     protected HealthBar bar;
     protected float stateTime = (float) Math.random();
 
@@ -36,9 +39,6 @@ public abstract class Entity extends Sprite {
         this.world = screen.getWorld();
         this.screen = screen;
         setPosition(x, y);
-        this.setToDestroy = false;
-        this.destroyed = false;
-        this.health = 100;
 
     }
 
@@ -47,10 +47,20 @@ public abstract class Entity extends Sprite {
      */
     protected abstract void defineBody();
 
+    public static Texture getScaledTexture(String imgPath, Integer width, Integer height) {
+        Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal(imgPath));
+        Pixmap pixmapNew = new Pixmap(width, height, pixmapOriginal.getFormat());
+        pixmapNew.drawPixmap(pixmapOriginal, 0, 0, pixmapOriginal.getWidth(), pixmapOriginal.getHeight(), 0, 0, pixmapNew.getWidth(), pixmapNew.getHeight());
+        Texture texture = new Texture(pixmapNew);
+        pixmapOriginal.dispose();
+        pixmapNew.dispose();
+        return texture;
+    }
+
     /**
      * Defines contact
      */
-    public abstract void onContact();
+    public abstract void onContact(Entity collidingEntity);
 
     public abstract void update(float dt);
 
@@ -66,5 +76,16 @@ public abstract class Entity extends Sprite {
 
     public Float getDistance(Entity e) {
         return new Vector2(e.getX() - this.getX(), e.getY() - this.getY()).len();
+    }
+
+    public void damage(int damage) {
+        health -= damage;
+        if (health <= 0) {
+            setToDestroy = true;
+        }
+    }
+
+    protected int getDamage() {
+        return 0;
     }
 }

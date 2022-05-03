@@ -40,6 +40,7 @@ public class Projectile extends Entity {
         setRegion(new Texture(texturePath));
         setBounds(x, y, 10 / PirateGame.PPM, 10 / PirateGame.PPM);
         if (!(this instanceof PlayerFire)) defineBody();
+        this.damage = 10;
     }
 
     public Projectile(GameScreen screen, float x, float y, Float velocity, String texturePath, Vector2 target) {
@@ -64,7 +65,7 @@ public class Projectile extends Entity {
         CircleShape shape = new CircleShape();
         shape.setRadius(5 / PirateGame.PPM);
         // setting BIT identifier
-        fDef.filter.categoryBits = PirateGame.CANNON_BIT;
+        fDef.filter.categoryBits = PirateGame.PROJECTILE_BIT;
         // determining what this BIT can collide with
         fDef.filter.maskBits = PirateGame.PLAYER_BIT;
 
@@ -78,7 +79,8 @@ public class Projectile extends Entity {
     }
 
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
+        setToDestroy();
     }
 
     /**

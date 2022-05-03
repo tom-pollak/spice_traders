@@ -52,8 +52,6 @@ public class Ship extends Entity {
         setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
         defineBody();
         bar = new HealthBar(this);
-
-        damage = 20;
     }
 
     /**
@@ -64,6 +62,7 @@ public class Ship extends Entity {
      */
     public void update(float dt) {
         stateTime += dt;
+        bar.changeHealth(health);
 
         //If ship is set to destroy and isnt, destroy it
         if (setToDestroy && !destroyed) {
@@ -88,6 +87,11 @@ public class Ship extends Entity {
         //b2body.setLinearVelocity(target.scl(speed));
     }
 
+    /**
+     * Updates the position of the cannonballs the player has fired, and destroys them if they are out of range
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
     private void updateCannonBalls(float dt) {
         //Update cannon balls
         for (Projectile ball : cannonBalls) {
@@ -104,6 +108,10 @@ public class Ship extends Entity {
         setRotation((float) (b2body.getAngle() * 180 / Math.PI));
     }
 
+    /**
+     * Destroys the ship
+     * Plays sound effect, adds some points to the HUD and removes the ship and its child objects from the world
+     */
     private void destroyShip() {
         //Play death noise
         if (GameScreen.game.getPreferences().isEffectsEnabled()) {
@@ -117,6 +125,7 @@ public class Ship extends Entity {
         for (Projectile ball : cannonBalls) {
             ball.setToDestroy();
         }
+        this.setToDestroy = true;
     }
 
     /**
@@ -149,9 +158,9 @@ public class Ship extends Entity {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
         // determining what this BIT can collide with
-        //        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT;
+        //        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT | PirateGame.PROJECTILE_BIT;
         // PLAYER_BIT
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.PLAYER_BIT | PirateGame.CANNON_BIT | PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COLLEGE_BIT | PirateGame.PLAYER_BIT | PirateGame.PROJECTILE_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_SENSOR_BIT | PirateGame.WEATHER_BIT;
         fdef.shape = shape;
         //        fdef.restitution = 0.7f;
         //        fdef.friction = 0.2f;
@@ -171,15 +180,14 @@ public class Ship extends Entity {
      * Changes health in accordance with contact and damage
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
         Gdx.app.log("enemy", "collision");
         //Play collision sound
         if (GameScreen.game.getPreferences().isEffectsEnabled()) {
             hit.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
         //Deal with the damage
-        health -= damage;
-        bar.changeHealth(damage);
+        health -= collidingEntity.getDamage();
         Hud.changePoints(5);
     }
 

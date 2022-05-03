@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.mygdx.pirategame.logic.SpeedOrb;
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
@@ -81,7 +80,7 @@ public class Coin extends Entity {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.COIN_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
@@ -91,7 +90,7 @@ public class Coin extends Entity {
      * What happens when an entity collides with the coin. The only entity that is able to do so is the player ship
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
         //Add a coin
         Hud.changeCoins(1);
         //Set to destroy

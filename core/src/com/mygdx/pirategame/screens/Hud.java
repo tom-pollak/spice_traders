@@ -158,11 +158,13 @@ public class Hud implements Disposable {
     public static Integer getHealth() {
         return health;
     }
-    public static Integer getScore(){
+
+    public static Integer getScore() {
         return score;
     }
-    public static Integer getCoinMulti(){
-        return coinMulti;
+
+    public void setScore(int amount) {
+        score = amount;
     }
 
     /**
@@ -175,6 +177,26 @@ public class Hud implements Disposable {
         return coins;
     }
 
+    public static Integer getCoinMulti() {
+        return coinMulti;
+    }
+
+    public void setCoinMulti(int mulitplier) {
+        coinMulti = mulitplier;
+    }
+
+    public static void setHealth(int hp) {
+        health = hp;
+    }
+
+    /**
+     * Disposes game data
+     */
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
     /**
      * Updates the state of the hud
      *
@@ -182,9 +204,9 @@ public class Hud implements Disposable {
      */
     public void update(float dt) {
         timeCount += dt;
-        if(timeCount >= 1) {
+        if (timeCount >= 1) {
             //Regen health every second
-            if(health != 100) {
+            if (health != 100) {
                 health += 1;
             }
             //Gain point every second
@@ -200,25 +222,8 @@ public class Hud implements Disposable {
         healthLabel.setText(String.format("%02d", health));
     }
 
-    /**
-     * Disposes game data
-     */
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
-
-    public void setHealth(int hp){
-        health = hp;
-    }
-    public void setCoins(int amount){
+    public void setCoins(int amount) {
         coins = amount;
-    }
-    public void setScore(int amount){
-        score = amount;
-    }
-    public void setCoinMulti(int mulitplier){
-        coinMulti = mulitplier;
     }
 
 }

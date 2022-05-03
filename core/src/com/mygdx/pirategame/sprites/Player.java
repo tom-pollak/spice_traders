@@ -23,10 +23,12 @@ public class Player extends Ship {
     public final Array<Item> inventory;
 
     /**
-     * Instantiates a new Player. Constructor only called once per game
+     * Creates the player, singleton class
      *
-     * @param screen  visual data
-     * @param college
+     * @param screen  The game screen
+     * @param x       Spawn x position
+     * @param y       Spawn y position
+     * @param college The college the player is in
      */
     public Player(GameScreen screen, Integer x, Integer y, College college) {
         super(screen, x, y, "player_ship.png", college);
@@ -38,6 +40,7 @@ public class Player extends Ship {
         inventory = new Array<>();
         inventory.add(new SpeedOrb(this));
         inventory.add(new SpeedOrb(this));
+        health = 200;
     }
 
     /**
@@ -49,6 +52,7 @@ public class Player extends Ship {
             breakSound.play(GameScreen.game.getPreferences().getEffectsVolume());
         }
     }
+
 
     /**
      * Defines all the parts of the player's physical model. Sets it up for collisons
@@ -66,20 +70,19 @@ public class Player extends Ship {
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
 
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.CANNON_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.PROJECTILE_BIT | PirateGame.COLLEGE_SENSOR_BIT | PirateGame.WEATHER_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
     }
 
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
         System.out.println("Player contact");
-        super.onContact();
-        Hud.changeHealth(-15);
+        super.onContact(collidingEntity);
     }
 
     /**
-     * Called when E is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
+     * Called when Space is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
      */
     public void fire() {
         // Fires cannons
@@ -106,6 +109,12 @@ public class Player extends Ship {
         super.draw(batch);
         for (Projectile ball : cannonBalls)
             ball.draw(batch);
+    }
+
+    @Override
+    public void update(float dt) {
+        super.update(dt);
+        Hud.setHealth(health);
     }
 
     public Array<Item> getInventory() {

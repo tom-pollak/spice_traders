@@ -24,12 +24,15 @@ public class PirateGame extends Game {
     //Bits used in collisions
     public static final short DEFAULT_BIT = 1;
     public static final short PLAYER_BIT = 2;
-    public static final short COLLEGEFIRE_BIT = 4;
     public static final short COIN_BIT = 8;
-    public static final short CANNON_BIT = 16;
+    public static final short PROJECTILE_BIT = 16;
     public static final short ENEMY_BIT = 32;
+
     public static final short COLLEGE_BIT = 64;
-    public static final short COLLEGESENSOR_BIT = 128;
+    public static final short WEATHER_BIT = 128;
+
+    public static final short COLLEGE_SENSOR_BIT = 4;
+
     //Constant for swapping between screens
     public final static int MENU = 0;
     public final static int GAME = 1;
@@ -154,11 +157,11 @@ public class PirateGame extends Game {
         batch.dispose();
     }
 
-	public void load (String filename) {
-		try {
-			gameScreen.load(filename);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public void load(String filename) {
+        try {
+            gameScreen.load(filename);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

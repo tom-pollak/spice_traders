@@ -20,6 +20,8 @@ public class HealthBar {
     private final Texture image;
 
     private final Entity owner;
+    private final float maxHealthBar;
+    private Integer maxHealth;
 
     /**
      * Instantiates health bar
@@ -39,6 +41,8 @@ public class HealthBar {
         healthBar.setX(this.owner.b2body.getPosition().x - 0.68f);
         healthBar.setY(this.owner.b2body.getPosition().y + this.owner.getHeight() / 2);
         healthBar.setOrigin(0, 0);
+        this.maxHealth = owner.health;
+        maxHealthBar = healthBar.getWidth();
     }
 
     /**
@@ -62,10 +66,15 @@ public class HealthBar {
     /**
      * Updates healthbar with regards to damage
      *
-     * @param value Damage recieved
+     * @param currentHealth Damage recieved
      */
-    public void changeHealth(float value) {
+    public void changeHealth(float currentHealth) {
+        float health = currentHealth / maxHealth;
+        if (health > 1) {
+            health = 1;
+            maxHealth = (int) currentHealth;
+        }
         //Changes bar size when damaged
-        healthBar.setSize(healthBar.getWidth() - value, healthBar.getHeight());
+        healthBar.setSize(maxHealthBar * health, healthBar.getHeight());
     }
 }

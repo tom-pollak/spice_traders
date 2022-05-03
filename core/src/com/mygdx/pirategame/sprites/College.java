@@ -73,7 +73,6 @@ public class College extends Entity {
                 ranY = (int) Math.floor(y + (ranY / PirateGame.PPM));
                 spawnIsValid = getCoord(ranX, ranY);
             }
-            System.out.println(ranX + " " + ranY);
             fleet.add(new AiShip(screen, ranX, ranY, ship, this));
         }
     }
@@ -175,7 +174,7 @@ public class College extends Entity {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.COLLEGE_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.PLAYER_BIT;
+        fdef.filter.maskBits = PirateGame.PLAYER_BIT | PirateGame.PROJECTILE_BIT | PirateGame.WEATHER_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
@@ -186,7 +185,7 @@ public class College extends Entity {
      * Allows for the college to take damage
      */
     @Override
-    public void onContact() {
+    public void onContact(Entity collidingEntity) {
         //Damage the college and lower health bar
         Gdx.app.log("enemy", "collision");
         health -= damage;
