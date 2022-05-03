@@ -48,14 +48,12 @@ import java.util.Set;
 public class GameScreen implements Screen {
   public static final int GAME_RUNNING = 0;
   public static final int GAME_PAUSED = 1;
-  public static float maxSpeed = 2.5f;
-  public static float accel = 0.05f;
   public static PirateGame game;
   public static Player player;
   public static ArrayList<AiShip> ships = new ArrayList<>();
+  public static int gameStatus;
   private static HashMap<String, College> colleges = new HashMap<>();
   private static ArrayList<Coin> Coins = new ArrayList<>();
-  private static int gameStatus;
   public final BackgroundTiledMap backgroundTiledMap;
   private final OrthographicCamera camera;
   private final Viewport viewport;
@@ -225,7 +223,7 @@ public class GameScreen implements Screen {
    * @param percentage percentage increase
    */
   public static void changeAcceleration(Float percentage) {
-    accel = accel * (1 + (percentage / 100));
+    player.setAccel(player.getAccel() * (1 + (percentage / 100)));
   }
 
   /**
@@ -234,7 +232,7 @@ public class GameScreen implements Screen {
    * @param percentage percentage increase
    */
   public static void changeMaxSpeed(Float percentage) {
-    maxSpeed = maxSpeed * (1 + (percentage / 100));
+    player.setMaxSpeed(player.getMaxSpeed() * (1 + (percentage / 100)));
   }
 
   public Hud createHud(SpriteBatch batch) {
@@ -372,77 +370,12 @@ public class GameScreen implements Screen {
   }
 
   /**
-   * Checks for input and performs an action Applies to keys "W" "A" "S" "D" "E" "Esc"
-   *
-   * <p>Caps player velocity
-   *
-   * @param dt Delta time (elapsed time since last game tick)
-   */
-  public void handleInput(float dt) {
-    if (gameStatus == GAME_RUNNING) {
-      // Left physics impulse on 'A'
-      if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
-      }
-      // Right physics impulse on 'D'
-      if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
-      }
-      // Up physics impulse on 'W'
-      if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(0, accel), player.b2body.getWorldCenter(), true);
-      }
-      // Down physics impulse on 'S'
-      if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
-      }
-      // Cannon fire on 'E'
-      if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-        player.fire();
-      }
-      // Checking if player at max velocity, and keeping them below max
-      if (player.b2body.getLinearVelocity().x >= maxSpeed) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
-      }
-      if (player.b2body.getLinearVelocity().x <= -maxSpeed) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
-      }
-      if (player.b2body.getLinearVelocity().y >= maxSpeed) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
-      }
-      if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
-        player.b2body.applyLinearImpulse(
-            new Vector2(0, accel), player.b2body.getWorldCenter(), true);
-      }
-    }
-    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-      if (gameStatus == GAME_PAUSED) {
-        resume();
-        table.setVisible(true);
-        pauseTable.setVisible(false);
-      } else {
-        table.setVisible(false);
-        pauseTable.setVisible(true);
-        pause();
-      }
-    }
-  }
-
-  /**
    * Updates the state of each object with delta time
    *
    * @param dt Delta time (elapsed time since last game tick)
    */
   public void update(float dt) {
     stateTime += dt;
-    handleInput(dt);
     // Stepping the physics engine by time of 1 frame
     world.step(1 / 60f, 6, 2);
 
@@ -712,10 +645,7 @@ public class GameScreen implements Screen {
   private void loadEnemyShips(JSONObject json) {
     JSONArray allShips = (JSONArray) json.get("enemyShips");
     GameScreen.ships.clear();
-    GameScreen.colleges.forEach(
-        (key, college) -> {
-          college.fleet.clear();
-        });
+    GameScreen.colleges.forEach((key, college) -> college.fleet.clear());
     for (Object allShip : allShips) {
       JSONArray shipData = (JSONArray) allShip;
       JSONArray shipPos = (JSONArray) shipData.get(0);
@@ -757,6 +687,20 @@ public class GameScreen implements Screen {
       float x = ((Double) position.get(0)).floatValue();
       float y = ((Double) position.get(1)).floatValue();
       Coins.add(new Coin(this, x, y));
+    }
+  }
+
+  public void handleInput(Float dt) {
+    if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+      if (gameStatus == GAME_PAUSED) {
+        resume();
+        table.setVisible(true);
+        pauseTable.setVisible(false);
+      } else {
+        table.setVisible(false);
+        pauseTable.setVisible(true);
+        pause();
+      }
     }
   }
 }

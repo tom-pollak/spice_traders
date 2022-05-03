@@ -1,8 +1,10 @@
 package com.mygdx.pirategame.sprites;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
@@ -11,6 +13,8 @@ import com.mygdx.pirategame.logic.Item;
 import com.mygdx.pirategame.logic.SpeedOrb;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
+
+import static com.mygdx.pirategame.screens.GameScreen.*;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
@@ -88,6 +92,55 @@ public class Player extends Ship {
   }
 
   /**
+   * Checks for input and performs an action Applies to keys "W" "A" "S" "D" "E" "Esc"
+   *
+   * <p>Caps player velocity
+   *
+   * @param dt Delta time (elapsed time since last game tick)
+   */
+  public void handleInput(float dt) {
+    if (gameStatus == GAME_RUNNING) {
+      // Left physics impulse on 'A'
+      if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
+      }
+      // Right physics impulse on 'D'
+      if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
+      }
+      // Up physics impulse on 'W'
+      if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
+      }
+      // Down physics impulse on 'S'
+      if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
+      }
+      // Cannon fire on 'E'
+      if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        fire();
+      }
+      // Checking if player at max velocity, and keeping them below max
+      if (player.b2body.getLinearVelocity().x >= maxSpeed) {
+        player.b2body.applyLinearImpulse(
+            new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
+      }
+      if (player.b2body.getLinearVelocity().x <= -maxSpeed) {
+        player.b2body.applyLinearImpulse(
+            new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
+      }
+      if (player.b2body.getLinearVelocity().y >= maxSpeed) {
+        player.b2body.applyLinearImpulse(
+            new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
+      }
+      if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
+        player.b2body.applyLinearImpulse(
+            new Vector2(0, accel), player.b2body.getWorldCenter(), true);
+      }
+    }
+  }
+
+  /**
    * Called when Space is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their
    * relative velocity
    */
@@ -120,6 +173,7 @@ public class Player extends Ship {
   @Override
   public void update(float dt) {
     super.update(dt);
+    handleInput(dt);
     Hud.setHealth(health);
 
     //update how inventory items affect the player

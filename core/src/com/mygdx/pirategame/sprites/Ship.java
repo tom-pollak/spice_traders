@@ -19,6 +19,8 @@ import com.mygdx.pirategame.screens.Hud;
  * @version 1.0
  */
 public class Ship extends Entity {
+  protected static float maxSpeed = 2.5f;
+  protected static float accel = 0.05f;
   protected final Sound destroy;
   protected final Sound hit;
   public String texturePath;
@@ -199,5 +201,21 @@ public class Ship extends Entity {
     this.college = college;
     shipTexture = new Texture(path);
     setRegion(shipTexture);
+  }
+
+  public Float getAccel() {
+    return accel;
+  }
+
+  public void setAccel(Float accel) {
+    Player.accel = accel;
+  }
+
+  public float getMaxSpeed() {
+    return maxSpeed;
+  }
+
+  public void setMaxSpeed(float maxSpeed) {
+    Player.maxSpeed = maxSpeed;
   }
 }

@@ -36,6 +36,7 @@ task dist(type: Jar) {
 dependencies {
     implementation 'com.badlogicgames.gdx:gdx-backend-headless:1.10.0'
     implementation 'com.badlogicgames.gdx:gdx-backend-lwjgl3:1.10.0'
+    implementation 'junit:junit:4.13.2'
 }
 
 

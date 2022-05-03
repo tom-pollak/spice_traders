@@ -23,7 +23,7 @@ public class AudioControls {
    *
    * @return the preferences of that page
    */
-  protected Preferences optionsObtains() {
+  public Preferences optionsObtains() {
     return Gdx.app.getPreferences(PAGE);
   }
 

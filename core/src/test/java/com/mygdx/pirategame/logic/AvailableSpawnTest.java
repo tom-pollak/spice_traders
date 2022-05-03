@@ -1,11 +1,11 @@
 package com.mygdx.pirategame.logic;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class AvailableSpawnTest {
   /** Method under test: default or parameterless constructor of {@link AvailableSpawn} */
