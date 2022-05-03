@@ -19,185 +19,200 @@ import com.mygdx.pirategame.screens.Hud;
  * @version 1.0
  */
 public class Ship extends Entity {
-  protected final Sound destroy;
-  protected final Sound hit;
-  public String texturePath;
-  public College college;
-  protected Texture shipTexture;
-  protected Array<Projectile> cannonBalls = new Array<>();
+    protected static float maxSpeed = 2.5f;
+    protected static float accel = 0.05f;
+    protected final Sound destroy;
+    protected final Sound hit;
+    public String texturePath;
+    public College college;
+    protected Texture shipTexture;
+    protected Array<Projectile> cannonBalls = new Array<>();
 
-  /**
-   * Instantiates enemy ship
-   *
-   * @param screen Visual data
-   * @param x x coordinates of entity
-   * @param y y coordinates of entity
-   * @param path path of texture file
-   * @param college College ship is assigned to
-   */
-  public Ship(GameScreen screen, float x, float y, String path, College college) {
-    super(screen, x, y);
-    shipTexture = new Texture(path);
-    this.texturePath = path;
-    this.college = college;
-    // Assign college
-    // Set audios
-    destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
-    hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
-    // Set the position and size of the college
-    setBounds(x, y, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
-    setRegion(shipTexture);
-    setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
-    defineBody();
-    bar = new HealthBar(this);
-  }
-
-  /**
-   * Updates the state of each object with delta time Checks for ship destruction
-   *
-   * @param dt Delta time (elapsed time since last game tick)
-   */
-  public void update(float dt) {
-    stateTime += dt;
-    bar.changeHealth(health);
-
-    // If ship is set to destroy and isnt, destroy it
-    if (setToDestroy && !destroyed) {
-      destroyShip();
-    } else if (!destroyed) {
-      // Update position and angle of ship
-      updatePosition();
-      // Update health bar
-      bar.update();
-      updateCannonBalls(dt);
-    }
-    if (health <= 0) {
-      setToDestroy = true;
+    /**
+     * Instantiates enemy ship
+     *
+     * @param screen  Visual data
+     * @param x       x coordinates of entity
+     * @param y       y coordinates of entity
+     * @param path    path of texture file
+     * @param college College ship is assigned to
+     */
+    public Ship(GameScreen screen, float x, float y, String path, College college) {
+        super(screen, x, y);
+        shipTexture = new Texture(path);
+        this.texturePath = path;
+        this.college = college;
+        // Assign college
+        // Set audios
+        destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
+        hit = Gdx.audio.newSound(Gdx.files.internal("ship-hit.wav"));
+        // Set the position and size of the college
+        setBounds(x, y, 64 / PirateGame.PPM, 110 / PirateGame.PPM);
+        setRegion(shipTexture);
+        setOrigin(32 / PirateGame.PPM, 55 / PirateGame.PPM);
+        defineBody();
+        bar = new HealthBar(this);
     }
 
-    // below code is to move the ship to a coordinate (target)
-    // Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
-    // target.sub(b2body.getPosition());
-    // target.nor();
-    // float speed = 1.5f;
-    // b2body.setLinearVelocity(target.scl(speed));
-  }
+    /**
+     * Updates the state of each object with delta time Checks for ship destruction
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
+    public void update(float dt) {
+        stateTime += dt;
+        bar.changeHealth(health);
 
-  /**
-   * Updates the position of the cannonballs the player has fired, and destroys them if they are out
-   * of range
-   *
-   * @param dt Delta time (elapsed time since last game tick)
-   */
-  private void updateCannonBalls(float dt) {
-    // Update cannon balls
-    for (Projectile ball : cannonBalls) {
-      ball.update(dt);
-      if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
+        // If ship is set to destroy and isnt, destroy it
+        if (setToDestroy && !destroyed) {
+            destroyShip();
+        } else if (!destroyed) {
+            // Update position and angle of ship
+            updatePosition();
+            // Update health bar
+            bar.update();
+            updateCannonBalls(dt);
+        }
+        if (health <= 0) {
+            setToDestroy = true;
+        }
+
+        // below code is to move the ship to a coordinate (target)
+        // Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
+        // target.sub(b2body.getPosition());
+        // target.nor();
+        // float speed = 1.5f;
+        // b2body.setLinearVelocity(target.scl(speed));
     }
-  }
 
-  private void updatePosition() {
-    setPosition(
-        b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
-    float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
-    b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
-    setRotation((float) (b2body.getAngle() * 180 / Math.PI));
-  }
-
-  /**
-   * Destroys the ship Plays sound effect, adds some points to the HUD and removes the ship and its
-   * child objects from the world
-   */
-  private void destroyShip() {
-    // Play death noise
-    if (GameScreen.game.getPreferences().isEffectsEnabled()) {
-      destroy.play(GameScreen.game.getPreferences().getEffectsVolume());
+    /**
+     * Updates the position of the cannonballs the player has fired, and destroys them if they are out
+     * of range
+     *
+     * @param dt Delta time (elapsed time since last game tick)
+     */
+    private void updateCannonBalls(float dt) {
+        // Update cannon balls
+        for (Projectile ball : cannonBalls) {
+            ball.update(dt);
+            if (ball.isDestroyed()) cannonBalls.removeValue(ball, true);
+        }
     }
-    world.destroyBody(b2body);
-    destroyed = true;
-    // Change player coins and points
-    Hud.changePoints(20);
-    Hud.changeCoins(10);
-    for (Projectile ball : cannonBalls) {
-      ball.setToDestroy();
+
+    private void updatePosition() {
+        setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
+        float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
+        b2body.setTransform(b2body.getWorldCenter(), angle - ((float) Math.PI) / 2.0f);
+        setRotation((float) (b2body.getAngle() * 180 / Math.PI));
     }
-    this.setToDestroy = true;
-  }
 
-  /**
-   * Constructs the ship batch
-   *
-   * @param batch The batch of visual data of the ship
-   */
-  public void draw(Batch batch) {
-    if (!destroyed) {
-      super.draw(batch);
-      // Render health bar
-      bar.render(batch);
-      for (Projectile ball : cannonBalls) ball.draw(batch);
+    /**
+     * Destroys the ship Plays sound effect, adds some points to the HUD and removes the ship and its
+     * child objects from the world
+     */
+    private void destroyShip() {
+        // Play death noise
+        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
+            destroy.play(GameScreen.game.getPreferences().getEffectsVolume());
+        }
+        world.destroyBody(b2body);
+        destroyed = true;
+        // Change player coins and points
+        Hud.changePoints(20);
+        Hud.changeCoins(10);
+        for (Projectile ball : cannonBalls) {
+            ball.setToDestroy();
+        }
+        this.setToDestroy = true;
     }
-  }
 
-  /** Defines the ship as an enemy Sets data to act as an enemy */
-  @Override
-  protected void defineBody() {
-    createBody();
-
-    // Sets collision boundaries
-    FixtureDef fdef = new FixtureDef();
-    CircleShape shape = new CircleShape();
-    shape.setRadius(55 / PirateGame.PPM);
-    // setting BIT identifier
-    fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
-    // determining what this BIT can collide with
-    //        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT |
-    // PirateGame.ENEMY_BIT | PirateGame.PROJECTILE_BIT;
-    // PLAYER_BIT
-    fdef.filter.maskBits =
-        PirateGame.DEFAULT_BIT
-            | PirateGame.COLLEGE_BIT
-            | PirateGame.PLAYER_BIT
-            | PirateGame.PROJECTILE_BIT
-            | PirateGame.ENEMY_BIT
-            | PirateGame.COLLEGE_SENSOR_BIT
-            | PirateGame.WEATHER_BIT;
-    fdef.shape = shape;
-    //        fdef.restitution = 0.7f;
-    //        fdef.friction = 0.2f;
-    b2body.createFixture(fdef).setUserData(this);
-  }
-
-  protected void createBody() {
-    // sets the body definitions
-    BodyDef bdef = new BodyDef();
-    bdef.position.set(getX(), getY());
-    bdef.type = BodyDef.BodyType.DynamicBody;
-    b2body = world.createBody(bdef);
-  }
-
-  /** Checks contact Changes health in accordance with contact and damage */
-  @Override
-  public void onContact(Entity collidingEntity) {
-    Gdx.app.log("enemy", "collision");
-    // Play collision sound
-    if (GameScreen.game.getPreferences().isEffectsEnabled()) {
-      hit.play(GameScreen.game.getPreferences().getEffectsVolume());
+    /**
+     * Constructs the ship batch
+     *
+     * @param batch The batch of visual data of the ship
+     */
+    public void draw(Batch batch) {
+        if (!destroyed) {
+            super.draw(batch);
+            // Render health bar
+            bar.render(batch);
+            for (Projectile ball : cannonBalls) ball.draw(batch);
+        }
     }
-    // Deal with the damage
-    health -= collidingEntity.getDamage();
-    Hud.changePoints(5);
-  }
 
-  /**
-   * Updates the ship image. Particuarly change texture on college destruction
-   *
-   * @param college Associated college
-   * @param path Path of new texture
-   */
-  public void updateTexture(College college, String path) {
-    this.college = college;
-    shipTexture = new Texture(path);
-    setRegion(shipTexture);
-  }
+    /**
+     * Defines the ship as an enemy Sets data to act as an enemy
+     */
+    @Override
+    protected void defineBody() {
+        createBody();
+
+        // Sets collision boundaries
+        FixtureDef fdef = new FixtureDef();
+        CircleShape shape = new CircleShape();
+        shape.setRadius(55 / PirateGame.PPM);
+        // setting BIT identifier
+        fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
+        // determining what this BIT can collide with
+        //        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT |
+        // PirateGame.ENEMY_BIT | PirateGame.PROJECTILE_BIT;
+        // PLAYER_BIT
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COLLEGE_BIT | PirateGame.PLAYER_BIT | PirateGame.PROJECTILE_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_SENSOR_BIT | PirateGame.WEATHER_BIT;
+        fdef.shape = shape;
+        //        fdef.restitution = 0.7f;
+        //        fdef.friction = 0.2f;
+        b2body.createFixture(fdef).setUserData(this);
+    }
+
+    protected void createBody() {
+        // sets the body definitions
+        BodyDef bdef = new BodyDef();
+        bdef.position.set(getX(), getY());
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        b2body = world.createBody(bdef);
+    }
+
+    /**
+     * Checks contact Changes health in accordance with contact and damage
+     */
+    @Override
+    public void onContact(Entity collidingEntity) {
+        Gdx.app.log("enemy", "collision");
+        // Play collision sound
+        if (GameScreen.game.getPreferences().isEffectsEnabled()) {
+            hit.play(GameScreen.game.getPreferences().getEffectsVolume());
+        }
+        // Deal with the damage
+        health -= collidingEntity.getDamage();
+        Hud.changePoints(5);
+    }
+
+    /**
+     * Updates the ship image. Particuarly change texture on college destruction
+     *
+     * @param college Associated college
+     * @param path    Path of new texture
+     */
+    public void updateTexture(College college, String path) {
+        this.college = college;
+        shipTexture = new Texture(path);
+        setRegion(shipTexture);
+    }
+
+    public Float getAccel() {
+        return accel;
+    }
+
+    public void setAccel(Float accel) {
+        Player.accel = accel;
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public void setMaxSpeed(float maxSpeed) {
+        Player.maxSpeed = maxSpeed;
+    }
+
 }
