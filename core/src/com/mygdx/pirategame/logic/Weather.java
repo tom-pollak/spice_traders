@@ -11,7 +11,6 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.sprites.Entity;
 import com.mygdx.pirategame.sprites.HealthBar;
-
 import java.util.ArrayList;
 
 public class Weather extends Entity {
