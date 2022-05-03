@@ -218,14 +218,3 @@ project(":tests") {
         testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     }
 }
-
-dependencies {
-}
-
-
-tasks.register("runOnGitHub") {
-    dependsOn(":tests:test")
-    group = "custom"
-//     description = "$ ./gradlew runOnGitHub # runs on GitHub Action"
-}
-
