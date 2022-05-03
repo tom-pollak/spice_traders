@@ -11,6 +11,7 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.logic.AvailableSpawn;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,10 +25,10 @@ import java.util.Random;
 public class College extends Entity {
   private final Texture enemyCollege;
   private final String name;
-  public Random rand = new Random();
   private final String currentCollege;
   private final Array<Projectile> cannonBalls;
   private final AvailableSpawn noSpawn;
+  public Random rand = new Random();
   public ArrayList<AiShip> fleet = new ArrayList<>();
 
   /**
@@ -175,8 +176,7 @@ public class College extends Entity {
     // setting BIT identifier
     fdef.filter.categoryBits = PirateGame.COLLEGE_BIT;
     // determining what this BIT can collide with
-    fdef.filter.maskBits =
-        PirateGame.PLAYER_BIT | PirateGame.PROJECTILE_BIT | PirateGame.WEATHER_BIT;
+    fdef.filter.maskBits = PirateGame.PLAYER_BIT | PirateGame.PROJECTILE_BIT;
     fdef.shape = shape;
     fdef.isSensor = true;
     b2body.createFixture(fdef).setUserData(this);

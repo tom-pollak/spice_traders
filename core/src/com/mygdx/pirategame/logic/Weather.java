@@ -14,12 +14,23 @@ import com.mygdx.pirategame.sprites.HealthBar;
 
 import java.util.ArrayList;
 
+/** Created by tom Weather entity that is used to add hazardous conditions to the game */
 public class Weather extends Entity {
   private final boolean canDamage = false;
   private final ArrayList<Entity> affectedEntities = new ArrayList<>();
   private Integer damageOnTurn = 0;
   private Float speedMultiplier = 1.0f;
 
+  /**
+   * Constructor for the weather entity
+   *
+   * @param screen GameScreen
+   * @param x x coordinate of the weather entity
+   * @param y y coordinate of the weather entity
+   * @param width width of the weather entity
+   * @param height height of the weather entity
+   * @param texturePath path to the texture of the weather entity
+   */
   public Weather(
       GameScreen screen, Float x, Float y, Integer width, Integer height, String texturePath) {
     super(screen, x, y);
@@ -52,6 +63,7 @@ public class Weather extends Entity {
     b2body.setLinearVelocity(direction.scl(speed));
   }
 
+  /** Defines the Box2D body of the weather entity Can collide with the player or an enemy ship */
   @Override
   protected void defineBody() {
     // sets the body definitions
@@ -74,14 +86,20 @@ public class Weather extends Entity {
     b2body.createFixture(fdef).setUserData(this);
   }
 
+  /**
+   * Called when a entity moves into the weather entity
+   *
+   * @param collidingEntity the entity that is colliding with the weather entity
+   */
   @Override
   public void onContact(Entity collidingEntity) {
     Gdx.app.log("Weather", "Collision with " + collidingEntity.getClass().getSimpleName());
     affectedEntities.add(collidingEntity);
   }
 
-  // If college is set to destroy and isnt, destroy it
-
+  /**
+   * @param dt
+   */
   @Override
   public void update(float dt) {
     stateTime += dt;

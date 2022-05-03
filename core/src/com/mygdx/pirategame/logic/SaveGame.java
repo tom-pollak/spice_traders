@@ -1,24 +1,62 @@
 package com.mygdx.pirategame.logic;
 
-import com.mygdx.pirategame.*;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
 import com.mygdx.pirategame.sprites.AiShip;
 import com.mygdx.pirategame.sprites.Coin;
 import com.mygdx.pirategame.sprites.Player;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
-import java.io.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Created by Jakub
+ *
+ * <p>Used to save game state. The loading is done in GameScreen.java
+ */
 public
 class SaveGame { // using JSON because it seems the easiest to write objects to and retrieve them
+  /**
+   * Constructor for SaveGame
+   *
+   * @param gameScreen GameScreen object, can find all other game objects
+   */
   public SaveGame(GameScreen gameScreen) {}
 
   /*          LOAD IS IN GAMESCREEN.JAVA          */
 
+  /**
+   * Saves the game state to a JSON file
+   *
+   * <p>SAVE JSON FORMAT The JSON saves as an object containing the following keys: player,
+   * enemyShips, coins, hud accessible with "json.get("-key-")
+   *
+   * <p>Player Array: Index 0: Array containing position Index 1: Angle of player Index 2: Inventory
+   * array containing each item's information in indexes: Index 0: Type of item Index 1: Texture
+   * (toString) Index 2: Array of buffs in JSONObjects with buff type and value, formatted (key,
+   * value)
+   *
+   * <p>Hud Array: Index 0: Health Index 1: Coins Index 2: Score Index 3: Coin Multiplier
+   *
+   * <p>Enemy Ship Array: Each index contains an array with the data for a single saved ship. For
+   * example json,get(0) is the data for the first saved ship.
+   *
+   * <p>In each index, the array containing the data for a ship: Index 0: Array containing position
+   * Index 1: Angle of ship Index 2: Array containing the linear velocity of the ship Index 3:
+   * Health Index 4: Damage Index 5: College Index 6: Path to texture of the ship (String)
+   *
+   * <p>Coin Array: Each index is an array containing the position of a coin.
+   *
+   * @param player player
+   * @param enemyShips an array of all ships
+   * @param coins an array of all coins
+   * @param hud data from hud (points, score)
+   * @param filename file to save to
+   */
   public static void save(
       Player player,
       ArrayList<AiShip> enemyShips,
@@ -26,43 +64,6 @@ class SaveGame { // using JSON because it seems the easiest to write objects to 
       Hud hud,
       String filename) {
     JSONObject fullSave = new JSONObject();
-
-    /*SAVE JSON FORMAT
-     *   The JSON saves as an object containing the following keys:
-     *       player, enemyShips, coins, hud
-     *       accessible with "json.get("-key-")
-     *
-     *   Player Array:
-     *       Index 0: Array containing position
-     *       Index 1: Angle of player
-     *       Index 2: Inventory array containing each item's information in indexes:
-     *           Index 0: Type of item
-     *           Index 1: Texture (toString)
-     *           Index 2: Array of buffs in JSONObjects with buff type and value, formatted (key, value)
-     *
-     *   Hud Array:
-     *       Index 0: Health
-     *       Index 1: Coins
-     *       Index 2: Score
-     *       Index 3: Coin Multiplier
-     *
-     *   Enemy Ship Array:
-     *       Each index contains an array with the data for a single saved ship.
-     *       For example json,get(0) is the data for the first saved ship.
-     *
-     *       In each index, the array containing the data for a ship:
-     *           Index 0: Array containing position
-     *           Index 1: Angle of ship
-     *           Index 2: Array containing the linear velocity of the ship
-     *           Index 3: Health
-     *           Index 4: Damage
-     *           Index 5: College
-     *           Index 6: Path to texture of the ship (String)
-     *
-     *   Coin Array:
-     *       Each index is an array containing the position of a coin.
-     *
-     * */
 
     // save all player attributes
     JSONArray playerData = new JSONArray();
@@ -91,7 +92,7 @@ class SaveGame { // using JSON because it seems the easiest to write objects to 
     hudData.add(Hud.getHealth());
     hudData.add(Hud.getCoins());
     hudData.add(Hud.getScore());
-    hudData.add(hud.getCoinMulti());
+    hudData.add(Hud.getCoinMulti());
     fullSave.put("hud", hudData);
 
     // save all attributes of enemy ships

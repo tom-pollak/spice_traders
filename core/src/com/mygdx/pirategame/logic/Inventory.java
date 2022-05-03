@@ -8,11 +8,17 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.pirategame.sprites.Player;
 
+/** Shows the players inventory on the HUD */
 public class Inventory implements Disposable {
   public static Stage stage;
-  private Table table1;
   private final Player player;
+  private Table table1;
 
+  /**
+   * Constructor
+   *
+   * @param parent the player, holds the items in the inventory
+   */
   public Inventory(Player parent) { // the entity of which the inventory is going to be shown
     stage = new Stage(new ScreenViewport());
     player = parent;
@@ -20,6 +26,7 @@ public class Inventory implements Disposable {
     update();
   }
 
+  /** Updates the inventory HUD */
   public void update() {
     table1.reset();
     Array<Item> inventory = player.getInventory();
@@ -36,6 +43,7 @@ public class Inventory implements Disposable {
     stage.addActor(table1);
   }
 
+  /** Disposes the inventory HUD */
   @Override
   public void dispose() {}
 }

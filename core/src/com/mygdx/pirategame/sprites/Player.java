@@ -164,7 +164,6 @@ public class Player extends Ship {
    * @param batch The batch of the program
    */
   public void draw(Batch batch) {
-    Gdx.app.log("Player", "Coord: " + getX() + ", " + getY());
     // Draws player and cannonballs
     super.draw(batch);
     for (Projectile ball : cannonBalls) ball.draw(batch);

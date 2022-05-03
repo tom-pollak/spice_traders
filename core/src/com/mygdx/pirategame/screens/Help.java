@@ -56,7 +56,8 @@ public class Help implements Screen {
     // Text
     Label Controls1 =
         new Label("WASD to move", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-    Label Controls2 = new Label("E to fire", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+    Label Controls2 =
+        new Label("Space to fire", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
     Label Controls3 =
         new Label("ESCAPE to see menu", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
     Label objective1 =

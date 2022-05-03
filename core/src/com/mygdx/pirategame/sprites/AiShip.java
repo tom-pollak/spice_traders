@@ -1,12 +1,12 @@
 package com.mygdx.pirategame.sprites;
 
-import static com.mygdx.pirategame.screens.GameScreen.*;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
+
+import static com.mygdx.pirategame.screens.GameScreen.player;
 
 /**
  * Entity AiShip Generates enemy ship data Instantiates an enemy ship
@@ -44,6 +44,7 @@ public class AiShip extends Ship {
     }
   }
 
+  /** Called in update to fire at player if certain conditions are met */
   private void fireAtPlayer() {
     if (stateTime > 1 && getDistance(player) < 10) {
       if (screen.getPlayerPos() != null) {

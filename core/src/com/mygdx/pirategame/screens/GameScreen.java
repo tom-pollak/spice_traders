@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -54,7 +55,6 @@ public class GameScreen implements Screen {
   public static int gameStatus;
   private static HashMap<String, College> colleges = new HashMap<>();
   private static ArrayList<Coin> Coins = new ArrayList<>();
-  public final BackgroundTiledMap backgroundTiledMap;
   private final OrthographicCamera camera;
   private final Viewport viewport;
   private final Stage stage;
@@ -72,7 +72,6 @@ public class GameScreen implements Screen {
   private Hud hud;
   private Table pauseTable;
   private Table table;
-  public static int difficulty;
 
   /**
    * Initialises the Game Screen, generates the world data and data for entities that exist upon it,
@@ -87,7 +86,6 @@ public class GameScreen implements Screen {
     camera.zoom = 0.0155f;
     viewport = new ScreenViewport(camera);
     camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
-    player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
     // Initialize a hud
     hud = createHud(game.batch);
@@ -99,7 +97,6 @@ public class GameScreen implements Screen {
     TmxMapLoader maploader = new TmxMapLoader();
     map = maploader.load("map.tmx");
     renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
-    backgroundTiledMap = new BackgroundTiledMap(map);
 
     // Setting up contact listener for collisions
     world.setContactListener(new WorldContactListener());
@@ -156,12 +153,9 @@ public class GameScreen implements Screen {
     ships.addAll(colleges.get("Constantine").fleet);
     ships.addAll(colleges.get("Goodricke").fleet);
 
-    monsters.add(new SeaMonster(this, 150, 20));
-    Weather cloud = new Weather(this, 10f, 10f, 10, 10, "cloud.png");
-    cloud.setDamageOnTurn(10);
-    cloud.setMovement(new Vector2(1, 2), 2f);
-    weathers.add(cloud);
+    monsters.add(new SeaMonster(this, 20, 20));
 
+    player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
     new WorldCreator(this);
     // Random ships
@@ -236,10 +230,26 @@ public class GameScreen implements Screen {
     player.setMaxSpeed(player.getMaxSpeed() * (1 + (percentage / 100)));
   }
 
+  /**
+   * Creates a new HUD for the player
+   *
+   * @param batch batch to draw to
+   * @return the new HUD
+   */
   public Hud createHud(SpriteBatch batch) {
     return new Hud(batch);
   }
 
+  /**
+   * Creates new HUD for the player
+   *
+   * @param batch batch to draw to
+   * @param health health of the player
+   * @param coins coins of the player
+   * @param score score of the player
+   * @param coinMulti player's coin multiplier
+   * @return the new HUD
+   */
   public Hud createHud(SpriteBatch batch, int health, int coins, int score, int coinMulti) {
     Hud hud = new Hud(batch);
     Hud.setHealth(health);
@@ -261,6 +271,7 @@ public class GameScreen implements Screen {
     // GAME BUTTONS
     final TextButton pauseButton = new TextButton("Pause", skin);
     final TextButton skill = new TextButton("Skill Tree", skin);
+    final TextButton shop = new TextButton("Shop", skin);
 
     // PAUSE MENU BUTTONS
     final TextButton start = new TextButton("Resume", skin);
@@ -295,6 +306,8 @@ public class GameScreen implements Screen {
     pauseTable.add(start).fillX().uniformX();
     pauseTable.row().pad(20, 0, 10, 0);
     pauseTable.add(skill).fillX().uniformX();
+    pauseTable.row().pad(20, 0, 10, 0);
+    pauseTable.add(shop).fillX().uniformX();
     pauseTable.row().pad(20, 0, 10, 0);
     pauseTable.add(options).fillX().uniformX();
     pauseTable.row().pad(20, 0, 10, 0);
@@ -395,6 +408,7 @@ public class GameScreen implements Screen {
     for (SeaMonster monster : monsters) {
       monster.update(dt);
     }
+    createRandomWeatherEvents();
     for (Weather weather : weathers) {
       weather.update(dt);
     }
@@ -529,10 +543,8 @@ public class GameScreen implements Screen {
   /** Checks if the game is over i.e. goal reached (all colleges bar "Alcuin" are destroyed) */
   public void gameOverCheck() {
     // Lose game if ship on 0 health or Alcuin is destroyed
-    if (player.health <= 0 || colleges.get("Alcuin").destroyed) {
+    if (Hud.getHealth() <= 0 || colleges.get("Alcuin").destroyed) {
       game.changeScreen(PirateGame.DEATH);
-      System.out.println("Player dead: " + (player.health <= 0));
-      System.out.println("Player College Dead: " + (colleges.get("Alcuin").destroyed));
       game.killGame();
     }
     // Win game if all colleges destroyed
@@ -599,14 +611,10 @@ public class GameScreen implements Screen {
     player.setY(y);
   }
 
-  /**
-   * Takes a file path to a JSON containing data of a saved game from the save function in SaveGame.class
-   */
   public void load(String filename) throws FileNotFoundException {
     JSONParser jsonParser = new JSONParser();
 
     try (FileReader reader = new FileReader(filename)) {
-      //Read the JSON which contains one object with other objects and arrays with all game data required
       Object obj = jsonParser.parse(reader);
       JSONObject list = (JSONObject) obj;
       loadPlayer(list);
@@ -621,32 +629,22 @@ public class GameScreen implements Screen {
   }
 
   /**
-   * Takes a loaded JSON object containing all save data and extracts the player data and loads it into the game.
-   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the player.
+   * Loads the player's data from the JSON file
+   *
+   * @param json : JSON object to load from
    */
   private void loadPlayer(JSONObject json) {
-
-    /*
-     * All methods that load a save file contain many type conversions. This is because many strings were read as objects,
-     * and many integers and floats were read as doubles and required conversion.
-     * */
-
     JSONArray playerData = (JSONArray) json.get("player");
-    //position 0 of the player array contains an array of the position
     JSONArray playerPos = (JSONArray) playerData.get(0);
-    //position 1 of the player array contains an array of the direction being faced at the time of saving.
     float playerDirection = ((Double) playerData.get(1)).floatValue();
     // JSON reader insisted on a value being read being a double, so it must be a double converted
     // to float
     GameScreen.player.b2body.setTransform(
-            //0 and 1 are the positions of the array containing x, y
         ((Double) playerPos.get(0)).floatValue(),
         ((Double) playerPos.get(1)).floatValue(),
         playerDirection);
     GameScreen.player.b2body.setLinearVelocity(0, 0);
-    //clear current inventory to load the saved inventory
     player.inventory.clear();
-    //position 2 of the player data array contains an array of items that were contained in the inventory
     JSONArray inventoryData = (JSONArray) playerData.get(2);
     for (Object item : inventoryData) {
       String type = ((JSONArray) item).get(0).toString();
@@ -665,12 +663,12 @@ public class GameScreen implements Screen {
   }
 
   /**
-   * Takes a loaded JSON object containing all save data and extracts the data for the non-player ships and loads them into the game
-   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the enemy ships.
+   * Loads enemy ships from JSON object
+   *
+   * @param json JSON object to load from
    */
   private void loadEnemyShips(JSONObject json) {
     JSONArray allShips = (JSONArray) json.get("enemyShips");
-    //Clear al ships and references to ships currently loaded, to load in the set of ships that were saved
     GameScreen.ships.clear();
     GameScreen.colleges.forEach((key, college) -> college.fleet.clear());
     for (Object allShip : allShips) {
@@ -679,7 +677,6 @@ public class GameScreen implements Screen {
       String college = (shipData.get(5)).toString();
       AiShip restoredShip =
           new AiShip(this, 0, 0, shipData.get(6).toString(), colleges.get(college));
-      //give attributes to the ship from it's saved data
       restoredShip.health = ((Long) shipData.get(3)).intValue();
       restoredShip.damage = ((Long) shipData.get(4)).intValue();
       JSONArray shipVelocity = (JSONArray) shipData.get(2);
@@ -698,8 +695,9 @@ public class GameScreen implements Screen {
   }
 
   /**
-   * Takes a loaded JSON object containing all save data and extracts the data for the HUD and loads it into the game
-   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the HUD and the elements it holds (XP, coins).
+   * Loads the HUD data from the JSON object.
+   *
+   * @param json The JSON file to load from.
    */
   private void loadHud(JSONObject json) {
     JSONArray hudData = (JSONArray) json.get("hud");
@@ -712,8 +710,9 @@ public class GameScreen implements Screen {
   }
 
   /**
-   * Takes a loaded JSON object containing all save data and extracts the data for the coin locations across the map and loads them into the game
-   * Should be used in conjuction with the rest of the load methods (or the main load method), unless only loading the coins on the map.
+   * Loads game's coins from JSON file
+   *
+   * @param json JSON object to load from
    */
   private void loadCoins(JSONObject json) {
     JSONArray coinsArray = (JSONArray) json.get("coins");
@@ -726,6 +725,11 @@ public class GameScreen implements Screen {
     }
   }
 
+  /**
+   * Handles the escape key press, which will pause the game.
+   *
+   * @param dt Delta time
+   */
   public void handleInput(Float dt) {
     if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
       if (gameStatus == GAME_PAUSED) {
@@ -739,4 +743,34 @@ public class GameScreen implements Screen {
       }
     }
   }
+
+  /** Creates random weather entities in random positions */
+  public void createRandomWeatherEvents() {
+    if (MathUtils.random(0, 100) < 20) {
+      float x = MathUtils.random(0, stage.getWidth());
+      float y = MathUtils.random(0, stage.getHeight());
+      Weather cloud =
+          new Weather(this, x, y, MathUtils.random(1, 20), MathUtils.random(1, 20), "cloud.png");
+      cloud.setDamageOnTurn(10);
+      cloud.setMovement(
+          new Vector2(MathUtils.random(), MathUtils.random()), MathUtils.random(0.2f, 1.5f));
+      weathers.add(cloud);
+      Gdx.app.log("Weather", "Cloud created: " + x + " " + y);
+    }
+  }
+  //        for (int i = 0; i < 0; i++) {
+  //            validLoc = false;
+  //            while (!validLoc) {
+  //                //Get random x and y coords
+  //                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) +
+  // AvailableSpawn.xBase;
+  //                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) +
+  // AvailableSpawn.yBase;
+  //                //Check if valid
+  //                validLoc = checkGenPos(a, b);
+  //            }
+  //            //Add a ship at the random coords
+  //            ships.add(new AiShip(this, a, b, "unaligned_ship.png", College.NEUTRAL));
+  //        }
+
 }
