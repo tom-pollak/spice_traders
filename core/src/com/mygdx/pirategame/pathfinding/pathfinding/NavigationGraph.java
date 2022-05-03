@@ -2,7 +2,6 @@ package com.mygdx.pirategame.pathfinding.pathfinding;
 
 import java.util.List;
 
-
 /**
  * A collection of {@link NavigationNode}.
  *
@@ -10,26 +9,22 @@ import java.util.List;
  * @author Xavier Guzman
  */
 public interface NavigationGraph<T extends NavigationNode> {
-    /**
-     * @param node the node to find the neighbors for
-     * @return a list with all the adjacent nodes for the passed node, using the default options
-     */
-    List<T> getNeighbors(T node);
+  /**
+   * @param node the node to find the neighbors for
+   * @return a list with all the adjacent nodes for the passed node, using the default options
+   */
+  List<T> getNeighbors(T node);
 
-    /**
-     * @param node the node to find the neighbors for
-     * @return a list containing the adjacent nodes for the passed node, using the passed options
-     */
-    List<T> getNeighbors(T node, PathFinderOptions opt);
+  /**
+   * @param node the node to find the neighbors for
+   * @return a list containing the adjacent nodes for the passed node, using the passed options
+   */
+  List<T> getNeighbors(T node, PathFinderOptions opt);
 
-    /**
-     * Determines the movement cost for moving from node1 to node2, with the given options
-     */
-    float getMovementCost(T node1, T node2, PathFinderOptions opt);
+  /** Determines the movement cost for moving from node1 to node2, with the given options */
+  float getMovementCost(T node1, T node2, PathFinderOptions opt);
 
+  boolean isWalkable(T node);
 
-    boolean isWalkable(T node);
-
-    boolean lineOfSight(NavigationNode from, NavigationNode to);
-
+  boolean lineOfSight(NavigationNode from, NavigationNode to);
 }
