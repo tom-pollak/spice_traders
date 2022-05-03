@@ -1,5 +1,7 @@
 package com.mygdx.pirategame.sprites;
 
+import static com.mygdx.pirategame.screens.GameScreen.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -13,8 +15,6 @@ import com.mygdx.pirategame.logic.Item;
 import com.mygdx.pirategame.logic.SpeedOrb;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
-
-import static com.mygdx.pirategame.screens.GameScreen.*;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
@@ -176,20 +176,21 @@ public class Player extends Ship {
     handleInput(dt);
     Hud.setHealth(health);
 
-    //update how inventory items affect the player
+    // update how inventory items affect the player
     damageBuff = 1;
     speedBuff = 1;
-    for (Item item : inventory){
-      item.buffs.forEach((buff, multiplier) -> {
-        switch (buff) {
-          case "speed":
-            speedBuff *= multiplier;
-            break;
-          case "dmg":
-            damageBuff *= multiplier;
-            break;
-        }
-      });
+    for (Item item : inventory) {
+      item.buffs.forEach(
+          (buff, multiplier) -> {
+            switch (buff) {
+              case "speed":
+                speedBuff *= multiplier;
+                break;
+              case "dmg":
+                damageBuff *= multiplier;
+                break;
+            }
+          });
     }
   }
 
@@ -198,7 +199,7 @@ public class Player extends Ship {
   }
 
   @Override
-  public int getDamage(){
+  public int getDamage() {
     return Math.round(damage * damageBuff);
   }
 }
