@@ -1,5 +1,7 @@
 package com.mygdx.pirategame.sprites;
 
+import static com.mygdx.pirategame.screens.GameScreen.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -13,8 +15,6 @@ import com.mygdx.pirategame.logic.Item;
 import com.mygdx.pirategame.logic.SpeedOrb;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
-
-import static com.mygdx.pirategame.screens.GameScreen.*;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
