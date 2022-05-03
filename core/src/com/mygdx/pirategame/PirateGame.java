@@ -150,7 +150,7 @@ public class PirateGame extends Game {
     try {
       gameScreen.load(filename);
     } catch (FileNotFoundException e) {
-      throw new RuntimeException(e);
+      System.out.println("File not found");
     }
   }
 }

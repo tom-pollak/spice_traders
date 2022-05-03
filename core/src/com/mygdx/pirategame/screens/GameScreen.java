@@ -53,6 +53,7 @@ public class GameScreen implements Screen {
   public static Player player;
   public static ArrayList<AiShip> ships = new ArrayList<>();
   public static int gameStatus;
+  public static int difficulty;
   private static HashMap<String, College> colleges = new HashMap<>();
   private static ArrayList<Coin> Coins = new ArrayList<>();
   private final OrthographicCamera camera;
@@ -86,6 +87,8 @@ public class GameScreen implements Screen {
     camera.zoom = 0.0155f;
     viewport = new ScreenViewport(camera);
     camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+
+    player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
     // Initialize a hud
     hud = createHud(game.batch);
@@ -154,8 +157,6 @@ public class GameScreen implements Screen {
     ships.addAll(colleges.get("Goodricke").fleet);
 
     monsters.add(new SeaMonster(this, 20, 20));
-
-    player = new Player(this, 10, 10, colleges.get("Alcuin"));
 
     new WorldCreator(this);
     // Random ships

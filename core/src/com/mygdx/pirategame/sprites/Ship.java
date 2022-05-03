@@ -42,6 +42,7 @@ public class Ship extends Entity {
     shipTexture = new Texture(path);
     this.texturePath = path;
     this.college = college;
+    this.damage = 20;
     // Assign college
     // Set audios
     destroy = Gdx.audio.newSound(Gdx.files.internal("ship-explosion-2.wav"));
@@ -187,7 +188,7 @@ public class Ship extends Entity {
       hit.play(GameScreen.game.getPreferences().getEffectsVolume());
     }
     // Deal with the damage
-    health -= collidingEntity.getDamage();
+    health -= collidingEntity.getDamage() * GameScreen.difficulty;
     Hud.changePoints(5);
   }
 
