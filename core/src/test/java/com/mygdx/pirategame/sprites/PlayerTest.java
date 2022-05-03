@@ -2,10 +2,9 @@ package com.mygdx.pirategame.sprites;
 
 import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
-import org.junit.jupiter.api.*;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import org.junit.jupiter.api.*;
 
 public class PlayerTest {
   @Test
