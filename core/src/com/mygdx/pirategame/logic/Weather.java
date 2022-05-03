@@ -11,7 +11,6 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.sprites.Entity;
 import com.mygdx.pirategame.sprites.HealthBar;
-
 import java.util.ArrayList;
 
 /** Created by tom Weather entity that is used to add hazardous conditions to the game */
@@ -97,9 +96,7 @@ public class Weather extends Entity {
     affectedEntities.add(collidingEntity);
   }
 
-  /**
-   * @param dt
-   */
+  /** @param dt */
   @Override
   public void update(float dt) {
     stateTime += dt;

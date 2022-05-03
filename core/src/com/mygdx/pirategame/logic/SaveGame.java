@@ -5,13 +5,12 @@ import com.mygdx.pirategame.screens.Hud;
 import com.mygdx.pirategame.sprites.AiShip;
 import com.mygdx.pirategame.sprites.Coin;
 import com.mygdx.pirategame.sprites.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * Created by Jakub

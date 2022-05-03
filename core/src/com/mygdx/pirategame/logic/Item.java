@@ -2,7 +2,6 @@ package com.mygdx.pirategame.logic;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import java.util.HashMap;
 
 /**
@@ -33,23 +32,17 @@ public class Item {
     this.buffs.put("dmg", 1f);
   }
 
-  /**
-   * @return type of item
-   */
+  /** @return type of item */
   public String getType() {
     return this.type;
   }
 
-  /**
-   * @return parent sprite
-   */
+  /** @return parent sprite */
   public Sprite getParent() {
     return this.parent;
   }
 
-  /**
-   * @return sets a new parent sprite
-   */
+  /** @return sets a new parent sprite */
   public void setParent(Sprite newParent) {
     this.parent = newParent;
   }
@@ -65,9 +58,7 @@ public class Item {
     return true; // FINISH THIS
   }
 
-  /**
-   * @return returns the texture of the item
-   */
+  /** @return returns the texture of the item */
   public Texture getTexture() {
     return this.texture;
   }
