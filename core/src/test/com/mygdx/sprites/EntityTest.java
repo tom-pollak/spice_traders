@@ -1,5 +1,3 @@
 package sprites;
 
-public class EntityTest {
-
-}
+public class EntityTest {}

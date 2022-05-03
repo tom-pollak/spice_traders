@@ -13,25 +13,23 @@ import com.mygdx.pirategame.sprites.Entity;
  * @version 1.0
  */
 public class Islands extends InteractiveTileObject {
-    /**
-     * Instantiates a new Islands.
-     *
-     * @param screen visual data
-     * @param bounds Rectangle boundary (world boundary)
-     */
-    public Islands(GameScreen screen, Rectangle bounds) {
-        super(screen, bounds);
-        fixture.setUserData(this);
-        //Set the category bit
-        setCategoryFilter(PirateGame.DEFAULT_BIT);
-    }
+  /**
+   * Instantiates a new Islands.
+   *
+   * @param screen visual data
+   * @param bounds Rectangle boundary (world boundary)
+   */
+  public Islands(GameScreen screen, Rectangle bounds) {
+    super(screen, bounds);
+    fixture.setUserData(this);
+    // Set the category bit
+    setCategoryFilter(PirateGame.DEFAULT_BIT);
+  }
 
-    /**
-     * When contact occurs between the ship and island. deal damage to the ship
-     */
-    @Override
-    public void onContact(Entity collidingEntity) {
-        Gdx.app.log("island", "collision");
-        //Deal damage to the boat
-    }
+  /** When contact occurs between the ship and island. deal damage to the ship */
+  @Override
+  public void onContact(Entity collidingEntity) {
+    Gdx.app.log("island", "collision");
+    // Deal damage to the boat
+  }
 }
