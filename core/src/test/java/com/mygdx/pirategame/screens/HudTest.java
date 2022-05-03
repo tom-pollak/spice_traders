@@ -1,5 +1,7 @@
 package com.mygdx.pirategame.screens;
 
+import com.mygdx.pirategame.PirateGame;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -129,5 +131,14 @@ class HudTest {
     //   See https://diff.blue/R004 to resolve this issue.
 
     Hud.setHealth(1);
+  }
+
+  @Test
+  void testExperienceIncreaseOverTime() {
+    PirateGame pirateGame = new PirateGame();
+    Hud hud = new Hud(pirateGame.batch);
+    int initialCoinAmount = hud.getScore();
+    hud.update(1000);
+    Assertions.assertNotEquals((int) hud.getScore(), initialCoinAmount);
   }
 }

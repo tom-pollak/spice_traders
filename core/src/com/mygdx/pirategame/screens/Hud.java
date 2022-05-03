@@ -33,7 +33,7 @@ public class Hud implements Disposable {
   private static Label healthLabel;
   private static Label coinLabel;
   private static Label pointsText;
-  private static Integer coins;
+  public static Integer coins;
   private static Integer coinMulti;
   private final Image hpImg;
   private final Image box;
