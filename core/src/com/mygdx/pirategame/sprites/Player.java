@@ -176,20 +176,21 @@ public class Player extends Ship {
     handleInput(dt);
     Hud.setHealth(health);
 
-    //update how inventory items affect the player
+    // update how inventory items affect the player
     damageBuff = 1;
     speedBuff = 1;
-    for (Item item : inventory){
-      item.buffs.forEach((buff, multiplier) -> {
-        switch (buff) {
-          case "speed":
-            speedBuff *= multiplier;
-            break;
-          case "dmg":
-            damageBuff *= multiplier;
-            break;
-        }
-      });
+    for (Item item : inventory) {
+      item.buffs.forEach(
+          (buff, multiplier) -> {
+            switch (buff) {
+              case "speed":
+                speedBuff *= multiplier;
+                break;
+              case "dmg":
+                damageBuff *= multiplier;
+                break;
+            }
+          });
     }
   }
 
@@ -198,7 +199,7 @@ public class Player extends Ship {
   }
 
   @Override
-  public int getDamage(){
+  public int getDamage() {
     return Math.round(damage * damageBuff);
   }
 }
