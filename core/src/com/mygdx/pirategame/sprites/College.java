@@ -187,8 +187,8 @@ public class College extends Entity {
   public void onContact(Entity collidingEntity) {
     // Damage the college and lower health bar
     Gdx.app.log("enemy", "collision");
-    health -= damage;
-    bar.changeHealth(damage);
+    health -= collidingEntity.getDamage();
+    bar.changeHealth(collidingEntity.getDamage());
   }
 
   /** Fires cannonballs */

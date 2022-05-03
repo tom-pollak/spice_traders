@@ -21,6 +21,9 @@ import com.mygdx.pirategame.screens.Hud;
 public class Player extends Ship {
   public final Array<Item> inventory;
   private final Sound breakSound;
+  public int damage;
+  public float damageBuff;
+  public float speedBuff;
 
   /**
    * Creates the player, singleton class
@@ -41,6 +44,7 @@ public class Player extends Ship {
     inventory.add(new SpeedOrb(this));
     inventory.add(new SpeedOrb(this));
     health = 200;
+    damage = 20;
   }
 
   /** Plays the break sound when a boat takes damage */
@@ -117,9 +121,30 @@ public class Player extends Ship {
   public void update(float dt) {
     super.update(dt);
     Hud.setHealth(health);
+
+    //update how inventory items affect the player
+    damageBuff = 1;
+    speedBuff = 1;
+    for (Item item : inventory){
+      item.buffs.forEach((buff, multiplier) -> {
+        switch (buff) {
+          case "speed":
+            speedBuff *= multiplier;
+            break;
+          case "dmg":
+            damageBuff *= multiplier;
+            break;
+        }
+      });
+    }
   }
 
   public Array<Item> getInventory() {
     return this.inventory;
+  }
+
+  @Override
+  public int getDamage(){
+    return Math.round(damage * damageBuff);
   }
 }

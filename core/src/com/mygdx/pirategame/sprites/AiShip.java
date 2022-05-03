@@ -105,8 +105,8 @@ public class AiShip extends Ship {
       hit.play(GameScreen.game.getPreferences().getEffectsVolume());
     }
     // Deal with the damage
-    health -= damage;
-    bar.changeHealth(damage);
+    health -= collidingEntity.getDamage();
+    bar.changeHealth(collidingEntity.getDamage());
     Hud.changePoints(5);
   }
 
