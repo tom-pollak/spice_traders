@@ -1,9 +1,9 @@
 package com.mygdx.pirategame.logic;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+
+import org.junit.Test;
 
 public class PairTest {
   /** Method under test: default or parameterless constructor of {@link Pair} */

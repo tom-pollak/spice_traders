@@ -1,9 +1,9 @@
 package com.mygdx.pirategame.logic;
 
+import static org.junit.Assert.*;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ItemTest {
   /** Method under test: default or parameterless constructor of {@link Item} */
