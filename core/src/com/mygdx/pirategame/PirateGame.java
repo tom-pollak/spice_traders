@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.pirategame.logic.AudioControls;
 import com.mygdx.pirategame.screens.*;
-
 import java.io.FileNotFoundException;
 
 /**

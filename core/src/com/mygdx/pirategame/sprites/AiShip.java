@@ -1,12 +1,12 @@
 package com.mygdx.pirategame.sprites;
 
+import static com.mygdx.pirategame.screens.GameScreen.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.screens.Hud;
-
-import static com.mygdx.pirategame.screens.GameScreen.*;
 
 /**
  * Entity AiShip Generates enemy ship data Instantiates an enemy ship
