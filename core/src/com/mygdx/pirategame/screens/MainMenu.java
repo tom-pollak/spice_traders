@@ -78,7 +78,6 @@ public class MainMenu implements Screen {
           public void changed(ChangeEvent event, Actor actor) {
             parent.changeScreen(PirateGame.GAME);
             GameScreen.difficulty = difficultyLevel;
-
           }
         });
     // Help Screen
@@ -119,21 +118,23 @@ public class MainMenu implements Screen {
         });
 
     difficulty.addListener(
-          new ChangeListener() {
-              @Override
-              public void changed(ChangeEvent event, Actor actor) {
-                  difficultyLevel++;
-                  if(difficultyLevel > 3){difficultyLevel = 1;}
-                  if(difficultyLevel == 1){
-                      difficulty.setText("Easy Difficulty");
-                  } else if (difficultyLevel == 2){
-                      difficulty.setText("Normal Difficulty");
-                  } else if (difficultyLevel == 3){
-                      difficulty.setText("Hard Difficulty");
-                  }
-                  stage.draw();
-              }
-          });
+        new ChangeListener() {
+          @Override
+          public void changed(ChangeEvent event, Actor actor) {
+            difficultyLevel++;
+            if (difficultyLevel > 3) {
+              difficultyLevel = 1;
+            }
+            if (difficultyLevel == 1) {
+              difficulty.setText("Easy Difficulty");
+            } else if (difficultyLevel == 2) {
+              difficulty.setText("Normal Difficulty");
+            } else if (difficultyLevel == 3) {
+              difficulty.setText("Hard Difficulty");
+            }
+            stage.draw();
+          }
+        });
   }
 
   /**

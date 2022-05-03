@@ -1,6 +1,5 @@
 package com.mygdx.pirategame.sprites;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -189,7 +188,7 @@ public class Ship extends Entity {
       hit.play(GameScreen.game.getPreferences().getEffectsVolume());
     }
     // Deal with the damage
-    health -= collidingEntity.getDamage()*GameScreen.difficulty;
+    health -= collidingEntity.getDamage() * GameScreen.difficulty;
     Hud.changePoints(5);
   }
 

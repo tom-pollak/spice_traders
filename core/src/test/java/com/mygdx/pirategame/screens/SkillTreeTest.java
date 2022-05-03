@@ -1,9 +1,10 @@
 package com.mygdx.pirategame.screens;
 
+import static org.junit.Assert.*;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.Disabled;
-import static org.junit.Assert.*;
 
 public class SkillTreeTest {
   /** Method under test: {@link SkillTree#pointsCheck(int)} */

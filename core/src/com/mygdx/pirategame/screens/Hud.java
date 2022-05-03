@@ -1,6 +1,5 @@
 package com.mygdx.pirategame.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -78,7 +77,9 @@ public class Hud implements Disposable {
         new Label(
             String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
     healthLabel =
-        new Label(String.format("%03d", GameScreen.player.health), new Label.LabelStyle(new BitmapFont(), Color.RED));
+        new Label(
+            String.format("%03d", GameScreen.player.health),
+            new Label.LabelStyle(new BitmapFont(), Color.RED));
     coinLabel =
         new Label(
             String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
