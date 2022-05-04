@@ -10,7 +10,6 @@ public class HudTest {
   /** Method under test: {@link Hud#resize(int, int)} */
   @Test
   @Ignore
-
   @Disabled("TODO: Complete this test")
   public void testResize() {
     // TODO: Complete this test.
@@ -33,7 +32,6 @@ public class HudTest {
   /** Method under test: {@link Hud#changeHealth(int)} */
   @Test
   @Ignore
-
   @Disabled("TODO: Complete this test")
   public void testChangeHealth() {
     // TODO: Complete this test.
@@ -55,7 +53,6 @@ public class HudTest {
   /** Method under test: {@link Hud#changeCoins(int)} */
   @Test
   @Ignore
-
   @Disabled("TODO: Complete this test")
   public void testChangeCoins() {
     // TODO: Complete this test.
@@ -77,7 +74,6 @@ public class HudTest {
   /** Method under test: {@link Hud#changeCoins(int)} */
   @Test
   @Ignore
-
   public void testChangeCoins2() {
     // TODO: Complete this test.
     //   Reason: R004 No meaningful assertions found.
@@ -92,7 +88,6 @@ public class HudTest {
   /** Method under test: {@link Hud#changePoints(int)} */
   @Test
   @Ignore
-
   @Disabled("TODO: Complete this test")
   public void testChangePoints() {
     // TODO: Complete this test.
@@ -114,7 +109,6 @@ public class HudTest {
   /** Method under test: {@link Hud#changeCoinsMulti(int)} */
   @Test
   @Ignore
-
   @Disabled("TODO: Complete this test")
   public void testChangeCoinsMulti() {
     // TODO: Complete this test.
@@ -148,7 +142,7 @@ public class HudTest {
   }
 
   @Test
-  public  void testExperienceIncreaseOverTime() {
+  public void testExperienceIncreaseOverTime() {
     PirateGame pirateGame = new PirateGame();
     Hud hud = new Hud(pirateGame.batch);
     int initialCoinAmount = hud.getScore();

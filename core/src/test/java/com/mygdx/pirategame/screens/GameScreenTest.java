@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 
-import static com.mygdx.pirategame.screens.GameScreen.GAME_PAUSED;
 
 public class GameScreenTest {
   /** Method under test: {@link GameScreen#changeDamage(int)} */
