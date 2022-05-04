@@ -1,12 +1,12 @@
 package com.mygdx.pirategame.sprites;
 
+import static com.mygdx.pirategame.screens.GameScreen.*;
+
 import com.mygdx.pirategame.PirateGame;
-import org.junit.Test;
-import org.junit.jupiter.api.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-
-import static com.mygdx.pirategame.screens.GameScreen.*;
+import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 public class PlayerTest {
   private Robot r;
