@@ -26,11 +26,6 @@ import com.mygdx.pirategame.PirateGame;
 import com.mygdx.pirategame.logic.*;
 import com.mygdx.pirategame.sprites.*;
 import com.mygdx.pirategame.tiles.WorldCreator;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -38,6 +33,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Game Screen Class to generate the various screens used to play the game. Instantiates all screen
