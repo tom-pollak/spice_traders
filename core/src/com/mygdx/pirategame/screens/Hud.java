@@ -1,5 +1,7 @@
 package com.mygdx.pirategame.screens;
 
+import static com.mygdx.pirategame.screens.GameScreen.player;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import static com.mygdx.pirategame.screens.GameScreen.player;
 
 /**
  * Hud Produces a hud for the player
