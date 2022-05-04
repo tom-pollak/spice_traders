@@ -787,8 +787,7 @@ public class GameScreen implements Screen {
   //            ships.add(new AiShip(this, a, b, "unaligned_ship.png", College.NEUTRAL));
   //        }
 
-  public void addCoin(int x, int y){
+  public void addCoin(int x, int y) {
     Coins.add(new Coin(this, x, y));
   }
-
 }
