@@ -54,7 +54,7 @@ public class GameScreen implements Screen {
   public static int gameStatus;
   public static int difficulty;
   private static HashMap<String, College> colleges = new HashMap<>();
-  private static ArrayList<Coin> Coins = new ArrayList<>();
+  public static ArrayList<Coin> Coins = new ArrayList<>();
   private final OrthographicCamera camera;
   private final Viewport viewport;
   private final Stage stage;
@@ -786,5 +786,9 @@ public class GameScreen implements Screen {
   //            //Add a ship at the random coords
   //            ships.add(new AiShip(this, a, b, "unaligned_ship.png", College.NEUTRAL));
   //        }
+
+  public void addCoin(int x, int y){
+    Coins.add(new Coin(this, x, y));
+  }
 
 }
