@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 
-import static com.mygdx.pirategame.screens.GameScreen.GAME_PAUSED;
 
 public class GameScreenTest {
   /** Method under test: {@link GameScreen#changeDamage(int)} */
@@ -56,11 +55,11 @@ public class GameScreenTest {
   }
 
   @Test
-  public void testPause(){
+  public void testPause() {
     PirateGame pirateGame = new PirateGame();
     pirateGame.setScreen(new GameScreen(pirateGame));
     pirateGame.getGameScreen().pause();
-    Assertions.assertEquals(pirateGame.getGameScreen().GAME_PAUSED, pirateGame.getGameScreen().gameStatus);
-
+    Assertions.assertEquals(
+        pirateGame.getGameScreen().GAME_PAUSED, pirateGame.getGameScreen().gameStatus);
   }
 }
