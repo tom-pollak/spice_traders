@@ -1,13 +1,14 @@
 package com.mygdx.pirategame.sprites;
 
+import com.badlogic.gdx.graphics.Texture;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 
 public class EntityTest {
   /** Method under test: {@link Entity#getScaledTexture(String, Integer, Integer)} */
   @Test
-  @Ignore("TODO: Complete this test")
   public void testGetScaledTexture() {
     // TODO: Complete this test.
     //   Reason: R013 No inputs found that don't throw a trivial exception.
@@ -22,7 +23,12 @@ public class EntityTest {
     //   getScaledTexture(String, Integer, Integer).
     //   See https://diff.blue/R013 to resolve this issue.
 
-    Entity.getScaledTexture("Img Path", 1, 1);
+     Texture test1 = Entity.getScaledTexture("./assets/ship.png", 64, 64);
+     Texture test2 = Entity.getScaledTexture("./assets/Orb_04.png", 32, 32);
+     Assertions.assertEquals(test1.getWidth(), 64);
+     Assertions.assertEquals(test1.getHeight(), 64);
+     Assertions.assertEquals(test2.getWidth(), 32);
+     Assertions.assertEquals(test2.getHeight(), 32);
   }
 
   /** Method under test: {@link Entity#getScaledTexture(String, Integer, Integer)} */
@@ -44,4 +50,5 @@ public class EntityTest {
 
     Entity.getScaledTexture("Img Path", 1, 1);
   }
+
 }

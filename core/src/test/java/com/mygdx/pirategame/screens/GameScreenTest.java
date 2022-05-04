@@ -1,7 +1,11 @@
 package com.mygdx.pirategame.screens;
 
+import com.mygdx.pirategame.PirateGame;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
+
+import static com.mygdx.pirategame.screens.GameScreen.GAME_PAUSED;
 
 public class GameScreenTest {
   /** Method under test: {@link GameScreen#changeDamage(int)} */
@@ -49,5 +53,14 @@ public class GameScreenTest {
     //   See https://diff.blue/R004 to resolve this issue.
 
     GameScreen.changeMaxSpeed(10.0f);
+  }
+
+  @Test
+  public void testPause(){
+    PirateGame pirateGame = new PirateGame();
+    pirateGame.setScreen(new GameScreen(pirateGame));
+    pirateGame.getGameScreen().pause();
+    Assertions.assertEquals(pirateGame.getGameScreen().GAME_PAUSED, pirateGame.getGameScreen().gameStatus);
+
   }
 }
