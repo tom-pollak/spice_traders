@@ -2,9 +2,9 @@ package com.mygdx.pirategame.screens;
 
 import com.mygdx.pirategame.PirateGame;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
-import org.junit.Test;
 
 public class HudTest {
   /** Method under test: {@link Hud#resize(int, int)} */
