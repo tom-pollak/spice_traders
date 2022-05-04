@@ -15,12 +15,16 @@ import static com.mygdx.pirategame.screens.GameScreen.*;
 import static com.mygdx.pirategame.screens.GameScreen.player;
 
 public class PlayerTest {
-  @Test
-  public void testHandleInput() throws AWTException {
+  Player player;
+  Robot r;
+  int originalX;
+
+  @BeforeEach
+  void setup() throws AWTException {
     PirateGame pirateGame = new PirateGame();
     GameScreen gameScreen = new GameScreen(pirateGame);
-    int originalX = 0;
-    Player player = new Player(gameScreen, originalX, 0, new College(
+    originalX = 0;
+    player = new Player(gameScreen, originalX, 0, new College(
             gameScreen,
             "Goodricke",
             1760 / PirateGame.PPM,
@@ -29,7 +33,10 @@ public class PlayerTest {
             "goodricke_ship.png",
             1,
             new AvailableSpawn()));
-    Robot r = new Robot();
+    r = new Robot();
+  }
+  @Test
+  void testHandleInput() {
     r.keyPress(KeyEvent.VK_A);
     player.update(1000);
     r.keyRelease(KeyEvent.VK_A);
