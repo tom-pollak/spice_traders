@@ -87,11 +87,6 @@ public class GameScreen implements Screen {
     viewport = new ScreenViewport(camera);
     camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
 
-    player = new Player(this, 10, 10, colleges.get("Alcuin"));
-
-    // Initialize a hud
-    hud = createHud(game.batch);
-
     // Initialising box2d physics
     b2dr = new Box2DDebugRenderer();
 
@@ -156,6 +151,11 @@ public class GameScreen implements Screen {
     ships.addAll(colleges.get("Goodricke").fleet);
 
     monsters.add(new SeaMonster(this, 20, 20));
+
+    player = new Player(this, 10, 10, colleges.get("Alcuin"));
+
+    // Initialize a hud
+    hud = createHud(game.batch);
 
     new WorldCreator(this);
     // Random ships
